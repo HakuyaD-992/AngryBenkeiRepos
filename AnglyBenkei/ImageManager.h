@@ -7,12 +7,13 @@
 #include <array>
 
 #include "ANIMATION.h"
+#include "ATTACK_LEVEL.h"
 #include "Vector2.h"
 #include "GamePlay.h"
 
 #define lpImageMng ImageManager::getInstance()
 
-#define FILE_ID(X,Y) (ImageManager::getInstance().GetCombinedID(X,Y))
+#define FILE_ID(X,Y,Z) (ImageManager::getInstance().GetCombinedID(X,Y,(ATTACK_LEVEL)Z))
 
 // 整数型ｺﾝﾃﾅ（画像ﾊﾝﾄﾞﾙを保存する用）
 using VecInt = std::vector<int>;
@@ -29,7 +30,7 @@ public:
 		return *imageIns;
 	}
 	// ｱﾆﾒｰｼｮﾝ毎のｲﾒｰｼﾞﾈｰﾑｾｯﾄ
-	void SetAnimationName(const ANIMATION& anim,const WEAPON& weapon,FileName fileName);
+	void SetAnimationName(const ANIMATION& anim,const WEAPON& weapon,WeaponFile fileName,ATTACK_LEVEL& level);
 	// ｱﾆﾒｰｼｮﾝ毎の文字列をｾｯﾄ
 	void SetAnimationString(const Actor& actor,const ANIMATION& anim);
 	// 1枚ｻｲｽﾞの画像ﾊﾝﾄﾞﾙ取得関数
@@ -37,7 +38,7 @@ public:
 	// 1枚の画像を分割して画像ﾊﾝﾄﾞﾙを取得する際の関数
 	const VecInt& GetID(std::string imageName,Vector2 divSize,Vector2 divCount);
 	// 1枚ｻｲｽﾞの画像を連番画像として画像ﾊﾝﾄﾞﾙを取得する関数
-	const VecInt& GetCombinedID(const ANIMATION& anim,const WEAPON& weapon);
+	const VecInt& GetCombinedID(const ANIMATION& anim,const WEAPON& weapon,const int& level);
 	// ｱﾆﾒｰｼｮﾝ名取得関数
 	const AnimationString& GetAnimString(void)
 	{
@@ -58,10 +59,10 @@ private:
 	// ｱﾆﾒｰｼｮﾝ名
 	AnimationString animString;
 	// ｱﾆﾒｰｼｮﾝ毎の画像の名前
-	std::array<std::vector<std::string>,ANIM_MAX> animationImageName[WEAPON_MAX];
+	std::array<WeaponFile, WEAPON_MAX> animationImageName[ANIM_MAX];
 	// 画像ﾊﾝﾄﾞﾙを文字列で識別するためのｺﾝﾃﾅ
 	std::map<std::string, VecInt> imageHandleMap;
 	// ﾌﾟﾚｲﾔｰのｱﾆﾒｰｼｮﾝ毎の画像ﾊﾝﾄﾞﾙをｱﾆﾒｰｼｮﾝで識別するためのｺﾝﾃﾅ
-	std::map<ANIMATION, VecInt> playerHandleMap[WEAPON_MAX];
+	std::map<ATTACK_LEVEL, VecInt> playerHandleMap[WEAPON_MAX][ANIM_MAX];
 };
 

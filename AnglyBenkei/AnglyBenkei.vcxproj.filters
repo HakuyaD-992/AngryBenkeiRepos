@@ -111,11 +111,8 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="PLAYERSTATE.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ATTACK_LEVEL.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Enum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,11 +185,8 @@
     <ClInclude Include="Inventory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PLAYERSTATE.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="ATTACK_LEVEL.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Enum</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

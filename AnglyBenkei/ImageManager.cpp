@@ -14,12 +14,11 @@ void ImageManager::Destroy(void)
 	imageIns = nullptr;
 }
 
-void ImageManager::SetAnimationName(const ANIMATION & anim,const WEAPON& weapon,FileName fileName)
+void ImageManager::SetAnimationName(const ANIMATION & anim,const WEAPON& weapon,WeaponFile fileName,ATTACK_LEVEL& level)
 {
-	for (auto file = fileName.begin(); file != fileName.end(); file++)
-	{
-		animationImageName[weapon][anim].push_back((*file));
-	}
+	animationImageName[anim][weapon] = fileName;
+	// ±¸À°‚É
+	level = (ATTACK_LEVEL)animationImageName[anim][weapon].size();
 }
 
 void ImageManager::SetAnimationString(const Actor & actor,const ANIMATION & anim)
@@ -51,16 +50,16 @@ const VecInt & ImageManager::GetID(std::string imageName, Vector2 divSize, Vecto
 	return imageHandleMap[imageName];
 }
 
-const VecInt & ImageManager::GetCombinedID(const ANIMATION & anim,const WEAPON& weapon)
+const VecInt & ImageManager::GetCombinedID(const ANIMATION & anim,const WEAPON& weapon,const int& level)
 {
-	if (playerHandleMap[weapon].find(anim) == playerHandleMap[weapon].end())
+	if (playerHandleMap[weapon][anim].find((ATTACK_LEVEL)level) == playerHandleMap[weapon][anim].end())
 	{
-		for (auto p = animationImageName[weapon][anim].begin(); p != animationImageName[weapon][anim].end(); p++)
+		for (auto p = animationImageName[anim][weapon][level].begin(); p != animationImageName[anim][weapon][level].end(); p++)
 		{
-			playerHandleMap[weapon][anim].push_back(LoadGraph((*p).c_str()));
+			playerHandleMap[weapon][anim][(ATTACK_LEVEL)level].push_back(LoadGraph((*p).c_str()));
 		}
 	}
-	return playerHandleMap[weapon][anim];
+	return playerHandleMap[weapon][anim][(ATTACK_LEVEL)level];
 }
 
 ImageManager::ImageManager()

@@ -8,6 +8,10 @@
 
 
 using FileName = std::vector<std::string>;
+using WeaponFile = std::vector<FileName>;
+
+// •Ší–ˆ‚ÌŠi”[”z—ñ
+using WeaponFrame = std::vector<int>;
 
 struct Actor
 {
@@ -18,7 +22,9 @@ struct Actor
 	// ±ÆÒ°¼®İ‚Ì’iŠK•Ê‚Ì•¶š—ñ
 	std::array<std::string, LEVEL_MAX> levelName;
 	// 1±ÆÒ°¼®İ‚ÌÅ‘åÌÚ°Ñ”
-	std::vector<std::vector<int>> frameMax[ANIM_MAX];
+	std::array<WeaponFrame,WEAPON_MAX> frame[ANIM_MAX];
+	// UŒ‚±ÆÒ°¼®İ‚Ì’iŠK•Ê‚Ì‰æ‘œ–‡”
+	std::array<WeaponFrame,WEAPON_MAX> attackFrameNum;
 	// 1±ÆÒ°¼®İ‚ÌÚÍŞÙ‘”
 	std::array<int, WEAPON_MAX> levelNum[ANIM_MAX];
 	// •Ší‚Ìí—Ş
@@ -44,8 +50,7 @@ private:
 	// ÃŞÊŞ¯¸Ş•`‰æŠÖŒWŠÖ”
 	void DebugDraw(void);
 
-	std::array<FileName, ANIM_MAX> fileName[WEAPON_MAX];
-
+	std::array<WeaponFile,WEAPON_MAX> fileName[ANIM_MAX];
 
 	// ±¸À°–ˆ‚Ì•Ï”
 	Actor actor[Player_Max];

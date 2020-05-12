@@ -36,12 +36,21 @@ BasePlayer::BasePlayer()
 	// çUåÇ
 	attackCount = 0.0f;
 	attackAllowTime = 0;
-	attackLevelCount = { -1,-1,-1,-1,-1,-1,-1 };
+	for (int a = ANIM_WAIT; a < ANIM_MAX; a++)
+	{
+		for (int w = WEAPON_SWORD; w < WEAPON_MAX; w++)
+		{
+			if (a != ANIM_ATTACK)
+			{
+				levelCount[a][w] = 0;
+			}
+			else
+			{
+				levelCount[a][w] = -1;
+			}
+		}
+	}
 
-	// ïêäÌÇÃçUåÇíiäKÇÃê›íË
-	attackLevel[WEAPON_SWORD].resize(3);
-
-	attackMaxNum = { 9,0,0,0,0,0,0 };
 	// è¡ãéä÷åW
 	deleteFlag = false;
 }
@@ -90,12 +99,20 @@ void BasePlayer::SetAnimationString(std::string animString, const ANIMATION & an
 
 void BasePlayer::Draw(void)
 {
-	if (FILE_ID(myActionType, inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()).size() == 0)
+	if (FILE_ID(myActionType,
+				inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType(),
+				levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]).size() == 0)
 	{
 		return;
 	}
 
 	float animationID = 0.0f;
+	if (levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]
+		!= oldLevelCount)
+	{
+		animationCount = 0;
+	}
+
 	animationCount++;
 
 	if (animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()].find(animationName)
@@ -109,14 +126,15 @@ void BasePlayer::Draw(void)
 		// ∂ﬁ∞ƒﬁÇÃ±∆“∞ºÆ›ÇÃç€ÇÕ±∆“∞ºÆ›Çé~ÇﬂÇÈ
 		//if (myActionType != ANIM_GUARD)
 		{
-			int count = (animationCount
+			count = (animationCount
 				/ animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Interval]);
 
 			if (animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Loop] ||
 				count < animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Frame])
 			{
 				// Ÿ∞Ãﬂçƒê∂Ã◊∏ﬁÇ™trueÇÃèÍçáÇÕÇªÇÃ”∞ºÆ›ÇŸ∞Ãﬂçƒê∂
-				count %= animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Frame];
+				count %= animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Frame]
+					     / animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()];
 			}
 			else
 			{
@@ -127,16 +145,23 @@ void BasePlayer::Draw(void)
 			animationID = animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Start] + count;
 		}
 	}
-	if (animationID < FILE_ID(myActionType,inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()).size())
+	if (animationID < FILE_ID(myActionType,
+		inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType(),
+		levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]).size())
 	{
 		switch (direction)
 		{
 		case Direction_Right:
-			DrawRotaGraph(pos.x, pos.y, 1.0f, 0.0f, FILE_ID(myActionType,inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType())[animationID], true, true);
+			DrawRotaGraph(pos.x, pos.y, 1.0f, 0.0f, FILE_ID(myActionType,
+				inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType(),
+				levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()])[animationID], true, true);
 			break;
 			
 		case Direction_Left:
-			DrawRotaGraph(pos.x, pos.y, 1.0f, 0.0f, FILE_ID(myActionType,inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType())[animationID], true, false);
+			DrawRotaGraph(pos.x, pos.y, 1.0f, 0.0f, FILE_ID(myActionType,
+				inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType(),
+				levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()])[animationID],
+				true, false);
 			break;
 		default:
 			break;
@@ -144,5 +169,6 @@ void BasePlayer::Draw(void)
 	}
 
 	DrawFormatString(400, 400, 0xffffff, "animID:%f", animationID);
-
+	DrawFormatString(450, 450, 0xffffff, "nowLevel:%d", levelCount);
+	DrawFormatString(450, 500, 0xffffff, "oldLevel:%d", oldLevelCount);
 }

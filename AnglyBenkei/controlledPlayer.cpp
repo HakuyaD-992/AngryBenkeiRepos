@@ -49,6 +49,7 @@ void controlledPlayer::Action(const GameController & gameCtl, WeakWeaponList ite
 	// d—Í‚ğ‚©‚¯‚é
 	gravity->PutGravityOnActor(pos);
 
+
 	// •Ší‚Ì•ÏX
 	lpWeaponInventry.ChangeWeaponNum(gameCtl);
 
@@ -164,19 +165,31 @@ void controlledPlayer::Action(const GameController & gameCtl, WeakWeaponList ite
 		myActionType = ANIM_GUARD;
 	}
 	// ÎŞÀİ‚ğ‰Ÿ‚µ‚Ä‚¢‚È‚¢‚Í¶Ş°ÄŞ¶³İÄ•Ï”‚Í0‚É–ß‚é‚Ì‚Åwait‚É–ß‚·
-	else
+	/*else
 	{
 		myActionType = ANIM_WAIT;
-	}
-
+	}*/
+	// 1ÌÚ°Ñ‘O‚ÌÚÍŞÙ‚ğŠi”[
+	oldLevelCount = levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()];
 	// UŒ‚±ÆÒ°¼®İ‚©‚ç(5/8–é‹Î‚Ì‹xŒe‚Ì)
 	if (inputNow[5] && !inputOld[5])
 	{
+		myActionType = ANIM_ATTACK;
+		//UŒ‚’iŠK‚ğã‚°‚é
+		levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]++;
 		attackFlag[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()] = true;
 	}
-	if (attackFlag[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()])
-	{
 
+	// –¾“ú‚±‚±‚©‚ç
+	if (myActionType == ANIM_ATTACK)
+	{
+		if (levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]
+			 >= animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()])
+		{
+			levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]
+				= -1;
+			myActionType = ANIM_WAIT;
+		}
 	}
 
 	// Œˆ’èÎŞÀİ‚ğ‰Ÿ‚·‚Æ¡Œ»İw’è‚µ‚Ä‚¢‚é•Ší‚É•ÏX‚·‚é‚©ŒŸ“¢
@@ -217,6 +230,7 @@ void controlledPlayer::Action(const GameController & gameCtl, WeakWeaponList ite
 	// •Ší±²ºİ‚ÌÎß¼Ş¼®İ‚ğÌßÚ²Ô°‚É’Ç]
 	lpWeaponInventry.UpDateInventoryPos(pos);
 	//----------------------------------------
+
 }
 
 bool controlledPlayer::InitAnimation(WEAPON weapon)
@@ -225,7 +239,6 @@ bool controlledPlayer::InitAnimation(WEAPON weapon)
 	{
 	case WEAPON_SWORD:
 		AddAnimation("attack", 9, 30, true, weapon);
-		attackLevel[weapon] = { 3,6,9 };
 
 		attackFlag[weapon]=false;
 		break;

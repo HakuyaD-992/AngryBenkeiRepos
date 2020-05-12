@@ -66,6 +66,11 @@ public:
 	{
 		return direction;
 	}
+	// ±ÆÒ°¼®İ’iŠKÚÍŞÙæ“¾ŠÖ”
+	ATTACK_LEVEL& GetAnimLevel(ANIMATION anim,WEAPON weapon)
+	{
+		return animLevel[anim][weapon];
+	}
 
 	// Á‹Œn
 	bool Getdeleteflag(void)
@@ -85,6 +90,8 @@ private:
 	std::map<std::string, int[AnimationTB_Max]> animationTable[WEAPON_MAX];
 	//Ä¶‚·‚é±ÆÒ°¼®İ–¼
 	std::string animationName;
+	// ±ÆÒ°¼®İ‚ğ§Œä‚·‚é¶³İÄ•Ï”
+	int count;
 
 	// •¨‘ÌÁ‹Ì×¸Ş
 	bool deleteFlag;
@@ -141,7 +148,9 @@ protected:
 	// ˆê’è‚ÌŠÔUŒ‚ÎŞÀİ‚ğ“ü—Í‚µ‚Ä‚¢‚È‚¢‚Æ‘Ò‹@Ó°¼®İ‚ÉˆÚs‚³‚¹‚é
 	int attackAllowTime;
 	// •Ší–ˆ‚É¡Œ»İ‚ÌUŒ‚’iŠK‚ğ¶³İÄ‚·‚é•Ï”
-	std::array<int, WEAPON_MAX> attackLevelCount;
+	std::array<int,WEAPON_MAX> levelCount[ANIM_MAX];
+	// 1ÌÚ°Ñ‘O‚ÌÚÍŞÙ
+	int oldLevelCount;
 	// UŒ‚’iŠK
 	std::array<std::vector<int>,WEAPON_MAX> attackLevel;
 	// •Ší–ˆ‚ÌÅ‘åUŒ‚‰ñ”
@@ -151,4 +160,6 @@ protected:
 
 	// ±ÆÒ°¼®İ¶³İÀ°
 	unsigned int animationCount;
+	// ±ÆÒ°¼®İ‚Ì’iŠK‚ğ•\‚·ÚÍŞÙ
+	std::array<ATTACK_LEVEL, WEAPON_MAX> animLevel[ANIM_MAX];
 };
