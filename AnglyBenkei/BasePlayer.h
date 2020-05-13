@@ -21,7 +21,7 @@
 // ﾀﾞｯｼｭのﾃﾞﾌｫﾙﾄﾀｲﾑ
 #define DashDefTime 20
 // 攻撃入力を受け付ける時間（この時間を超えてしまうと待機ﾓｰｼｮﾝに自動的に移行）
-#define AttackLimTime 50
+#define AttackLimTime 100
 
 class GameController;
 
@@ -147,8 +147,9 @@ protected:
 	std::array<int, WEAPON_MAX> attackMaxNum;
 	// 現在の攻撃ﾓｰｼｮﾝをﾌﾚｰﾑ毎に見た時のﾌﾗｸﾞ
 	std::array<bool, WEAPON_MAX> attackFlag;
-	// 攻撃ﾎﾞﾀﾝを押していいとなったらtrueを返す
-	bool canPushAttackButton;
+
+	// 一定時間攻撃ﾎﾞﾀﾝ押していなければ攻撃段階を初期にﾘｾｯﾄするｶｳﾝﾄ変数
+	int levelResetCount;
 
 
 	// ｱﾆﾒｰｼｮﾝｶｳﾝﾀｰ

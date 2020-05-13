@@ -33,7 +33,7 @@ public:
 	// ｱﾆﾒｰｼｮﾝ毎のｲﾒｰｼﾞﾈｰﾑｾｯﾄ
 	void SetAnimationName(const ANIMATION& anim,const WEAPON& weapon,WeaponFile fileName,ATTACK_LEVEL& level);
 	// ｱﾆﾒｰｼｮﾝ毎の文字列をｾｯﾄ
-	void SetAnimationString(const Actor& actor,const ANIMATION& anim);
+	void SetAnimationString(const std::string animationName, const PLAYER& player, const ANIMATION & anim);
 	// ｱﾆﾒｰｼｮﾝ毎の文字列ｾｯﾄ（敵用）
 	void SetAnimationString(const ANIMATION& anim);
 	// ｱﾆﾒｰｼｮﾝ毎のｲﾒｰｼﾞﾈｰﾑｾｯﾄ(敵用)
@@ -47,9 +47,9 @@ public:
 	// 1枚ｻｲｽﾞの画像を連番画像として画像ﾊﾝﾄﾞﾙを取得する関数(enemy用)
 	const VecInt& GetCombinedID(const ANIMATION& anim,const EnemyType& type);
 	// ｱﾆﾒｰｼｮﾝ名取得関数
-	const AnimationString& GetAnimString(void)
+	const AnimationString& GetAnimString(const PLAYER& player)
 	{
-		return animString;
+		return animString[player];
 	}
 
 private:
@@ -64,7 +64,7 @@ private:
 	// 画像の名前
 	std::string imageName;
 	// ｱﾆﾒｰｼｮﾝ名
-	AnimationString animString;
+	AnimationString animString[Player_Max];
 	// ｱﾆﾒｰｼｮﾝ毎の画像の名前(player用)
 	std::array<WeaponFile, WEAPON_MAX> animationImageName[ANIM_MAX];
 	// ｱﾆﾒｰｼｮﾝ毎の画像の名前(enemy用)

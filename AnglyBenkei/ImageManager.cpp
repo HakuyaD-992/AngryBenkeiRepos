@@ -21,9 +21,9 @@ void ImageManager::SetAnimationName(const ANIMATION & anim,const WEAPON& weapon,
 	level = (ATTACK_LEVEL)animationImageName[anim][weapon].size();
 }
 
-void ImageManager::SetAnimationString(const Actor & actor,const ANIMATION & anim)
+void ImageManager::SetAnimationString(const std::string animationName,const PLAYER& player,const ANIMATION & anim)
 {
-	animString[anim] = actor.animationName[anim];
+	animString[player][anim] = animationName;
 }
 
 

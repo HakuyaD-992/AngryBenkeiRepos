@@ -16,21 +16,13 @@ GamePlay::GamePlay()
 	Init();
 
 	// ±ÆÒ°¼®Ý•¶Žš—ñ‚ð¾¯Ä‚³‚¹‚é
-	for (auto p = playerList->begin(); p != playerList->end(); p++)
+	/*for (auto p = playerList->begin(); p != playerList->end(); p++)
 	{
 		for (int anim = ANIM_WAIT; anim < ANIM_MAX; anim++)
 		{
 			(*p)->SetAnimationString(actor[Player_1].animationName[anim], (ANIMATION)anim);
 		}
-	}
-	// ±ÆÒ°¼®Ý•¶Žš—ñ‚ð¾¯Ä‚³‚¹‚é(“G)
-	for (auto e = enemyList->begin(); e != enemyList->end(); e++)
-	{
-		for (int anim = ANIM_WAIT; anim < ANIM_MAX; anim++)
-		{
-			(*e)->SetAnimationString(actor[Player_AI_StandardEnemy].animationName[anim], (ANIMATION)anim);
-		}
-	}
+	}*/
 
 	for (int w = WEAPON_SWORD; w < WEAPON_MAX; w++)
 	{
@@ -54,10 +46,17 @@ ScenePtr GamePlay::SceneUpDate(ScenePtr own, const PlayerController & gameCtl)
 	SharedWeaponList deleteItemList(itemList->size());
 	(*itemList).remove_if([](SharedWeaponPtr& item) {return (item->Getdeleteflag()); });
 
+	// ƒvƒŒƒCƒ„[
 	for (auto p = playerList->begin(); p != playerList->end(); p++)
 	{
 		(*p)->UpDate(*gameCtl[Player_1],itemList);
 	}
+	// ŽG‹›“G
+	for (auto e = enemyList->begin(); e != enemyList->end(); e++)
+	{
+		(*e)->UpDate();
+	}
+	// •Ší±²ÃÑ
 	for (auto i = itemList->begin(); i != itemList->end(); i++)
 	{
 		(*i)->UpDate(playerList);
@@ -246,9 +245,15 @@ bool GamePlay::Init(void)
 			}
 			// ŽG‹›“G‚Ì±ÆÒ°¼®Ý‰æ‘œ¾¯Ä
 			lpImageMng.SetAnimationName((ANIMATION)animation,StandardEnemy, enemyFileName[StandardEnemy][(ANIMATION)animation]);
-			lpImageMng.SetAnimationString(actor[Player_1], (ANIMATION)animation);
+			lpImageMng.SetAnimationString(actor[Player_1].animationName[animation],Player_1, (ANIMATION)animation);
 		}
 	}
+
+	for (int anim = ANIM_WAIT; anim < ANIM_MAX; anim++)
+	{
+		lpImageMng.SetAnimationString(actor[Player_AI_StandardEnemy].animationName[anim], Player_AI_StandardEnemy, (ANIMATION)anim);
+	}
+
 	return true;
 }
 
@@ -258,58 +263,55 @@ bool GamePlay::InitFrame(const ANIMATION & anim, const WEAPON & weapon,const PLA
 	{
 		//actor[player].frame[anim][weapon].resize(1);
 	}
-	if (actor[player].frame[anim][weapon].size() <= 0)
+	if (player == Player_1)
 	{
-		actor[player].frame[anim][weapon].resize(actor[player].levelNum[anim][weapon]);
-	}
-	//// ‰æ‘œ–‡”•ª‚ðŠi”[
-	switch (anim)
-	{
-	case ANIM_WAIT:
-		actor[player].frame[anim][weapon][0] = 5;
-		break;
-
-	case ANIM_DASH:
-		actor[player].frame[anim][weapon][0] = 2;
-
-		break;
-	case ANIM_GUARD:
-		actor[player].frame[anim][weapon][0] = 2;
-
-		break;
-	case ANIM_PICKUP:
-		actor[player].frame[anim][weapon][0] = 5;
-
-		break;
-	case ANIM_ATTACK:
-		switch (weapon)
+		if (actor[player].frame[anim][weapon].size() <= 0)
 		{
-		case WEAPON_SWORD:
-			actor[player].frame[anim][weapon] = { 3,3,3 };
-			
-			break;
-		case WEAPON_SPEAR:
-
-			break;
-		case WEAPON_AXE:
-
-			break;
-		case WEAPON_HAMMER:
-			break;
-		case WEAPON_TONGFAR:
-			break;
-		case WEAPON_JITTE:
-			break;
-
+			actor[player].frame[anim][weapon].resize(actor[player].levelNum[anim][weapon]);
 		}
-		break;
+		//// ‰æ‘œ–‡”•ª‚ðŠi”[
+		switch (anim)
+		{
+		case ANIM_WAIT:
+			actor[player].frame[anim][weapon][0] = 5;
+			break;
 
+		case ANIM_DASH:
+			actor[player].frame[anim][weapon][0] = 2;
 
+			break;
+		case ANIM_GUARD:
+			actor[player].frame[anim][weapon][0] = 2;
 
+			break;
+		case ANIM_PICKUP:
+			actor[player].frame[anim][weapon][0] = 5;
+
+			break;
+		case ANIM_ATTACK:
+			switch (weapon)
+			{
+			case WEAPON_SWORD:
+				actor[player].frame[anim][weapon] = { 3,3,3 };
+
+				break;
+			case WEAPON_SPEAR:
+
+				break;
+			case WEAPON_AXE:
+
+				break;
+			case WEAPON_HAMMER:
+				break;
+			case WEAPON_TONGFAR:
+				break;
+			case WEAPON_JITTE:
+				break;
+
+			}
+			break;
+		}
 	}
-
-
-
 	return true;
 }
 
