@@ -9,6 +9,7 @@
 #include "Vector2.h"
 #include "ANIMATION.h"
 #include "DIRECTION.h"
+#include "AnimationTB.h"
 #include "WEAPON.h"
 #include "GamePlay.h"
 #include "WeaponInventry.h"
@@ -23,17 +24,6 @@
 #define AttackLimTime 50
 
 class GameController;
-
-// ±ÆÒ°¼®İ‚Ìí—Ş•ÊÃ°ÌŞÙ
-enum AnimationTable
-{
-	Animation_TB_Start,
-	Animation_TB_Frame,
-	Animation_TB_Interval,
-	Animation_TB_Loop,
-	AnimationTB_Max
-};
-
 
 class BasePlayer
 {
@@ -157,6 +147,9 @@ protected:
 	std::array<int, WEAPON_MAX> attackMaxNum;
 	// Œ»İ‚ÌUŒ‚Ó°¼®İ‚ğÌÚ°Ñ–ˆ‚ÉŒ©‚½‚ÌÌ×¸Ş
 	std::array<bool, WEAPON_MAX> attackFlag;
+	// UŒ‚ÎŞÀİ‚ğ‰Ÿ‚µ‚Ä‚¢‚¢‚Æ‚È‚Á‚½‚çtrue‚ğ•Ô‚·
+	bool canPushAttackButton;
+
 
 	// ±ÆÒ°¼®İ¶³İÀ°
 	unsigned int animationCount;

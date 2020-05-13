@@ -8,6 +8,7 @@
 #include "ImageManager.h"
 #include "controlledPlayer.h"
 #include "Item_Weapon.h"
+#include "Enemy.h"
 
 
 GamePlay::GamePlay()
@@ -22,6 +23,15 @@ GamePlay::GamePlay()
 			(*p)->SetAnimationString(actor[Player_1].animationName[anim], (ANIMATION)anim);
 		}
 	}
+	// ±ÆÒ°¼®İ•¶š—ñ‚ğ¾¯Ä‚³‚¹‚é(“G)
+	for (auto e = enemyList->begin(); e != enemyList->end(); e++)
+	{
+		for (int anim = ANIM_WAIT; anim < ANIM_MAX; anim++)
+		{
+			(*e)->SetAnimationString(actor[Player_AI_StandardEnemy].animationName[anim], (ANIMATION)anim);
+		}
+	}
+
 	for (int w = WEAPON_SWORD; w < WEAPON_MAX; w++)
 	{
 		AddWeaponList()(itemList,
@@ -61,35 +71,52 @@ void GamePlay::CreateImageFolderPass(const ANIMATION& anim,
 									 const WEAPON& weapon,
 									 const PLAYER& player)
 {
-	// ‚Ü‚¸ÚÍŞÙÌ«ÙÀŞ•ª‚ğŠm•Û
-	fileName[anim][weapon].resize(actor[player].levelNum[anim][weapon]);
-	// ÚÍŞÙÌ«ÙÀŞ‚É“ü‚Á‚Ä‚¢‚é–‡”•ªŠm•Û
-	for (auto file = fileName[anim][weapon].begin();
-		 file != fileName[anim][weapon].end();)
+	if (player == Player_1)
 	{
-		for (auto f : actor[player].frame[anim][weapon])
+		// ‚Ü‚¸ÚÍŞÙÌ«ÙÀŞ•ª‚ğŠm•Û
+		fileName[anim][weapon].resize(actor[player].levelNum[anim][weapon]);
+		// ÚÍŞÙÌ«ÙÀŞ‚É“ü‚Á‚Ä‚¢‚é–‡”•ªŠm•Û
+		for (auto file = fileName[anim][weapon].begin();
+			file != fileName[anim][weapon].end();)
 		{
-			file->resize(f);
-			file++;
+			for (auto f : actor[player].frame[anim][weapon])
+			{
+				file->resize(f);
+				file++;
+			}
+		}
+		// ‰æ‘œÊß½‚Å‚ ‚é•¶š—ñ‚ğŠe•Ï”‚ÉŠi”[
+		for (int level = 0; level < actor[player].frame[anim][weapon].size(); level++)
+		{
+			for (int frame = 0; frame < actor[player].frame[anim][weapon][level]; frame++)
+			{
+				if (anim != ANIM_ATTACK)
+				{
+					fileName[anim][weapon][level][frame] = "Image/GamePlay/" + actor[player].playerName + "/" + actor[player].animationName[anim] +
+						"/" + actor[player].weaponString[weapon] + "/" + actor[player].animationName[anim] + "_" +
+						std::to_string(frame) + ".png";
+				}
+				else
+				{
+					fileName[anim][weapon][level][frame] = "Image/GamePlay/" + actor[player].playerName + "/" + actor[player].animationName[anim] +
+						"/" + actor[player].weaponString[weapon] + "/" + actor[player].levelName[level] + "/" + actor[player].animationName[anim]
+						+ std::to_string(level + 1) + "_" +
+						std::to_string(frame) + ".png";
+				}
+			}
 		}
 	}
-	// ‰æ‘œÊß½‚Å‚ ‚é•¶š—ñ‚ğŠe•Ï”‚ÉŠi”[
-	for (int level = 0; level < actor[player].frame[anim][weapon].size(); level++)
+	if (player == Player_AI_StandardEnemy)
 	{
-		for (int frame = 0; frame < actor[player].frame[anim][weapon][level]; frame++)
+		if (enemyFrameMax[player - 1][anim] > 0 && enemyFileName[player - 1][anim].size() <= 0)
 		{
-			if (anim != ANIM_ATTACK)
+			enemyFileName[player - 1][anim].resize(enemyFrameMax[player - 1][anim]);
+
+			for (int num = 0; num < enemyFrameMax[player - 1][anim]; num++)
 			{
-				fileName[anim][weapon][level][frame] = "Image/GamePlay/" + actor[player].playerName[player] + "/" + actor[player].animationName[anim] +
-					"/" + actor[player].weaponString[weapon] + "/" + actor[player].animationName[anim] + "_" +
-					std::to_string(frame) + ".png";
-			}
-			else
-			{
-				fileName[anim][weapon][level][frame] = "Image/GamePlay/" + actor[player].playerName[player] + "/" + actor[player].animationName[anim] +
-					"/" + actor[player].weaponString[weapon] + "/" + actor[player].levelName[level] + "/" + actor[player].animationName[anim]
-					+ std::to_string(level + 1) + "_" +
-					std::to_string(frame) + ".png";
+				enemyFileName[player - 1][anim][num] = "Image/GamePlay/" + actor[player].playerName + "/" + actor[player].animationName[anim] +
+					"/" + actor[player].animationName[anim] + "_" +
+					std::to_string(num) + ".png";
 			}
 		}
 	}
@@ -104,6 +131,10 @@ bool GamePlay::Init(void)
 	{
 		playerList = make_shared<SharedList>();
 	}
+	if (!enemyList)
+	{
+		enemyList = make_shared<SharedEnemyList>();
+	}
 
 	if (!itemList)
 	{
@@ -111,9 +142,12 @@ bool GamePlay::Init(void)
 	}
 
 	AddList()(playerList, std::make_unique<controlledPlayer>(Vector2(100, 100), ANIM_WAIT, Vector2(50, 50)));
+	AddEnemyList()(enemyList, std::make_unique<Enemy>(Vector2(100, 100), ANIM_WAIT,StandardEnemy));
 
 	// ÌßÚ²Ô°‚È‚Ì‚©´ÈĞ°‚È‚Ì‚©‚ğ‹æ•Ê‚·‚é‚½‚ß‚Ì•¶š—ñ
-	actor[Player_1].playerName = { "Player","Enemy","Boss" };
+	actor[Player_1].playerName = "Player";
+	actor[Player_AI_StandardEnemy].playerName = "Enemy";
+
 
 	// ÌßÚ²Ô°‚Ì±ÆÒ°¼®İÈ°Ñ‚Æ±ÆÒ°¼®İ‚É‰ˆ‚Á‚½Å‘åÌÚ°Ñ”‚Ì‰Šú‰»--------------
 	actor[Player_1].animationName =
@@ -122,6 +156,14 @@ bool GamePlay::Init(void)
 		"dash",
 		"guard",
 		"pickup",
+		"attack",
+	};
+	actor[Player_AI_StandardEnemy].animationName =
+	{
+		"wait",
+		"dash",
+		"guard",
+		"",
 		"attack",
 	};
 
@@ -179,7 +221,10 @@ bool GamePlay::Init(void)
 		"None"
 	};
 
-
+	enemyFrameMax[StandardEnemy] =
+	{
+		5,5,0,0,4
+	};
 
 	// -------------------------------------------------------------------
 
@@ -190,6 +235,8 @@ bool GamePlay::Init(void)
 		{
 			InitFrame((ANIMATION)animation, (WEAPON)w, Player_1);
 			CreateImageFolderPass((ANIMATION)animation, (WEAPON)w, Player_1);
+			CreateImageFolderPass((ANIMATION)animation, (WEAPON)w, Player_AI_StandardEnemy);
+
 			for (auto p = playerList->begin(); p != playerList->end(); p++)
 			{
 				lpImageMng.SetAnimationName((ANIMATION)animation,
@@ -197,6 +244,8 @@ bool GamePlay::Init(void)
 											fileName[animation][w],
 											(*p)->GetAnimLevel((ANIMATION)animation,(WEAPON)w));
 			}
+			// G‹›“G‚Ì±ÆÒ°¼®İ‰æ‘œ¾¯Ä
+			lpImageMng.SetAnimationName((ANIMATION)animation,StandardEnemy, enemyFileName[StandardEnemy][(ANIMATION)animation]);
 			lpImageMng.SetAnimationString(actor[Player_1], (ANIMATION)animation);
 		}
 	}
@@ -268,10 +317,16 @@ void GamePlay::Draw(void)
 {
 	ClsDrawScreen();
 	DebugDraw();
-	// ÌßÚ²Ô°‚Ì•`‰æ
+
+	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
 	for (auto p = playerList->begin(); p != playerList->end(); p++)
 	{
 		(*p)->Draw();
+	}
+	// “G‚Ì•`‰æ
+	for (auto e = enemyList->begin(); e != enemyList->end(); e++)
+	{
+		(*e)->Draw();
 	}
 	// oŒ»±²ÃÑ‚Ì•`‰æ
 	for (auto i = itemList->begin(); i != itemList->end(); i++)

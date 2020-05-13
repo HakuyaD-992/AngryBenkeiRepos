@@ -17,13 +17,22 @@ void ImageManager::Destroy(void)
 void ImageManager::SetAnimationName(const ANIMATION & anim,const WEAPON& weapon,WeaponFile fileName,ATTACK_LEVEL& level)
 {
 	animationImageName[anim][weapon] = fileName;
-	// ±¸À°‚É
+
 	level = (ATTACK_LEVEL)animationImageName[anim][weapon].size();
 }
 
 void ImageManager::SetAnimationString(const Actor & actor,const ANIMATION & anim)
 {
 	animString[anim] = actor.animationName[anim];
+}
+
+
+void ImageManager::SetAnimationName(const ANIMATION & anim, const EnemyType& type, FileName file)
+{
+	if (enemyImageName[type][anim].size() <= 0 && file.size() > 0)
+	{
+		enemyImageName[type][anim] = file;
+	}
 }
 
 const VecInt & ImageManager::GetID(std::string imageName)
@@ -60,6 +69,18 @@ const VecInt & ImageManager::GetCombinedID(const ANIMATION & anim,const WEAPON& 
 		}
 	}
 	return playerHandleMap[weapon][anim][(ATTACK_LEVEL)level];
+}
+
+const VecInt & ImageManager::GetCombinedID(const ANIMATION & anim, const EnemyType& type)
+{
+	if (enemyHandleMap[type].find(anim) == enemyHandleMap[type].end())
+	{
+		for (auto e = enemyImageName[type][anim].begin(); e != enemyImageName[type][anim].end(); e++)
+		{
+			enemyHandleMap[type][anim].push_back(LoadGraph((*e).c_str()));
+		}
+	}
+	return enemyHandleMap[type][anim];
 }
 
 ImageManager::ImageManager()

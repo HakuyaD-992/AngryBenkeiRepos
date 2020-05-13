@@ -2,6 +2,7 @@
 #include <array>
 #include "BaseScene.h"
 #include "ANIMATION.h"
+#include "EnemyType.h"
 #include "AddList.h"
 #include "WEAPON.h"
 #include "ATTACK_LEVEL.h"
@@ -16,7 +17,7 @@ using WeaponFrame = std::vector<int>;
 struct Actor
 {
 	// ÌßÚ²Ô°‚Ì–¼‘O
-	std::array<std::string, Player_Max> playerName;
+	std::string playerName;
 	// ±ÆÒ°¼®İ–¼
 	std::array<std::string, ANIM_MAX> animationName;
 	// ±ÆÒ°¼®İ‚Ì’iŠK•Ê‚Ì•¶š—ñ
@@ -50,13 +51,22 @@ private:
 	// ÃŞÊŞ¯¸Ş•`‰æŠÖŒWŠÖ”
 	void DebugDraw(void);
 
+	// ƒvƒŒƒCƒ„[—p‰æ‘œ•¶š—ñŠi”[•Ï”
 	std::array<WeaponFile,WEAPON_MAX> fileName[ANIM_MAX];
+	// “G—p‰æ‘œ•¶š—ñŠi”[—p•Ï”
+	std::array<FileName, ANIM_MAX> enemyFileName[EnemyTypeMax];
+	// “G‚Ì±ÆÒ°¼®İ–ˆ‚ÌÅ‘åÌÚ°Ñ
+	std::array<int, ANIM_MAX> enemyFrameMax[EnemyTypeMax];
+	// G‹›“G‚È‚Ì‚©ÎŞ½‚È‚Ì‚©‚Ì•¶š—ñ
+	std::string enemyTypeString[EnemyTypeMax];
 
 	// ±¸À°–ˆ‚Ì•Ï”
 	Actor actor[Player_Max];
 
 	// ÌßÚ²Ô°î•ñ‚ğŠi”[‚µ‚Ä‚¢‚éØ½Ä
 	SharedListPtr playerList;
+	// G‹›“Gî•ñ‚ğŠi”[‚µ‚Ä‚¢‚éØ½Ä
+	SharedEnemyListPtr enemyList;
 	// ±²ÃÑî•ñ‚ğŠi”[‚µ‚Ä‚¢‚éØ½Ä
 	SharedWeaponListPtr itemList;
 };

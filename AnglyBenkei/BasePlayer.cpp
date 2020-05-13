@@ -36,6 +36,7 @@ BasePlayer::BasePlayer()
 	// çUåÇ
 	attackCount = 0.0f;
 	attackAllowTime = 0;
+	canPushAttackButton = false;
 	for (int a = ANIM_WAIT; a < ANIM_MAX; a++)
 	{
 		for (int w = WEAPON_SWORD; w < WEAPON_MAX; w++)
@@ -130,8 +131,13 @@ void BasePlayer::Draw(void)
 				/ animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Interval]);
 
 			if (animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Loop] ||
-				count < animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Frame])
+				count < animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Frame]
+				/ animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()])
 			{
+				if (myActionType == ANIM_ATTACK)
+				{
+					canPushAttackButton = true;
+				}
 				// Ÿ∞Ãﬂçƒê∂Ã◊∏ﬁÇ™trueÇÃèÍçáÇÕÇªÇÃ”∞ºÆ›ÇŸ∞Ãﬂçƒê∂
 				count %= animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Frame]
 					     / animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()];
@@ -139,8 +145,10 @@ void BasePlayer::Draw(void)
 			else
 			{
 				// Ÿ∞Ãﬂçƒê∂Ã◊∏ﬁÇ™falseÇÃèÍçáÇÕ1±∆“∞ºÆ›Ç™èIÇÌÇËéüëÊë“Çø”∞ºÆ›Ç…Ç∑ÇÈ
-				myActionType = ANIM_WAIT;
-				//count = animationTable[animationName][Animation_TB_Frame] - 1;
+				//myActionType = ANIM_WAIT;
+				count = animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]
+					[animationName][Animation_TB_Frame]
+					/ animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()] - 1;
 			}
 			animationID = animationTable[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()][animationName][Animation_TB_Start] + count;
 		}
@@ -169,6 +177,6 @@ void BasePlayer::Draw(void)
 	}
 
 	DrawFormatString(400, 400, 0xffffff, "animID:%f", animationID);
-	DrawFormatString(450, 450, 0xffffff, "nowLevel:%d", levelCount);
+	DrawFormatString(450, 450, 0xffffff, "nowLevel:%d", levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]);
 	DrawFormatString(450, 500, 0xffffff, "oldLevel:%d", oldLevelCount);
 }

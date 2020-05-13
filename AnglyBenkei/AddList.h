@@ -3,6 +3,7 @@
 #include <memory>
 
 class BasePlayer;
+class EnemyBase;
 class ItemBase;
 
 using namespace std;
@@ -14,6 +15,14 @@ using SharedListPtr = shared_ptr<SharedList>;
 
 using WeakList = weak_ptr<SharedList>;
 using SharedListItr = SharedList::iterator;
+
+// ¹Ş°Ñ“oê·¬×¸À°—p‚ÌØ½Äì¬(G‹›)
+using SharedEnemyPtr = shared_ptr<EnemyBase>;
+using SharedEnemyList = list<SharedEnemyPtr>;
+using SharedEnemyListPtr = shared_ptr<SharedEnemyList>;
+
+using WeakEnemyList = weak_ptr<SharedEnemyList>;
+using SharedEnemyListItr = SharedEnemyList::iterator;
 
 // •Ší±²ÃÑ—p‚ÌØ½Äì¬
 using SharedWeaponPtr = shared_ptr<ItemBase>;
@@ -45,6 +54,22 @@ struct AddList
 		return itr;
 	}
 };
+
+// G‹›‚ÌØ½Ä‚Ö‚Ì’Ç‰Á
+struct AddEnemyList
+{
+	SharedEnemyListItr operator()(WeakEnemyList w, SharedEnemyPtr ptr)
+	{
+		w.lock()->push_back(ptr);
+
+		SharedEnemyListItr itr = w.lock()->end();
+
+		itr--;
+
+		return itr;
+	}
+};
+
 
 // Ø½Ä‚Ö‚Ì’Ç‰Á
 struct AddWeaponList

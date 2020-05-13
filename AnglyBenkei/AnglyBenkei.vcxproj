@@ -122,11 +122,15 @@
   <ItemGroup>
     <ClCompile Include="AddList.cpp" />
     <ClCompile Include="ANIMATION.cpp" />
+    <ClCompile Include="AnimationTB.cpp" />
     <ClCompile Include="ATTACK_LEVEL.cpp" />
     <ClCompile Include="BasePlayer.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="controlledPlayer.cpp" />
     <ClCompile Include="DIRECTION.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
+    <ClCompile Include="EnemyType.cpp" />
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameOver.cpp" />
@@ -149,11 +153,15 @@
   <ItemGroup>
     <ClInclude Include="AddList.h" />
     <ClInclude Include="ANIMATION.h" />
+    <ClInclude Include="AnimationTB.h" />
     <ClInclude Include="ATTACK_LEVEL.h" />
     <ClInclude Include="BasePlayer.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="controlledPlayer.h" />
     <ClInclude Include="DIRECTION.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="EnemyType.h" />
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameOver.h" />

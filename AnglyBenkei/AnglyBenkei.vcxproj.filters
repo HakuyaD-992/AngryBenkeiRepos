@@ -90,9 +90,6 @@
     <ClCompile Include="AddList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="DIRECTION.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="WeaponInventry.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -112,6 +109,21 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ATTACK_LEVEL.cpp">
+      <Filter>ソース ファイル\Enum</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>ソース ファイル\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DIRECTION.cpp">
+      <Filter>ソース ファイル\Enum</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationTB.cpp">
+      <Filter>ソース ファイル\Enum</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyType.cpp">
       <Filter>ソース ファイル\Enum</Filter>
     </ClCompile>
   </ItemGroup>
@@ -186,6 +198,18 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ATTACK_LEVEL.h">
+      <Filter>ヘッダー ファイル\Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダー ファイル\BaseClass</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationTB.h">
+      <Filter>ヘッダー ファイル\Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyType.h">
       <Filter>ヘッダー ファイル\Enum</Filter>
     </ClInclude>
   </ItemGroup>

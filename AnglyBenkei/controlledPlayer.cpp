@@ -169,22 +169,25 @@ void controlledPlayer::Action(const GameController & gameCtl, WeakWeaponList ite
 	{
 		myActionType = ANIM_WAIT;
 	}*/
+
 	// 1ÌÚ°Ñ‘O‚ÌÚÍÞÙ‚ðŠi”[
 	oldLevelCount = levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()];
-	// UŒ‚±ÆÒ°¼®Ý‚©‚ç(5/8–é‹Î‚Ì‹xŒe‚ÌŽž)
-	if (inputNow[5] && !inputOld[5])
+
+	//if (canPushAttackButton)
 	{
-		myActionType = ANIM_ATTACK;
-		//UŒ‚’iŠK‚ðã‚°‚é
-		levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]++;
-		attackFlag[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()] = true;
+		if (inputNow[5] && !inputOld[5])
+		{
+			myActionType = ANIM_ATTACK;
+			//UŒ‚’iŠK‚ðã‚°‚é
+			levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]++;
+			attackFlag[inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()] = true;
+		}
 	}
 
-	// –¾“ú‚±‚±‚©‚ç
 	if (myActionType == ANIM_ATTACK)
 	{
 		if (levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]
-			 >= animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()])
+			 > animLevel[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()] - 1)
 		{
 			levelCount[myActionType][inventory[lpWeaponInventry.GetCurrentWeaponNum()]->GetWeaponType()]
 				= -1;
@@ -238,7 +241,7 @@ bool controlledPlayer::InitAnimation(WEAPON weapon)
 	switch (weapon)
 	{
 	case WEAPON_SWORD:
-		AddAnimation("attack", 9, 30, true, weapon);
+		AddAnimation("attack", 9, 10, false, weapon);
 
 		attackFlag[weapon]=false;
 		break;
