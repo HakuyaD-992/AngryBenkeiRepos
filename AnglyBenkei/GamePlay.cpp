@@ -54,7 +54,7 @@ ScenePtr GamePlay::SceneUpDate(ScenePtr own, const PlayerController & gameCtl)
 	// G‹›“G
 	for (auto e = enemyList->begin(); e != enemyList->end(); e++)
 	{
-		(*e)->UpDate();
+		(*e)->UpDate(playerList);
 	}
 	// •Ší±²ÃÑ
 	for (auto i = itemList->begin(); i != itemList->end(); i++)
