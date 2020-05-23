@@ -3,8 +3,7 @@
 // enemy's animation value
 enum EnemyAnimation
 {
-	Eanim_Attack_1,
-	Eanim_Attack_2,
+	Eanim_Attack,
 	Eanim_Dead,
 	Eanim_Fall,
 	Eanim_Hit,

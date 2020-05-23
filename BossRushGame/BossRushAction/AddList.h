@@ -4,6 +4,7 @@
 
 
 class BasePlayer;
+class BaseEnemy;
 
 using namespace std;
 
@@ -15,6 +16,14 @@ using SharedPlayerListPtr = shared_ptr<SharedPlayerList>;
 using WeakPlayerList = weak_ptr<SharedPlayerList>;
 using SharedPlayerListItr = SharedPlayerList::iterator;
 
+// create enemy list
+using SharedEnemyPtr = shared_ptr<BaseEnemy>;
+using SharedEnemyList = list<SharedEnemyPtr>;
+using SharedEnemyListPtr = shared_ptr<SharedEnemyList>;
+
+using WeakEnemyList = weak_ptr<SharedEnemyList>;
+using SharedEnemyListItr = SharedEnemyList::iterator;
+
 struct AddPlayerList
 {
 	SharedPlayerListItr operator()(WeakPlayerList playerList, SharedPlayerPtr playerPtr)
@@ -24,5 +33,17 @@ struct AddPlayerList
 		playerItr--;
 
 		return playerItr;
+	}
+};
+
+struct AddEnemyList
+{
+	SharedEnemyListItr operator()(WeakEnemyList enemyList, SharedEnemyPtr enemyPtr)
+	{
+		enemyList.lock()->push_back(enemyPtr);
+		SharedEnemyListItr enemyItr = enemyList.lock()->end();;
+		enemyItr--;
+
+		return enemyItr;
 	}
 };

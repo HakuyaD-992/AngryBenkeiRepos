@@ -14,8 +14,9 @@ using SpriteString = std::vector<std::vector<std::string>>;
 
 // sprite file
 using PlayerSprite = std::array<SpriteString, Animation_Max>;
-using EnemySprite = std::array<std::vector<std::string>, Eanim_Max>;
 
+using EnemyAnimSprite = std::array<std::vector<std::string>,Eanim_Max> ;
+using EnemySprite = std::array<EnemyAnimSprite, ETYPE_MAX>;
 struct Actor
 {
 	// player name
@@ -57,15 +58,21 @@ private:
 	// player's sprite file path name
 	PlayerSprite playerSpriteName;
 	// enemy's sprite file path name
-	EnemySprite enemySpriteName[ETYPE_MAX];
+	EnemySprite enemySpriteName;
+	// enemy animation string
+	std::array<std::string, Eanim_Max> enemyAnimationString;
 	// enemy's type name
 	std::array<std::string, ETYPE_MAX> enemyTypeName;
 	// enemy's frame max num
-	std::array<int, Eanim_Max> enemyFrameMax;
+	std::array<int,Eanim_Max> enemyFrameMax[ETYPE_MAX];
+	// enemy's animation level
+	std::array<AnimationLevel, Eanim_Max> enemyAnimationLevelMax;
 
 	// actro's information
 	Actor actor[Player_Max];
-	// player list
+	// player's list
 	SharedPlayerListPtr playerList;
+	// enemy's list
+	SharedEnemyListPtr enemyList;
 };
 

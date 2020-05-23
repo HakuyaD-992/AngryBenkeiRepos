@@ -3,9 +3,9 @@
 // type of enemy
 enum ENEMYTYPE
 {
-	ETYPE_1,
-	ETYPE_2,
-	ETYPE_3,
+	Mandrake,
+	Golem,
+	Werewolf,
 	ETYPE_MAX
 };
 

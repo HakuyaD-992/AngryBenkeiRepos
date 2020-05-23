@@ -117,9 +117,9 @@ void controlledPlayer::AnimationInit(void)
 	AddAnimation("run", 6, 15, true);
 	AddAnimation("summersault", 3, 10, true);
 
-	AddAnimation("attack_sword", 17, 8, false);
-	AddAnimation("kick", 8, 8, false);
-	AddAnimation("punch", 13, 8, false);
+	AddAnimation("attack_sword", 17, 5, false);
+	AddAnimation("kick", 8, 5, false);
+	AddAnimation("punch", 13, 5, false);
 }
 
 void controlledPlayer::Jump(void)

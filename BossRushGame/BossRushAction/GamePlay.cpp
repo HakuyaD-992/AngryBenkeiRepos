@@ -4,6 +4,7 @@
 #include "GameController.h"
 #include "SpriteManager.h"
 #include "controlledPlayer.h"
+#include "Enemy.h"
 
 
 GamePlay::GamePlay()
@@ -14,6 +15,10 @@ GamePlay::GamePlay()
 	for (auto player = playerList->begin(); player != playerList->end(); player++)
 	{
 		(*player)->Init(playerSpriteName, actor[Player_1].animationLevel);
+	}
+	for (auto enemy = enemyList->begin(); enemy != enemyList->end(); enemy++)
+	{
+		(*enemy)->Init(enemySpriteName);
 	}
 }
 
@@ -28,10 +33,15 @@ ScenePtr GamePlay::SceneUpDate(ScenePtr own, const PlayerController & gameCtl)
 	auto inputNow = gameCtl[Player_1]->GetPadInfo().padInputNow;
 	auto inputOld = gameCtl[Player_1]->GetPadInfo().padInputOld;
 
-
+	// player action
 	for (auto player = playerList->begin(); player != playerList->end(); player++)
 	{
 		(*player)->UpDate(*gameCtl[Player_1]);
+	}
+	// enemies action
+	for (auto enemy = enemyList->begin(); enemy != enemyList->end(); enemy++)
+	{
+		(*enemy)->UpDate(playerList);
 	}
 
 	// draw something
@@ -47,8 +57,14 @@ bool GamePlay::Init(void)
 	{
 		playerList = make_shared<SharedPlayerList>();
 	}
+	if (!enemyList)
+	{
+		enemyList = make_shared<SharedEnemyList>();
+	}
 
 	AddPlayerList()(playerList, make_unique<controlledPlayer>(Vector2(100, 100), Idle, Direction_Right));
+
+	AddEnemyList()(enemyList, make_unique<Enemy>(Vector2(500,0), Eanim_Idle, Golem, Direction_Left));
 
 	// initialize player animation level
 	actor[Player_1].animationLevel = {
@@ -75,9 +91,19 @@ bool GamePlay::Init(void)
 		"summersault",
 		"dead"
 	};
-	actor[Player_AI_StandardEnemy].animationString = {
-		"attack1",
-		"attack2",
+
+	// initialize enemy's animation level
+	enemyAnimationLevelMax = { 
+		Level_2,
+		Level_1,
+		Level_1,
+		Level_1,
+		Level_1,
+		Level_1,
+		Level_1,
+	};
+	enemyAnimationString = {
+		"attack",
 		"dead",
 		"fall",
 		"hit",
@@ -89,27 +115,28 @@ bool GamePlay::Init(void)
 	actor[Player_1].name = "Player";
 	actor[Player_AI_StandardEnemy].name = "Enemy";
 
-	// initialize enemy's type name
-	for (int e = ETYPE_1; e < ETYPE_MAX; e++)
-	{
-		enemyTypeName[e] = "Enemy_" + std::to_string(e + 1);
-	}
+	enemyTypeName[Mandrake] = "Mandrake";
+	enemyTypeName[Golem] = "Golem";
+	enemyTypeName[Werewolf] = "Werewolf";
 
 	for (int anim = Idle; anim < Animation_Max; anim++)
 	{
 		CreateSpriteFolderPath((ANIMATION)anim, Player_1);
 	}
 
-	for (int eType = ETYPE_1; eType < ETYPE_MAX; eType++)
+	for (int eType = Mandrake; eType < ETYPE_MAX; eType++)
 	{
-		for (int eAnim = Eanim_Attack_1; eAnim < Eanim_Max; eAnim++)
+		for (int eAnim = Eanim_Attack; eAnim < Eanim_Max; eAnim++)
 		{
 			CreateEnemySpriteFolderPath((EnemyAnimation)eAnim, (ENEMYTYPE)eType);
 		}
 	}
-	// set animation strings
+	// set animation strings(player)
 	lpSpriteMng.SetPlayerAnimationString(actor[Player_1].animationString);
-	//lpSpriteMng.SetPlayterSpriteName(playerSpriteName);
+	lpSpriteMng.SetPlayerSpriteName(playerSpriteName);
+	// set animation strings(enemy)
+	lpSpriteMng.SetEnemyAnimationString(enemyAnimationString);
+
 	return true;
 }
 
@@ -121,9 +148,16 @@ void GamePlay::Draw(void)
 	// debug
 	DrawFormatString(0, 0, 0xffffff, "Gameplay");
 
+	// draw player
 	for (auto player = playerList->begin(); player != playerList->end(); player++)
 	{
 		(*player)->Draw();
+	}
+
+	// draw enemies
+	for (auto enemy = enemyList->begin(); enemy != enemyList->end(); enemy++)
+	{
+		(*enemy)->Draw();
 	}
 
 	// flip screen
@@ -158,18 +192,16 @@ void GamePlay::CreateEnemySpriteFolderPath(EnemyAnimation eAnim, ENEMYTYPE eType
 {
 
 	InitEnemyFrame(eAnim);
-	enemySpriteName[eType][eAnim].resize(enemyFrameMax[eAnim]);
+	enemySpriteName[eType][eAnim].resize(enemyFrameMax[eType][eAnim]);
 
-	for (int eFrameNum = 0; eFrameNum < enemyFrameMax[eAnim]; eFrameNum++)
+	for (int eFrameNum = 0; eFrameNum < enemyFrameMax[eType][eAnim]; eFrameNum++)
 	{
 		enemySpriteName[eType][eAnim][eFrameNum]
 			= "Image/GamePlay/" + actor[Player_AI_StandardEnemy].name + "/" + enemyTypeName[eType] + "/"
-			+ actor[Player_AI_StandardEnemy].animationString[eAnim]
-			+ "/" + actor[Player_AI_StandardEnemy].animationString[eAnim] + "_" + std::to_string(eFrameNum)
+			+ enemyAnimationString[eAnim] + "/" + enemyAnimationString[eAnim]
+			+ "_" + std::to_string(eFrameNum)
 			+ ".png";
 	}
-
-
 }
 
 void GamePlay::InitPlayerFrame(ANIMATION anim, PLAYER player)
@@ -233,23 +265,48 @@ void GamePlay::InitEnemyFrame(EnemyAnimation eAnim)
 {
 	switch (eAnim)
 	{
-	case Eanim_Attack_1:
-	case Eanim_Attack_2:
+	case Eanim_Attack:
+		enemyFrameMax[Mandrake][eAnim] = 7;
+		enemyFrameMax[Golem][eAnim] = 18;
+		enemyFrameMax[Werewolf][eAnim] = 7;
+
+		break;
 	case Eanim_Dead:
-		enemyFrameMax[eAnim] = 4;
+		enemyFrameMax[Mandrake][eAnim] = 10;
+		enemyFrameMax[Golem][eAnim] = 9;
+		enemyFrameMax[Werewolf][eAnim] = 9;
+
 		break;
 	case Eanim_Fall:
-		enemyFrameMax[eAnim] = 2;
+		enemyFrameMax[Mandrake][eAnim] = 2;
+		enemyFrameMax[Golem][eAnim] = 2;
+		enemyFrameMax[Werewolf][eAnim] = 2;
+
 		break;
 	case Eanim_Hit:
+		enemyFrameMax[Mandrake][eAnim] = 3;
+		enemyFrameMax[Golem][eAnim] = 3;
+		enemyFrameMax[Werewolf][eAnim] = 3;
+
+
+		break;
 	case Eanim_Idle:
-		enemyFrameMax[eAnim] = 4;
+		enemyFrameMax[Mandrake][eAnim] = 4;
+		enemyFrameMax[Golem][eAnim] = 5;
+		enemyFrameMax[Werewolf][eAnim] = 4;
+
 		break;
 	case Eanim_Run:
-		enemyFrameMax[eAnim] = 8;
+		enemyFrameMax[Mandrake][eAnim] = 6;
+		enemyFrameMax[Golem][eAnim] = 6;
+		enemyFrameMax[Werewolf][eAnim] = 6;
+
 		break;
 	case Eanim_Jump:
-		enemyFrameMax[eAnim] = 2;
+		enemyFrameMax[Mandrake][eAnim] = 4;
+		enemyFrameMax[Golem][eAnim] = 4;
+		enemyFrameMax[Werewolf][eAnim] = 4;
+
 		break;
 	case Eanim_Max:
 		break;

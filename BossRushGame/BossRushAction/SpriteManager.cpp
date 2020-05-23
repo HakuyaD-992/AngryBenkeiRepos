@@ -28,9 +28,37 @@ SpriteHandle SpriteManager::GetPlayerID(PlayerSprite playerSpriteName,ANIMATION 
 	return playerSpriteMap[anim][animlevel];
 }
 
+SpriteHandle SpriteManager::GetEnemyID(EnemyAnimSprite enemySpriteName, EnemyAnimation eAnim)
+{
+	if (enemySpriteMap.find(eAnim) == enemySpriteMap.end())
+	{
+		enemySpriteMap[eAnim].resize(enemySpriteName[eAnim].size());
+		for (int eSprite = 0; eSprite < enemySpriteName[eAnim].size(); eSprite++)
+		{
+			enemySpriteMap[eAnim][eSprite] = LoadGraph(enemySpriteName[eAnim][eSprite].c_str());
+		}
+	}
+	return enemySpriteMap[eAnim];
+}
+
 void SpriteManager::SetPlayerAnimationString(std::array<std::string, Animation_Max> pAnimStrings)
 {
 	playerAnimationString = pAnimStrings;
+}
+
+void SpriteManager::SetEnemyAnimationString(std::array<std::string, Eanim_Max> eAnimStrings)
+{
+	enemyAnimationString = eAnimStrings;
+}
+
+void SpriteManager::SetPlayerSpriteName(PlayerSprite playerSpriteName)
+{
+	this->playerSpriteName = playerSpriteName;
+}
+
+void SpriteManager::SetEnemySpriteName(EnemySprite enemySpriteName)
+{
+	this->enemySpriteName = enemySpriteName;
 }
 
 //void SpriteManager::SetPlayterSpriteName(PlayerSprite playerSpriteName)

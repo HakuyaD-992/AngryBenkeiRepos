@@ -94,7 +94,7 @@
       <Filter>ソース ファイル\BaseClass</Filter>
     </ClCompile>
     <ClCompile Include="EnemyAnimation.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\enum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +156,7 @@
       <Filter>ヘッダー ファイル\BaseClass</Filter>
     </ClInclude>
     <ClInclude Include="EnemyAnimation.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\enum</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,11 +27,15 @@ public:
 	// draw player
 	virtual void Draw(void);
 
-	// ±∆“∞ºÆ›í«â¡ä÷êî
+	// add animation
 	bool AddAnimation(std::string animName, int frame, int interval, bool loop);
-	// ±∆“∞ºÆ›æØƒ
+	// set animation
 	bool SetAnimation(std::string animName);
-
+	// you can get player's position
+	const Vector2& GetPos(void)
+	{
+		return pos;
+	}
 
 private:
 	// player's action
