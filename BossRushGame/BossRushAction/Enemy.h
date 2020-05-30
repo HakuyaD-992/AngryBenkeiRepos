@@ -15,5 +15,23 @@ private:
 	bool AnimationInit(ENEMYTYPE eType);
 	// move enemy right or left
 	void Run(void);
+	// knock back
+	void KnockBack(WeakPlayerList playerList);
+	void HitAttack(WeakPlayerList playerList);
+
+	void GoAroundBackofPlayer(void);
+
+	bool Init(void);
+
+	// update box collider position
+	void BoxColliderUpDate(void);
+	// player's direction
+	DIRECTION playerDir;
+
+	std::string typeName;
+
+	bool canGoaround;
+
+	bool moveY;
 };
 

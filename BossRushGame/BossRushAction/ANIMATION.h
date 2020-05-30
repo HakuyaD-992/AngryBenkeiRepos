@@ -12,7 +12,10 @@ enum ANIMATION
 	Fall,
 	Run,
 	SummerSault,
-	Dead,
+	KnockBack,
+	GetUp,
+	Walk,
+	Hit,
 	Animation_Max
 };
 

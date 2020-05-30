@@ -14,9 +14,18 @@ BaseEnemy::BaseEnemy()
 	startingJumpForce = -10.0f;
 
 	attackFlag = false;
+	damageFlag = false;
+	hitFlag = false;
+	isHitAttack = false;
+
 	intoSightRangeFlag = false;
 	sightRange = SightRange;
+	hp = MAXHP;
 
+	knockBackFlag = false;
+	kbFirstSpeed = E_KnockBackFirstSP;
+	kbAccel = 0;
+	kbSpeed = 0;
 }
 
 
@@ -36,12 +45,12 @@ void BaseEnemy::UpDate(WeakPlayerList playerList)
 
 void BaseEnemy::Draw(void)
 {
-	if (enemySpriteName[type][myAnimationType].size() - 1 == 0)
+	if (enemySpriteName[myAnimationType].size() - 1 == 0)
 	{
 		return;
 	}
 
-	float animationID = 0.0f;
+	animationID = 0;
 	animationCount++;
 	if (animationTable[type].find(animationName) != animationTable[type].end())
 	{
@@ -58,30 +67,71 @@ void BaseEnemy::Draw(void)
 			count = animationTable[type][animationName][Animation_TB_Frame] - 1;
 		}
 
+		if (count >= enemySpriteName[myAnimationType].size() - 1)
+		{
+			hitFlag = false;
+		}
+
+		if (myAnimationType != oldAnimationType)
+		{
+			count = 0;
+		}
+
 		animationID = animationTable[type][animationName][Animation_TB_Start] + count;
 	}
-	if (animationID < enemySpriteName[type][myAnimationType].size())
+	if (animationID < enemySpriteName[myAnimationType].size())
 	{
 		switch (direction)
 		{
 		case Direction_Right:
 			DrawRotaGraph(pos.x, pos.y, 1.0f, 0.0f,
-				lpSpriteMng.GetEnemyID(enemySpriteName[type], myAnimationType)[animationID],
+				lpSpriteMng.GetEnemyID(enemySpriteName, myAnimationType,type)[animationID],
 				true, true);
 			break;
 
 		case Direction_Left:
 			DrawRotaGraph(pos.x, pos.y, 1.0f, 0.0f,
-				lpSpriteMng.GetEnemyID(enemySpriteName[type], myAnimationType)[animationID],
+				lpSpriteMng.GetEnemyID(enemySpriteName, myAnimationType,type)[animationID],
 				true, false);
 			break;
 		default:
 			break;
 		}
+		DrawBoxCollider();
 	}
-	DrawFormatString(pos.x, pos.y - 100, 0xffffff, "myAnimationType:%d", myAnimationType);
-	DrawFormatString(pos.x, pos.y - 50, 0xffffff, "animationID:%f",animationID);
 
+	
+	DrawFormatString(pos.x, pos.y - 100, 0xffffff, "myAnimationType:%d", myAnimationType);
+	DrawFormatString(pos.x, pos.y - 50, 0xffffff, "animationID:%d",animationID);
+
+}
+
+void BaseEnemy::DrawBoxCollider(void)
+{
+	auto tmpColliderBox = collider.enemyAnimationRectData[myAnimationType].enemyFrameRectData[animationID];
+
+	for (int flag = R_State_Damage; flag < R_State_Max; flag++)
+	{
+		for (int colliderNum = 0; colliderNum < tmpColliderBox.rectNum[flag]; colliderNum++)
+		{
+			auto colliderPos = tmpColliderBox.pos[flag][colliderNum];
+			auto colliderSize = tmpColliderBox.size[flag][colliderNum];
+
+			if (flag == R_State_Attack)
+			{
+				boxColliderColor = 0xff0000;
+			}
+			else
+			{
+				boxColliderColor = 0x0000ff;
+			}
+			DrawBox(colliderPos.x - (colliderSize.x / 2),
+				colliderPos.y - (colliderSize.y / 2),
+				colliderPos.x + (colliderSize.x / 2),
+				colliderPos.y + (colliderSize.y / 2),
+				boxColliderColor, false);
+		}
+	}
 }
 
 bool BaseEnemy::AddAnimation(std::string animName, int frame, int interval, bool loop,ENEMYTYPE eType)
@@ -108,7 +158,12 @@ bool BaseEnemy::SetAnimation(std::string animName,ENEMYTYPE eType)
 	return false;
 }
 
-bool BaseEnemy::Init(EnemySprite enemySpriteName)
+void BaseEnemy::SetCollider(const EnemyRectData & enemyCollider)
+{
+	this->collider = enemyCollider[type];
+}
+
+bool BaseEnemy::Init(const EnemyAnimSprite& enemySpriteName)
 {
 	this->enemySpriteName = enemySpriteName;
 	return true;
@@ -126,13 +181,14 @@ bool BaseEnemy::IsFindPlayer(void)
 	ClampDistance(distance);
 	if (!attackFlag)
 	{
-		if (distance.x <= SightRange && distance.y <= SightRange)
+		if (distance.x >= collider.enemyAnimationRectData[myAnimationType].enemyFrameRectData[animationID].size[R_State_Damage][0].x &&
+			distance.y >= collider.enemyAnimationRectData[myAnimationType].enemyFrameRectData[animationID].size[R_State_Damage][0].y)
 		{
-			intoSightRangeFlag = true;
+			intoSightRangeFlag = false;
 		}
 		else
 		{
-			intoSightRangeFlag = false;
+			intoSightRangeFlag = true;
 		}
 	}
 
@@ -153,6 +209,41 @@ bool BaseEnemy::IsAttack(void)
 		attackFlag = false;
 	}
 	return attackFlag;
+}
+
+bool BaseEnemy::IsHitPlayerAttack(const ActionRect & playerRect)
+{
+	
+	if (!hitFlag)
+	{
+		Vector2 e_distance;
+		auto attackRect = playerRect;
+		auto damageRect = collider.enemyAnimationRectData[myAnimationType].enemyFrameRectData[animationID];
+		for (int atcRNum = 0; atcRNum < attackRect.rectNum[R_State_Attack]; atcRNum++)
+		{
+			for (int damRNum = 0; damRNum < damageRect.rectNum[R_State_Damage]; damRNum++)
+			{
+				e_distance = attackRect.pos[R_State_Attack][atcRNum] - damageRect.pos[R_State_Damage][damRNum];
+				ClampDistance(e_distance);
+
+				if (e_distance.x <= ((attackRect.size[R_State_Attack][atcRNum].x / 2)
+					+ (damageRect.size[R_State_Damage][damRNum].x / 2))
+					&& e_distance.y <= ((attackRect.size[R_State_Attack][atcRNum].y / 2)
+						+ (damageRect.size[R_State_Damage][damRNum].y / 2)))
+				{
+					hitFlag = true;
+					damageFlag = true;
+					return damageFlag;
+				}
+				else
+				{
+					hitFlag = false;
+					damageFlag = false;
+				}
+			}
+		}
+	}
+	return damageFlag;
 }
 
 void BaseEnemy::ClampDistance(Vector2& val)

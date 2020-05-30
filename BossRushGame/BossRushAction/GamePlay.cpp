@@ -5,20 +5,52 @@
 #include "SpriteManager.h"
 #include "controlledPlayer.h"
 #include "Enemy.h"
-
+#include "CollisionLoader.h"
+#include "Camera.h"
+#include "SoundManager.h"
 
 GamePlay::GamePlay()
 {
 	// initialize this scene
 	Init();
-
 	for (auto player = playerList->begin(); player != playerList->end(); player++)
 	{
-		(*player)->Init(playerSpriteName, actor[Player_1].animationLevel);
+		(*player)->Init(playerSpriteName, actor[Player_1]);
 	}
+
+	AddEnemyList()(enemyList, make_unique<Enemy>(Vector2(ScrSize.x - 100, 0), Eanim_Idle, Golem, Direction_Left));
+	AddEnemyList()(enemyList, make_unique<Enemy>(Vector2(-50, 0), Eanim_Idle, Mandrake, Direction_Left));
+
+	// loading player collider
+	for (int anim = Idle; anim < Animation_Max; anim++)
+	{
+		for (int level = 0; level < actor[Player_1].animationLevel[(ANIMATION)anim]; level++)
+		{
+			lpCollisionLoader.LoadPlayerCollider(
+				lpCollider.GetPlayerColliderData(),
+				(ANIMATION)anim, actor[Player_1].animationLevel[(ANIMATION)anim]);
+		}
+	}
+	for (auto player = playerList->begin(); player != playerList->end(); player++)
+	{
+		(*player)->SetCollider(lpCollider.GetPlayerColliderData());
+	}
+	// loading enemy collider
+	
+	for (int eType = Mandrake; eType < ETYPE_MAX; eType++)
+	{
+		for (int eAnim = Eanim_Attack; eAnim < Eanim_Max; eAnim++)
+		{
+			lpCollisionLoader.LoadEnemyCollider(
+				lpCollider.GetEnemyColliderData(),
+				(EnemyAnimation)eAnim,
+				(ENEMYTYPE)eType);
+		}
+	}
+
 	for (auto enemy = enemyList->begin(); enemy != enemyList->end(); enemy++)
 	{
-		(*enemy)->Init(enemySpriteName);
+		(*enemy)->SetCollider(lpCollider.GetEnemyColliderData());
 	}
 }
 
@@ -33,10 +65,16 @@ ScenePtr GamePlay::SceneUpDate(ScenePtr own, const PlayerController & gameCtl)
 	auto inputNow = gameCtl[Player_1]->GetPadInfo().padInputNow;
 	auto inputOld = gameCtl[Player_1]->GetPadInfo().padInputOld;
 
+	ChangeVolumeSoundMem(255 * 50 / 100, lpSoundMng.GetSoundID("BGM")[0]);
+	PlaySoundMem(lpSoundMng.GetSoundID("BGM")[0], DX_PLAYTYPE_BACK, false);
+
 	// player action
 	for (auto player = playerList->begin(); player != playerList->end(); player++)
 	{
-		(*player)->UpDate(*gameCtl[Player_1]);
+		(*player)->UpDate(*gameCtl[Player_1],enemyList);
+
+		// update camera position
+		camera->UpDate((*player)->GetPos());
 	}
 	// enemies action
 	for (auto enemy = enemyList->begin(); enemy != enemyList->end(); enemy++)
@@ -52,6 +90,7 @@ ScenePtr GamePlay::SceneUpDate(ScenePtr own, const PlayerController & gameCtl)
 
 bool GamePlay::Init(void)
 {
+	camera = new Camera({0,0});
 	// create player list
 	if (!playerList)
 	{
@@ -64,7 +103,6 @@ bool GamePlay::Init(void)
 
 	AddPlayerList()(playerList, make_unique<controlledPlayer>(Vector2(100, 100), Idle, Direction_Right));
 
-	AddEnemyList()(enemyList, make_unique<Enemy>(Vector2(500,0), Eanim_Idle, Golem, Direction_Left));
 
 	// initialize player animation level
 	actor[Player_1].animationLevel = {
@@ -73,6 +111,9 @@ bool GamePlay::Init(void)
 		Level_3,
 		Level_1,
 		Level_3,
+		Level_1,
+		Level_1,
+		Level_1,
 		Level_1,
 		Level_1,
 		Level_1,
@@ -89,20 +130,13 @@ bool GamePlay::Init(void)
 		"fall",
 		"run",
 		"summersault",
-		"dead"
+		"knockback",
+		"getup",
+		"walk",
+		"hit"
 	};
 
-	// initialize enemy's animation level
-	enemyAnimationLevelMax = { 
-		Level_2,
-		Level_1,
-		Level_1,
-		Level_1,
-		Level_1,
-		Level_1,
-		Level_1,
-	};
-	enemyAnimationString = {
+	enemy.enemyAnimationString = {
 		"attack",
 		"dead",
 		"fall",
@@ -115,9 +149,9 @@ bool GamePlay::Init(void)
 	actor[Player_1].name = "Player";
 	actor[Player_AI_StandardEnemy].name = "Enemy";
 
-	enemyTypeName[Mandrake] = "Mandrake";
-	enemyTypeName[Golem] = "Golem";
-	enemyTypeName[Werewolf] = "Werewolf";
+	enemy.enemyTypeName[Mandrake] = "Mandrake";
+	enemy.enemyTypeName[Golem] = "Golem";
+	enemy.enemyTypeName[Werewolf] = "Werewolf";
 
 	for (int anim = Idle; anim < Animation_Max; anim++)
 	{
@@ -135,7 +169,8 @@ bool GamePlay::Init(void)
 	lpSpriteMng.SetPlayerAnimationString(actor[Player_1].animationString);
 	lpSpriteMng.SetPlayerSpriteName(playerSpriteName);
 	// set animation strings(enemy)
-	lpSpriteMng.SetEnemyAnimationString(enemyAnimationString);
+	lpSpriteMng.SetEnemyAnimationString(enemy.enemyAnimationString);
+	lpSpriteMng.SetEnemySpriteName(enemySpriteName);
 
 	return true;
 }
@@ -147,6 +182,8 @@ void GamePlay::Draw(void)
 	DebugDraw();
 	// debug
 	DrawFormatString(0, 0, 0xffffff, "Gameplay");
+	/*DrawGraph(camera->GetPos().x, camera->GetPos().y,
+		lpSpriteMng.GetID("Image/GamePlay/BackGround/BackGroundTest.png")[0], true);*/
 
 	// draw player
 	for (auto player = playerList->begin(); player != playerList->end(); player++)
@@ -186,22 +223,25 @@ void GamePlay::CreateSpriteFolderPath(ANIMATION anim,PLAYER player)
 				+ std::to_string(level + 1) + "_" + std::to_string(frame) + ".png";
 		}
 	}
+	// set player collider
+	lpCollider.SetPlayerDataFile(actor[Player_1], (ANIMATION)anim);
 }
 
 void GamePlay::CreateEnemySpriteFolderPath(EnemyAnimation eAnim, ENEMYTYPE eType)
 {
 
 	InitEnemyFrame(eAnim);
-	enemySpriteName[eType][eAnim].resize(enemyFrameMax[eType][eAnim]);
+	enemySpriteName[eType][eAnim].resize(enemy.enemyFrameMax[eType][eAnim]);
 
-	for (int eFrameNum = 0; eFrameNum < enemyFrameMax[eType][eAnim]; eFrameNum++)
+	for (int eFrameNum = 0; eFrameNum < enemy.enemyFrameMax[eType][eAnim]; eFrameNum++)
 	{
 		enemySpriteName[eType][eAnim][eFrameNum]
-			= "Image/GamePlay/" + actor[Player_AI_StandardEnemy].name + "/" + enemyTypeName[eType] + "/"
-			+ enemyAnimationString[eAnim] + "/" + enemyAnimationString[eAnim]
+			= "Image/GamePlay/" + actor[Player_AI_StandardEnemy].name + "/" + enemy.enemyTypeName[eType] + "/"
+			+ enemy.enemyAnimationString[eAnim] + "/" + enemy.enemyAnimationString[eAnim]
 			+ "_" + std::to_string(eFrameNum)
 			+ ".png";
 	}
+	lpCollider.SetEnemyDataFile(enemy, eAnim, eType);
 }
 
 void GamePlay::InitPlayerFrame(ANIMATION anim, PLAYER player)
@@ -248,10 +288,18 @@ void GamePlay::InitPlayerFrame(ANIMATION anim, PLAYER player)
 			actor[player].frameMax[anim] = { 3 };
 
 			break;
-		case Dead:
-			actor[player].frameMax[anim] = { 7 };
+		case KnockBack:
+			actor[player].frameMax[anim] = { 6 };
 
 			break;
+		case GetUp:
+			actor[player].frameMax[anim] = { 7 };
+			break;
+		case Walk:
+			actor[player].frameMax[anim] = { 6 };
+			break;
+		case Hit:
+			actor[player].frameMax[anim] = { 3 };
 		case Animation_Max:
 			break;
 		default:
@@ -266,46 +314,46 @@ void GamePlay::InitEnemyFrame(EnemyAnimation eAnim)
 	switch (eAnim)
 	{
 	case Eanim_Attack:
-		enemyFrameMax[Mandrake][eAnim] = 7;
-		enemyFrameMax[Golem][eAnim] = 18;
-		enemyFrameMax[Werewolf][eAnim] = 7;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 7;
+		enemy.enemyFrameMax[Golem][eAnim] = 18;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 7;
 
 		break;
 	case Eanim_Dead:
-		enemyFrameMax[Mandrake][eAnim] = 10;
-		enemyFrameMax[Golem][eAnim] = 9;
-		enemyFrameMax[Werewolf][eAnim] = 9;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 10;
+		enemy.enemyFrameMax[Golem][eAnim] = 9;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 9;
 
 		break;
 	case Eanim_Fall:
-		enemyFrameMax[Mandrake][eAnim] = 2;
-		enemyFrameMax[Golem][eAnim] = 2;
-		enemyFrameMax[Werewolf][eAnim] = 2;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 2;
+		enemy.enemyFrameMax[Golem][eAnim] = 2;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 2;
 
 		break;
 	case Eanim_Hit:
-		enemyFrameMax[Mandrake][eAnim] = 3;
-		enemyFrameMax[Golem][eAnim] = 3;
-		enemyFrameMax[Werewolf][eAnim] = 3;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 3;
+		enemy.enemyFrameMax[Golem][eAnim] = 3;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 3;
 
 
 		break;
 	case Eanim_Idle:
-		enemyFrameMax[Mandrake][eAnim] = 4;
-		enemyFrameMax[Golem][eAnim] = 5;
-		enemyFrameMax[Werewolf][eAnim] = 4;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 4;
+		enemy.enemyFrameMax[Golem][eAnim] = 5;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 4;
 
 		break;
 	case Eanim_Run:
-		enemyFrameMax[Mandrake][eAnim] = 6;
-		enemyFrameMax[Golem][eAnim] = 6;
-		enemyFrameMax[Werewolf][eAnim] = 6;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 6;
+		enemy.enemyFrameMax[Golem][eAnim] = 6;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 6;
 
 		break;
 	case Eanim_Jump:
-		enemyFrameMax[Mandrake][eAnim] = 4;
-		enemyFrameMax[Golem][eAnim] = 4;
-		enemyFrameMax[Werewolf][eAnim] = 4;
+		enemy.enemyFrameMax[Mandrake][eAnim] = 4;
+		enemy.enemyFrameMax[Golem][eAnim] = 4;
+		enemy.enemyFrameMax[Werewolf][eAnim] = 4;
 
 		break;
 	case Eanim_Max:

@@ -127,6 +127,9 @@
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="BasePlayer.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CollisionLoader.cpp" />
     <ClCompile Include="controlledPlayer.cpp" />
     <ClCompile Include="DIRECTION.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -138,7 +141,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PLAYER.cpp" />
     <ClCompile Include="SceneShift.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
+    <ClCompile Include="StageLoader.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
@@ -150,6 +155,9 @@
     <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="BasePlayer.h" />
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="CollisionLoader.h" />
     <ClInclude Include="controlledPlayer.h" />
     <ClInclude Include="DIRECTION.h" />
     <ClInclude Include="Enemy.h" />
@@ -160,7 +168,9 @@
     <ClInclude Include="Gravity.h" />
     <ClInclude Include="PLAYER.h" />
     <ClInclude Include="SceneShift.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SpriteManager.h" />
+    <ClInclude Include="StageLoader.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>

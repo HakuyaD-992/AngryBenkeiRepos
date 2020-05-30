@@ -17,6 +17,7 @@ using PlayerSprite = std::array<SpriteString, Animation_Max>;
 
 using EnemyAnimSprite = std::array<std::vector<std::string>,Eanim_Max> ;
 using EnemySprite = std::array<EnemyAnimSprite, ETYPE_MAX>;
+
 struct Actor
 {
 	// player name
@@ -29,7 +30,18 @@ struct Actor
 	std::array<std::string, Animation_Max> animationString;
 };
 
+struct EnemyStructure
+{
+	// enemy animation string
+	std::array<std::string, Eanim_Max> enemyAnimationString;
+	// enemy's type name
+	std::array<std::string, ETYPE_MAX> enemyTypeName;
+	// enemy's frame max num
+	std::array<int, Eanim_Max> enemyFrameMax[ETYPE_MAX];
+};
 
+class Collider;
+class Camera;
 
 class GamePlay :
 	public BaseScene
@@ -59,14 +71,8 @@ private:
 	PlayerSprite playerSpriteName;
 	// enemy's sprite file path name
 	EnemySprite enemySpriteName;
-	// enemy animation string
-	std::array<std::string, Eanim_Max> enemyAnimationString;
-	// enemy's type name
-	std::array<std::string, ETYPE_MAX> enemyTypeName;
-	// enemy's frame max num
-	std::array<int,Eanim_Max> enemyFrameMax[ETYPE_MAX];
-	// enemy's animation level
-	std::array<AnimationLevel, Eanim_Max> enemyAnimationLevelMax;
+
+	EnemyStructure enemy;
 
 	// actro's information
 	Actor actor[Player_Max];
@@ -74,5 +80,8 @@ private:
 	SharedPlayerListPtr playerList;
 	// enemy's list
 	SharedEnemyListPtr enemyList;
+
+	// camera
+	Camera* camera;
 };
 

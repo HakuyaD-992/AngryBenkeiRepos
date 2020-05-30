@@ -22,10 +22,15 @@ public:
 		return *spriteIns;
 	}
 
+	// you can get sprite ID
+	const SpriteHandle& GetID(std::string imageName);
+	// you can get devided sprite ID
+	const SpriteHandle& GetID(std::string imageName, const Vector2& divSize, const Vector2& divCount);
+
 	// you can get player sprite ID
 	SpriteHandle GetPlayerID(PlayerSprite playerSpriteName,ANIMATION anim, AnimationLevel animlevel);
 	// you can get player sprite ID
-	SpriteHandle GetEnemyID(EnemyAnimSprite enemySpriteName,EnemyAnimation eAnim);
+	SpriteHandle GetEnemyID(EnemyAnimSprite enemySpriteName,EnemyAnimation eAnim,const ENEMYTYPE& eType);
 	
 	void SetPlayerAnimationString(std::array<std::string, Animation_Max> pAnimStrings);
 	void SetEnemyAnimationString(std::array<std::string, Eanim_Max> eAnimStrings);
@@ -33,6 +38,10 @@ public:
 	void SetPlayerSpriteName(PlayerSprite playerSpriteName);
 	void SetEnemySpriteName(EnemySprite enemySpriteName);
 
+	const EnemyAnimSprite& GetEnemySpriteName(const ENEMYTYPE& eType)
+	{
+		return enemySpriteName[eType];
+	}
 
 	// you can get player's animation string
 	std::string GetPlayerAnimationString(ANIMATION anim)
@@ -62,6 +71,8 @@ private:
 	static std::once_flag onceflag;
 	static SpriteManager* spriteIns;
 
+	std::map<std::string, SpriteHandle> imageHandle;
+
 	PlayerSprite playerSpriteName;
 	EnemySprite enemySpriteName;
 
@@ -75,6 +86,6 @@ private:
 	// player's sprite handle
 	std::map<AnimationLevel,SpriteHandle> playerSpriteMap[Animation_Max];
 	// enemy's sprite handle
-	std::map<EnemyAnimation, SpriteHandle> enemySpriteMap;
+	std::map<ENEMYTYPE, SpriteHandle> enemySpriteMap[Eanim_Max];
 };
 

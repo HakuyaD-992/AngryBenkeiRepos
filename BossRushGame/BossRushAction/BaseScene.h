@@ -29,6 +29,8 @@ public:
 	virtual void DebugDraw(void) = 0;
 
 private:
+
+protected:
 	// screen size
 	Vector2 ScrSize;
 

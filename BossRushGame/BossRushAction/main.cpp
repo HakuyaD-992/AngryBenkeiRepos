@@ -6,4 +6,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	SceneShift::getInstance().onceRun();
 
+	SceneShift::Destroy();
 }

@@ -7,14 +7,24 @@ public:
 	controlledPlayer(Vector2 pos,ANIMATION anim,DIRECTION direction);
 	~controlledPlayer();
 
-	void Action(const GameController& gameCtl);
+	void Action(const GameController& gameCtl, WeakEnemyList enemyList);
 
 
 private:
 	void Draw(void);
+	void Init(void);
 
 	void AnimationInit(void);
 	void Jump(void);
-	void Attack(const GameController& gameCtl);
+	void Attack(const GameController& gameCtl, WeakEnemyList enemyList);
+	void HitAttack(WeakEnemyList enemyList);
+	void KnockBack(WeakEnemyList enemyList);
+
+
+	void BoxColliderUpDate(void);
+
+	bool canAttack;
+
+	DIRECTION enemyDir;
 };
 

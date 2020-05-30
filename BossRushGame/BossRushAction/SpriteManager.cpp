@@ -15,6 +15,30 @@ void SpriteManager::Destroy(void)
 	spriteIns = nullptr;
 }
 
+const SpriteHandle& SpriteManager::GetID(std::string imageName)
+{
+	if (imageHandle.find(imageName) == imageHandle.end())
+	{
+		imageHandle[imageName].resize(1);
+		imageHandle[imageName][0] = LoadGraph(imageName.c_str());
+	}
+
+	return imageHandle[imageName];
+}
+
+const SpriteHandle & SpriteManager::GetID(std::string imageName, const Vector2 & divSize, const Vector2 & divCount)
+{
+	if (imageHandle.find(imageName) == imageHandle.end())
+	{
+		imageHandle[imageName].resize(divCount.x * divCount.y);
+		LoadDivGraph(imageName.c_str(), divCount.x*divCount.y,
+					 divCount.x, divCount.y,
+					 divSize.x, divSize.y, &imageHandle[imageName][0], true);
+	}
+
+	return imageHandle[imageName];
+}
+
 SpriteHandle SpriteManager::GetPlayerID(PlayerSprite playerSpriteName,ANIMATION anim, AnimationLevel animlevel)
 {
 	if (playerSpriteMap[anim].find(animlevel) == playerSpriteMap[anim].end())
@@ -28,17 +52,17 @@ SpriteHandle SpriteManager::GetPlayerID(PlayerSprite playerSpriteName,ANIMATION 
 	return playerSpriteMap[anim][animlevel];
 }
 
-SpriteHandle SpriteManager::GetEnemyID(EnemyAnimSprite enemySpriteName, EnemyAnimation eAnim)
+SpriteHandle SpriteManager::GetEnemyID(EnemyAnimSprite enemySpriteName, EnemyAnimation eAnim,const ENEMYTYPE& eType)
 {
-	if (enemySpriteMap.find(eAnim) == enemySpriteMap.end())
+	if (enemySpriteMap[eAnim].find(eType) == enemySpriteMap[eAnim].end())
 	{
-		enemySpriteMap[eAnim].resize(enemySpriteName[eAnim].size());
+		enemySpriteMap[eAnim][eType].resize(enemySpriteName[eAnim].size());
 		for (int eSprite = 0; eSprite < enemySpriteName[eAnim].size(); eSprite++)
 		{
-			enemySpriteMap[eAnim][eSprite] = LoadGraph(enemySpriteName[eAnim][eSprite].c_str());
+			enemySpriteMap[eAnim][eType][eSprite] = LoadGraph(enemySpriteName[eAnim][eSprite].c_str());
 		}
 	}
-	return enemySpriteMap[eAnim];
+	return enemySpriteMap[eAnim][eType];
 }
 
 void SpriteManager::SetPlayerAnimationString(std::array<std::string, Animation_Max> pAnimStrings)
