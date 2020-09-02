@@ -1,2 +1,0 @@
-# AngryBenkeiRepos
-AngryBenkeiのリポジトリ
