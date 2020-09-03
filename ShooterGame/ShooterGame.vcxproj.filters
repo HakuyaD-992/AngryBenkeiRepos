@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\Input">
+      <UniqueIdentifier>{80c16415-efb3-46b5-bcec-e9417700a8a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Input">
+      <UniqueIdentifier>{45efa22e-c467-46a4-93ef-8d29a2c341de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{d6f3b481-e64e-4f9c-8b91-1e00fd2c295e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene">
+      <UniqueIdentifier>{747eba25-0f42-493e-a8c4-c45a4e3891dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Manager">
+      <UniqueIdentifier>{5087d9cd-5cce-4a7f-b232-6f241ee49d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Manager">
+      <UniqueIdentifier>{36beaf4a-df6e-4a5d-8ea3-62a18bb44055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object">
+      <UniqueIdentifier>{a06ec522-ee78-4e07-b9bc-1ef50bb96ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object">
+      <UniqueIdentifier>{6e4c975c-2f4f-4d6f-8358-a21c6c239d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Bullets">
+      <UniqueIdentifier>{77daae26-090d-43eb-b280-ea5e0c44326d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Bullets">
+      <UniqueIdentifier>{f5f02e0a-f539-4e4c-88cb-d9d430781d74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Actor">
+      <UniqueIdentifier>{8d585a26-29dd-4410-9cb8-6d80d0d3647d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Weapon">
+      <UniqueIdentifier>{1df475c1-a448-4f33-8f03-b4d8b4bebaf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Weapon">
+      <UniqueIdentifier>{3ca19ad5-abc1-4664-96e2-9c12ef4ca96c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Actor">
+      <UniqueIdentifier>{1214ad94-ba99-4436-acb3-eb8283077202}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Geometory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyInput.cpp">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="PadInput.cpp">
+      <Filter>ソース ファイル\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneController.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Floor.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Gravity.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionRect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletBase.cpp">
+      <Filter>ソース ファイル\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>ソース ファイル\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlledPlayer.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="SubMachinegun.cpp">
+      <Filter>ソース ファイル\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponBase.cpp">
+      <Filter>ソース ファイル\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="AK69.cpp">
+      <Filter>ソース ファイル\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Pistol.cpp">
+      <Filter>ソース ファイル\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Exoskeleton.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Pod.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Application.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometory.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyConfiguration.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PLAYER.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyInput.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="PadInput.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneController.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageManager.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Fps.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Floor.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Gravity.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionRect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletBase.h">
+      <Filter>ヘッダー ファイル\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletType.h">
+      <Filter>ヘッダー ファイル\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>ヘッダー ファイル\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="AK69.h">
+      <Filter>ヘッダー ファイル\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponBase.h">
+      <Filter>ヘッダー ファイル\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="SubMachinegun.h">
+      <Filter>ヘッダー ファイル\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponType.h">
+      <Filter>ヘッダー ファイル\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>ヘッダー ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorType.h">
+      <Filter>ヘッダー ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlledPlayer.h">
+      <Filter>ヘッダー ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Pistol.h">
+      <Filter>ヘッダー ファイル\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Exoskeleton.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Pod.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
