@@ -23,6 +23,7 @@ public:
 	void ChangeAnimation(std::string animName);
 
 	virtual bool OnFloor(void);
+	virtual bool InFloor(void);
 
 	// �߼޼�ݎ擾
 	const Vector2I& GetPos(void) const

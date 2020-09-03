@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Application.h"
 #include "PlayScene.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Input.h"
 #include "PLAYER.h"
@@ -72,6 +73,7 @@ void PlayScene::Draw(void)
 
 	fps_.Draw();
 
+	//lpS_Effect.UpDate(EFFECT_TYPE::shake);
 
 
 	ScreenFlip();

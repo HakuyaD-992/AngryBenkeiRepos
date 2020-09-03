@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "Actor.h"
+#include "Floor.h"
 #include "ImageManager.h"
 
 Actor::Actor()
@@ -34,6 +35,16 @@ Actor::~Actor()
 bool Actor::OnFloor(void)
 {
 	if (pos_.y >= 500)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Actor::InFloor(void)
+{
+	if (pos_.x		>= GetPos().x && pos_.y + 64 >= GetPos().y &&
+		pos_.x + 64 <= 800		  && pos_.y + 64 <= GetPos().y + 166)
 	{
 		return true;
 	}

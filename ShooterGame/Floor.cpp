@@ -17,3 +17,8 @@ bool Floor::Initialize(void)
 	Object::Initialize();
 	return true;
 }
+
+const Vector2I& Floor::GetPos(void)
+{
+	return pos_;
+}

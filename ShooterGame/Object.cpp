@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "Object.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 
 Object::Object()
@@ -14,7 +15,7 @@ Object::~Object()
 
 void Object::Draw(void)
 {
-	DrawRotaGraph(pos_.x, pos_.y, exRate_, rotRate_, imageHandle_, true, false);
+	lpS_Effect.DrawRotaGraph(Vector2I(pos_.x, pos_.y), exRate_, rotRate_, imageHandle_, true, false);
 }
 
 void Object::SetPos(const Vector2I& pos)
