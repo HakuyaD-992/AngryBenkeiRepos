@@ -35,6 +35,14 @@ public:
 	{
 		return z_;
 	}
+	const Vector2I& GetSpeed(void) const
+	{
+		return speed_;
+	}
+	const int& GetZSpeed(void) const
+	{
+		return zSpeed_;
+	}
 	const bool& GetisTurnFlag(void)
 	{
 		return isTurnLeft_;

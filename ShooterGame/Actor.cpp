@@ -1,6 +1,8 @@
 #include <DxLib.h>
 #include "Actor.h"
 #include "Floor.h"
+#include "ObjectType.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 
 Actor::Actor()
@@ -43,8 +45,8 @@ bool Actor::OnFloor(void)
 
 bool Actor::InFloor(void)
 {
-	if (pos_.x		>= GetPos().x && pos_.y + 64 >= GetPos().y &&
-		pos_.x + 64 <= 800		  && pos_.y + 64 <= GetPos().y + 166)
+	if (pos_.x - 1	>= GetPos().x && pos_.y + 63 >= GetPos().y &&
+		pos_.x + 65 <= 800		  && pos_.y + 65 <= GetPos().y + 166)
 	{
 		return true;
 	}
@@ -96,10 +98,20 @@ void Actor::Draw(void)
 	auto& imageMng = ImageManager::GetInstance();
 
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
-	DrawRotaGraph(drawPos_.x, drawPos_.y,
-		exRate_, rotRate_,
-		imageMng.GetID(type_, currentAnimation_)[animationCount_],
-		true, isTurnLeft_);
+	if (type_ == ActorType::Player)
+	{
+		lpS_Effect.DrawRotaGraph(Vector2I(drawPos_.x, drawPos_.y),
+			exRate_, rotRate_,
+			imageMng.GetID(type_, currentAnimation_)[animationCount_],
+			true, isTurnLeft_);
+	}
+	else
+	{
+		lpS_Effect.DrawRotaGraph(Vector2I(drawPos_.x , drawPos_.y) + lpS_Effect.MoveAmountCalculator(ObjectType::Floor),
+			exRate_, rotRate_,
+			imageMng.GetID(type_, currentAnimation_)[animationCount_],
+			true, isTurnLeft_);
+	}
 
 	DrawFormatString(100, 100, 0xffffff, "pos.x:%d,pos.y:%d,pos.z:%d", pos_.x, pos_.y, z_);
 	DrawFormatString(100, 150, 0xffffff, "animationCount:%f",animationCount_);

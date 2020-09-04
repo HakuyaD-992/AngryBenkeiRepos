@@ -4,6 +4,7 @@
 #include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Input.h"
+#include "BackGround.h"
 #include "PLAYER.h"
 #include "ControlledPlayer.h"
 #include "Floor.h"
@@ -37,12 +38,15 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		player->UpDate();
 		player->GetCurrentWeapon()->UpDate();
+		lpS_Effect.GetPlayer(player);
 	}
 
 	for (auto enemy : enemyList_)
 	{
 		enemy->UpDate();
 	}
+	lpBackGround.UpData();
+	lpS_Effect.UpDate(EFFECT_TYPE::shake);
 
 	fps_.Wait();
 	frame_++;
@@ -55,6 +59,7 @@ void PlayScene::Draw(void)
 
 	DrawFormatString(0, 0, 0xffffff, "GamePlay");
 
+	lpBackGround.Draw();
 
 	for (auto obj : objList_)
 	{
@@ -72,8 +77,6 @@ void PlayScene::Draw(void)
 	}
 
 	fps_.Draw();
-
-	//lpS_Effect.UpDate(EFFECT_TYPE::shake);
 
 
 	ScreenFlip();

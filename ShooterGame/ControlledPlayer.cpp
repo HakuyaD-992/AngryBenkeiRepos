@@ -1,4 +1,5 @@
 #include "ControlledPlayer.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Application.h"
 #include "AK69.h"

@@ -1,4 +1,6 @@
 #include <DxLib.h>
+
+#include "ControlledPlayer.h"
 #include "ScreenEffectMng.h"
 
 void ScreenEffectMng::Init(void)
@@ -7,10 +9,8 @@ void ScreenEffectMng::Init(void)
 	offset["move"] = Vector2I(0, 0);
 }
 
-void ScreenEffectMng::UpDate(EFFECT_TYPE type, int player_pos, int player_speed, int shake_power)
+void ScreenEffectMng::UpDate(EFFECT_TYPE type, int shake_power)
 {
-	this->player_pos = player_pos;
-	this->player_speed = player_speed;
 
 	switch (type)
 	{
@@ -37,12 +37,23 @@ void ScreenEffectMng::DrawGraph(Vector2I pos, int g_handle,bool trans_flag)
 
 void ScreenEffectMng::DrawRotaGraph(Vector2I pos,float rate,float angle, int g_handle,bool trans_flag, int ReverseXFlag, int ReverseYFlag)
 {
+	DrawFormatString(500, 100, 0xffffff, "%d", player->GetZSpeed());
 	DxLib::DrawRotaGraph(pos.x + offset["shake"].x, pos.y + offset["shake"].y,rate,angle, g_handle,trans_flag,ReverseXFlag,ReverseYFlag);
 }
 
-Vector2I ScreenEffectMng::MoveAmountCalculator(LAYER_ID id)
+const void ScreenEffectMng::GetPlayer(std::shared_ptr<ControlledPlayer> player)
 {
-	return offset["move"];
+	this->player = player;
+}
+
+Vector2I ScreenEffectMng::MoveAmountCalculator(ObjectType id)
+{
+	if (id == ObjectType::Floor && player->GetPos().x - 1 >= 0/* && player->GetZPos() -1 >= 450 &&
+		player->GetPos().x + 65 <= 800 && player->GetZPos() + 65 <= (450 + 166)*/)
+	{
+		offset["move"] += Vector2I(0,player->GetZSpeed()/2 - (1.5 * static_cast<int>(id)));
+	}
+		return offset["move"];
 }
 
 ScreenEffectMng::ScreenEffectMng()
