@@ -38,16 +38,17 @@ public:
 
 	void Init(void);
 	void UpDate(EFFECT_TYPE type, int shake_power = 1);
-	void DrawGraph(Vector2I pos,int g_handle,bool trans_flag);
-	void DrawRotaGraph(Vector2I pos, float rate, float angle, int g_handle,bool trans_flag, int ReverseXFlag = false, int ReverseYFlag = false);
+	void DrawGraph(Vector2F pos,int g_handle,bool trans_flag);
+	void DrawRotaGraph(Vector2F pos, float rate, float angle, int g_handle,bool trans_flag, int ReverseXFlag = false, int ReverseYFlag = false);
 
 	const void GetPlayer(shared_ptr<ControlledPlayer> player);
-	Vector2I MoveAmountCalculator(ObjectType id);
+	const float& GetMoveOffset(void);
+	Vector2F MoveAmountCalculator(ObjectType id);
 private:
 	ScreenEffectMng();
 	~ScreenEffectMng();
 
-	map<string,Vector2I> offset;
+	map<string,Vector2F> offset;
 
 	std::shared_ptr<ControlledPlayer> player;
 	int frame;

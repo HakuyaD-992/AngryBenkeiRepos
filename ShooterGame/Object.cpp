@@ -15,8 +15,8 @@ Object::~Object()
 
 void Object::Draw(void)
 {
-	lpS_Effect.DrawRotaGraph(Vector2I(pos_.x, pos_.y) + lpS_Effect.MoveAmountCalculator(type_), exRate_, rotRate_, imageHandle_, true, false);
-	DrawFormatString(500, 150, 0xffffff, "%d", lpS_Effect.MoveAmountCalculator(type_).y);
+	lpS_Effect.DrawRotaGraph(Vector2F(pos_.x, pos_.y) + lpS_Effect.MoveAmountCalculator(type_), exRate_, rotRate_, imageHandle_, true, false);
+	DrawFormatString(500, 150, 0xffffff, "%f", lpS_Effect.MoveAmountCalculator(type_).y);
 }
 
 void Object::SetPos(const Vector2I& pos)

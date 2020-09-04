@@ -100,14 +100,14 @@ void Actor::Draw(void)
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
 	if (type_ == ActorType::Player)
 	{
-		lpS_Effect.DrawRotaGraph(Vector2I(drawPos_.x, drawPos_.y),
+		lpS_Effect.DrawRotaGraph(Vector2F(drawPos_.x, drawPos_.y),
 			exRate_, rotRate_,
 			imageMng.GetID(type_, currentAnimation_)[animationCount_],
 			true, isTurnLeft_);
 	}
 	else
 	{
-		lpS_Effect.DrawRotaGraph(Vector2I(drawPos_.x , drawPos_.y) + lpS_Effect.MoveAmountCalculator(ObjectType::Floor),
+		lpS_Effect.DrawRotaGraph(Vector2F(drawPos_.x , drawPos_.y + lpS_Effect.GetMoveOffset()) ,
 			exRate_, rotRate_,
 			imageMng.GetID(type_, currentAnimation_)[animationCount_],
 			true, isTurnLeft_);
