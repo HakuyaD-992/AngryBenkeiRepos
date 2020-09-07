@@ -1,14 +1,12 @@
 #pragma once
 #include "BulletBase.h"
-#include "WeaponBase.h"
-
-
-class PlayerBullet :
+#include "ActorType.h"
+class EnemyBullet :
 	public BulletBase
 {
 public:
-	PlayerBullet(Vector2I pos,int z,WeaponType weapon,bool isLeft);
-	~PlayerBullet();
+	EnemyBullet(Vector2I pos, int z,const ActorType& actor, bool isLeft);
+	~EnemyBullet();
 
 	void UpDate(void);
 	void Draw(void);
@@ -16,6 +14,6 @@ public:
 	void UpDateAnimation(std::string animName);
 
 private:
-	
+
 };
 

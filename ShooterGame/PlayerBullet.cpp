@@ -44,12 +44,12 @@ PlayerBullet::PlayerBullet(Vector2I pos,int z,WeaponType weapon,bool isLeft)
 		size_ = Vector2I(8,3);
 		if (isLeft)
 		{
-			pos_ = Vector2I(pos.x - 20, pos.y);
+			pos_ = Vector2I(pos.x - 20, pos.y -3);
 			speed_ = -4.0f;
 		}
 		else
 		{
-			pos_ = Vector2I(pos.x + 20, pos.y);
+			pos_ = Vector2I(pos.x + 20, pos.y - 3);
 			speed_ = 4.0f;
 		}
 		break;

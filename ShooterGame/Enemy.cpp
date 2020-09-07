@@ -1,14 +1,32 @@
 #include "Enemy.h"
 #include "ImageManager.h"
+#include "ControlledPlayer.h"
+#include "EnemyAIManager.h"
+#include "AICollider.h"
+#include "EnemyBullet.h"
+#include "Collision.h"
+#include "WeaponBase.h"
 
-Enemy::Enemy(std::list<std::shared_ptr<ControlledPlayer>>& player):
+int Enemy::enemyNo_ = 0;
+
+Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	player_(player)
 {
-
+	id_ = 0;
+	AIstate_ = AIState::Walk;
+	isHitAICollider_ = false;
+	isBehindPlayer_ = false;
+	deleteFlag_ = false;
 }
 
 Enemy::~Enemy()
 {
+}
+
+void Enemy::Action(void)
+{
+	UpDate();
+
 }
 
 bool Enemy::Initialize(void)
@@ -25,4 +43,72 @@ void Enemy::SetPos(const Vector2I& pos,int z)
 {
 	pos_ = pos;
 	z_ = z;
+}
+
+bool Enemy::CheckHitPlayerBullet(const std::vector<std::shared_ptr<BulletBase>>& playerBullets)
+{
+	for (auto bullet : playerBullets)
+	{
+		if (CircleCollision()(bullet->GetPos() - pos_,
+			size_,
+			nearestPlayer_->GetZPos() - z_
+			))
+		{
+			// 弾を消す
+			bullet->Delete();
+			return true;
+		}
+	}
+	return false;
+}
+
+std::shared_ptr<ControlledPlayer> Enemy::SearchNearestPlayer(void)
+{
+	// プレイヤーが2人以上の時	
+	if (player_.size() >= 2)
+	{
+		auto distance1 = player_[0]->GetPos().x - pos_.x;
+		auto distance2 = player_[1]->GetPos().x - pos_.x;
+
+		if (distance1 < distance2)
+		{
+			nearestPlayer_ = player_[0];
+		}
+		else
+		{
+			if (distance1 > distance2)
+			{
+				nearestPlayer_ = player_[1];
+			}
+		}
+	}
+	else
+	{
+		if (player_.size() <= 1)
+		{
+			// プレイヤーが1人の時
+			nearestPlayer_ = player_[0];
+		}
+	}
+	return nearestPlayer_;
+}
+
+std::shared_ptr<ControlledPlayer> Enemy::GetNearestPlayer(void)
+{
+	return nearestPlayer_;
+}
+
+const std::unique_ptr<AICollider>& Enemy::GetAICollider(void)
+{
+	return aiCollider_;
+}
+
+void Enemy::AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets)
+{
+	bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_));
+}
+
+void Enemy::SetisBehindPlayer(bool& flg)
+{
+	isBehindPlayer_ = flg;
 }

@@ -1,11 +1,13 @@
 #pragma once
 #include "Enemy.h"
+
+
 class Exoskeleton :
 	public Enemy
 {
 public:
 	Exoskeleton(Vector2I pos,int z,ActorType type,
-		std::list<std::shared_ptr<ControlledPlayer>>& player);
+		std::vector<std::shared_ptr<ControlledPlayer>>& player);
 	~Exoskeleton();
 
 	void UpDate(void);

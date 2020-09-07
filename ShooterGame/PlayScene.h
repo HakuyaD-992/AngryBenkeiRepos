@@ -5,12 +5,13 @@
 #include <unordered_map>
 
 #include "BaseScene.h"
-//#include "CollisionLoader.h"
 #include "ActorType.h"
 #include "Fps.h"
 
 class ControlledPlayer;
 class Enemy;
+class BulletBase;
+class EnemyAIManager;
 //class ShotBase;
 //class Spawner;
 class Object;
@@ -36,13 +37,18 @@ private:
 	bool is2PCreate_;
 	// ‰œsÌ×¸Ş
 	bool zFlag_;
+	// e’e‚ğì‚èo‚·Ì×¸Ş
+	std::array<bool,static_cast<int>(ActorType::Max)> createBullet_;
 
 	// ŠeÌßÚ²Ô°A“G‚Ì–¼‘O
 	std::array<std::string, static_cast<int>(ActorType::Max)> actorName_;
 
-	std::list<std::shared_ptr<ControlledPlayer>> playerList_;
+	std::vector<std::shared_ptr<ControlledPlayer>> playerList_;
 	std::list<std::shared_ptr<Enemy>> enemyList_;
-	//std::list<std::shared_ptr<Spawner>> spawners_;
+	std::unique_ptr<EnemyAIManager> aiManager_;
+
+	// ‚Ä‚«‚Ì’e(“G‚ÌÀ²Ìß‚É‚æ‚Á‚Ä•Ï‰»)
+	std::vector<std::shared_ptr<BulletBase>> enemyBullets_;
 
 	ObjectList objList_;
 	// ÌÚ°ÑÚ°Ä
@@ -51,6 +57,9 @@ private:
 	int frame_;
 	// ½Îß°Å°
 	std::shared_ptr<Spawner> spawner_;
+
+	// Œ»İÌßÚ²Ô°‚ª‚¢‚éˆÊ’u‚Ì“VŒó
+	std::string currentWeather_;
 };
 
 

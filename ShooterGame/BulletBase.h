@@ -15,10 +15,29 @@ public:
 	virtual bool Initialize(void) = 0;
 	virtual void UpDateAnimation(std::string animName) = 0;
 
+	const Vector2I& GetPos(void) const
+	{
+		return pos_;
+	}
+	const Vector2I& GetSize(void) const
+	{
+		return size_;
+	}
+
+	void Delete(void)
+	{
+		deleteFlag_ = true;
+	}
+
+	virtual const bool& GetDeleteFlag(void)
+	{
+		return deleteFlag_;
+	}
+
 	void SetAnimation(std::string animName);
 
 private:
-
+	bool deleteFlag_;
 protected:
 	Vector2I pos_;
 	Vector2I drawPos_;
@@ -35,5 +54,7 @@ protected:
 	float rotRate_;
 	// ’e‚Ì½Ëß°ÄÞ
 	float speed_;
+
+	BulletType type_;
 };
 

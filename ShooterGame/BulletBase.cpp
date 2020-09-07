@@ -6,6 +6,7 @@ BulletBase::BulletBase()
 {
 	isAnimEnd_ = false;
 	isMoveLeft_ = false;
+	deleteFlag_ = false;
 
 	exRate_ = 1.0f;
 	rotRate_ = 0.0f;

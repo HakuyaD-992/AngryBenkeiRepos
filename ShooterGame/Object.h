@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "Geometory.h"
 #include "ObjectType.h"
 
@@ -9,15 +10,21 @@ public:
 	Object();
 	~Object();
 	// •`‰æ
-	virtual void Draw(void);
+	virtual void Draw(void) = 0;
+
 	// Îß¼Ş¼®İ¾¯Ä
 	void SetPos(const Vector2I& pos);
 	// ‰Šú‰»
-	bool Initialize(void);
+	virtual bool Initialize(void);
 	// Îß¼Ş¼®İæ“¾
 	const Vector2I& GetPos(void)
 	{
 		return pos_;
+	}
+
+	const ObjectType& GetType(void) const
+	{
+		return type_;
 	}
 
 private:

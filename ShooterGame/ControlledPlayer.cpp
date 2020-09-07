@@ -7,6 +7,7 @@
 #include "KeyConfiguration.h"
 #include "Input.h"
 #include "BulletBase.h"
+#include "Collision.h"
 
 int ControlledPlayer::player_ = 0;
 
@@ -17,6 +18,7 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type/*,
 	// ‰œs
 	z_ = z;
 	weaponsArrangementAmount_ = {0,0};
+	deleteFlag_ = false;
 
 	playerNo_ = (PLAYER)player_;
 	player_++;
@@ -34,6 +36,13 @@ void ControlledPlayer::UpDate(void)
 	auto input = app.GetInput(playerNo_)->GetPeriData();
 
 	gravity_->Apply(pos_);
+
+	// ’e‚ÌÁ‹Ž
+	currentWeapon_->GetBullets().erase(std::remove_if(currentWeapon_->GetBullets().begin(),
+		currentWeapon_->GetBullets().end(),
+		[&](std::shared_ptr<BulletBase>& bullet) {
+			return bullet->GetDeleteFlag();
+		}), currentWeapon_->GetBullets().end());
 
 	auto weaponMoveSmallAmount = animationCount_ - 3.0f;
 

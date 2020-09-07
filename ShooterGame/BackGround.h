@@ -1,17 +1,19 @@
 #pragma once
 #include "Object.h"
-class Floor :
+
+class BackGround :
 	public Object
 {
 public:
-	Floor(Vector2I pos, ObjectType type);
-	~Floor();
+	BackGround();
+	~BackGround();
 
-	// èâä˙âª
 	bool Initialize(void);
 	void Draw(void);
 
 private:
+
+protected:
 
 };
 

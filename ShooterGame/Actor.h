@@ -22,26 +22,65 @@ public:
 	// ±ÆÒ°¼®İ‚Ì•ÏX
 	void ChangeAnimation(std::string animName);
 
+	const std::string& GetCurrentAnimation(void);
+
 	virtual bool OnFloor(void);
 
+	// À²Ìßæ“¾ŠÖ”
+	virtual const ActorType& GetType(void)
+	{
+		return type_;
+	}
+
 	// Îß¼Ş¼®İæ“¾
-	const Vector2I& GetPos(void) const
+	Vector2I& GetPos(void)
 	{
 		return pos_;
 	}
+	// »²½Şæ“¾
+	const Vector2I& GetSize(void)
+	{
+		return size_;
+	}
 	// ZÎß¼Ş¼®İæ“¾
-	const int& GetZPos(void) const
+	int& GetZPos(void)
 	{
 		return z_;
 	}
-	const bool& GetisTurnFlag(void)
+	bool& GetisTurnFlag(void)
 	{
 		return isTurnLeft_;
 	}
+	Vector2I& GetSpeed(void)
+	{
+		return speed_;
+	}
+	int& GetZSpeed(void)
+	{
+		return zSpeed_;
+	}
+
+	bool& GetisAnimEnd(void)
+	{
+		return isAnimEnd_;
+	}
+
+	virtual void Delete(void)
+	{
+		deleteFlag_ = true;
+	}
+
+	virtual const bool& GetDeleteFlag(void)
+	{
+		return deleteFlag_;
+	}
+
 private:
 	Vector2I drawPos_;
+
 	float count_;
 protected:
+	bool deleteFlag_;
 	Vector2I pos_;
 	// ½Ëß°ÄŞ
 	Vector2I speed_;
@@ -82,9 +121,6 @@ protected:
 	// ±ÆÒ°¼®İ‚ğÙ°Ìß‚·‚é‚Ì‚©‚ÌÌ×¸Ş
 	std::map<std::string, bool> isLoop_;
 
-	// Še±¸À°‚ÌHP—Ê
-	float hp_;
-
 	// ©•ª‚ÌŒü‚¢‚Ä‚¢‚é•ûŒüÌ×¸Ş
 	bool isTurnLeft_;
 	// ±¸À°‚ª“®‚¢‚Ä‚¢‚éÌ×¸Ş
@@ -93,5 +129,8 @@ protected:
 	double exRate_;
 	// ‰ñ“]—¦
 	double rotRate_;
+
+	// Še±¸À°‚ÌHP
+	int hp_;
 };
 

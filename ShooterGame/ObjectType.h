@@ -4,6 +4,7 @@
 enum class ObjectType
 {
 	Floor,
+	BackGround,
 	Max
 };
 

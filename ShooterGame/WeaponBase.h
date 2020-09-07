@@ -39,7 +39,7 @@ public:
 	// èeíeÇÃí«â¡
 	void AddBullet(void);
 
-	const std::vector<std::shared_ptr<BulletBase>>& GetBullets(void)
+	std::vector<std::shared_ptr<BulletBase>>& GetBullets(void)
 	{
 		return bullets_;
 	}

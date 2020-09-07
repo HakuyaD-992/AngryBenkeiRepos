@@ -60,10 +60,10 @@ struct StageResource
 	// ©•ª‚ÌµÌŞ¼Şª¸ÄÀ²Ìß‚Ì–¼‘O
 	std::string typeName;
 	// ‰æ‘œÊİÄŞÙ
-	int imageHandle;
+	int imageHandle = -1;
 
-	StageResource() :typeName(""), imageHandle(-1) {};
-	StageResource(std::string name, int handle) :typeName(name), imageHandle(handle) {};
+	Vector2I divSize;
+	Vector2I divCount;
 };
 
 class ImageManager
@@ -83,7 +83,6 @@ public:
 	// •ªŠ„“Ç‚İ‚İ‚ğ‚µ‚½‰æ‘œÊİÄŞÙ‚Ìæ“¾
 	const VecInt& GetDivID(std::string name);
 
-
 	// ‰æ‘œ‚ÌÛ°ÄŞ
 	void Load(std::string fileName);
 	// ½Ã°¼ŞµÌŞ¼Şª¸Ä‚ÌÛ°ÄŞ
@@ -93,11 +92,10 @@ public:
 	const VecInt& GetID(const ActorType& actor, std::string filepath);
 	const int& GetID(std::string fileName);
 
-
 	// ½Ã°¼ŞµÌŞ¼Şª¸ÄID‚Ìæ“¾
-	const StageResource& GetStageID(const ObjectType& objType)
+	const StageResource& GetStageResource(const ObjectType& objType)
 	{
-		return stageResources_[objType];
+		return stageResources_[static_cast<int>(objType)];
 	}
 	// Ø¿°½‚Ìæ“¾
 	const Resource& GetResource(const ActorType& actor)
@@ -135,7 +133,7 @@ private:
 	std::array<BulletResource, static_cast<int>(BulletType::Max)> bulletResources_;
 
 	// ½Ã°¼ŞµÌŞ¼Şª¸Ä‚ÌØ¿°½î•ñ
-	std::map<ObjectType, StageResource> stageResources_;
+	std::array<StageResource,static_cast<int>(ObjectType::Max)> stageResources_;
 
 	// ‰æ‘œÊİÄŞÙ(1–‡ŠG)
 	std::map<std::string, int> handles_;

@@ -14,7 +14,6 @@ Object::~Object()
 
 void Object::Draw(void)
 {
-	DrawRotaGraph(pos_.x, pos_.y, exRate_, rotRate_, imageHandle_, true, false);
 }
 
 void Object::SetPos(const Vector2I& pos)
@@ -29,7 +28,7 @@ bool Object::Initialize(void)
 	imageMng.LoadStage(type_, name_);
 
 	// ŒÂX‚ÌµÌŞ¼Şª¸Ä
-	imageHandle_ = imageMng.GetStageID(type_).imageHandle;
+	imageHandle_ = imageMng.GetStageResource(type_).imageHandle;
 
 	return true;
 }

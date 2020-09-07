@@ -140,5 +140,9 @@ void Actor::ChangeAnimation(std::string animName)
 		animationCount_ = 0;
 		isAnimEnd_ = true;
 	}
+}
 
+const std::string& Actor::GetCurrentAnimation(void)
+{
+	return currentAnimation_;
 }

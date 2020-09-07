@@ -100,8 +100,13 @@ const VecInt& ImageManager::GetDivID(std::string name)
 
 bool ImageManager::LoadStage(const ObjectType& objType, std::string objName)
 {
-	std::string filename = "Images/Objects/" + objName + ".png";
-	stageResources_.try_emplace(objType, StageResource(objName, LoadGraph(filename.c_str())));
+	std::string filename = "";
+	stageResources_[static_cast<int>(objType)].divSize = Vector2I(800, 387);
+	stageResources_[static_cast<int>(objType)].divCount = Vector2I(1, 1);
+	filename = "Images/Objects/" + objName + ".png";
+
+	stageResources_[static_cast<int>(objType)].imageHandle
+		= LoadGraph(filename.c_str());
 	return true;
 }
 
@@ -131,8 +136,6 @@ bool ImageManager::LoadWeapon(const WeaponType& weaponType, std::string weaponNa
 		weaponResources_[static_cast<int>(weaponType)].actionNameSet_.try_emplace("reload", std::make_pair(std::make_pair(7, 8), false));
 		weaponResources_[static_cast<int>(weaponType)].divCount_ = Vector2I(4, 3);
 		weaponResources_[static_cast<int>(weaponType)].divSize_ = Vector2I(80, 20);
-		
-
 		break;
 	case WeaponType::Max:
 		break;
@@ -245,9 +248,10 @@ void ImageManager::SetUp(ActorType actor)
 
 	case ActorType::Pod:
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("idle", std::make_pair(std::make_pair(0, 3), true));
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack_prepare", std::make_pair(std::make_pair(5, 13), false));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack_prepare", std::make_pair(std::make_pair(6, 13), false));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack_release", std::make_pair(std::make_pair(15, 19), false));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("walk", std::make_pair(std::make_pair(20, 25), true));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("hit", std::make_pair(std::make_pair(5, 8), false));
 
 		break;
 	case ActorType::Exoskeleton:

@@ -5,7 +5,7 @@ class Pod :
 {
 public:
 	Pod(Vector2I pos, int z,ActorType type,
-		std::list<std::shared_ptr<ControlledPlayer>>& player);
+		std::vector<std::shared_ptr<ControlledPlayer>>& player);
 	~Pod();
 
 	void UpDate(void);
