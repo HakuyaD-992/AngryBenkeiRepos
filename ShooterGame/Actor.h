@@ -48,18 +48,6 @@ public:
 	{
 		return z_;
 	}
-	const Vector2I& GetSpeed(void) const
-	{
-		return speed_;
-	}
-	const int& GetZSpeed(void) const
-	{
-		return zSpeed_;
-	}
-	const bool& GetisTurnFlag(void)
-	{
-		return isTurnLeft_;
-	}
 	Vector2I& GetSpeed(void)
 	{
 		return speed_;
@@ -67,6 +55,10 @@ public:
 	int& GetZSpeed(void)
 	{
 		return zSpeed_;
+	}
+	bool& GetisTurnFlag(void)
+	{
+		return isTurnLeft_;
 	}
 
 	bool& GetisAnimEnd(void)

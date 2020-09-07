@@ -84,7 +84,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 	enemyList_.remove_if
 	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
-	lpBackGround.UpData();
 	lpS_Effect.UpDate(EFFECT_TYPE::shake);
 
 	fps_.Wait();
@@ -104,7 +103,6 @@ void PlayScene::Draw(void)
 		1.0f, 0.0f,
 		lpImage.GetDivID(currentWeather_)[0], true);
 
-	lpBackGround.Draw();
 
 	for (auto obj : objList_)
 	{

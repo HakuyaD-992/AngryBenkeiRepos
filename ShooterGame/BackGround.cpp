@@ -1,25 +1,27 @@
 #include <DxLib.h>
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "BackGround.h"
 
-void BackGround::UpData(void)
-{
-	frame++;
-}
-
 void BackGround::Draw(void)
 {
-	DrawGraph(0, 0, lpImage.GetDivID("sky")[(frame/5) % 6], true);
-	DrawGraph(0, 0, lpImage.GetDivID("sky_effect")[(frame/5) % 6], true);
+	DrawRotaGraph(pos_.x, pos_.y - 24 + lpS_Effect.MoveAmountCalculator(type_).y, exRate_, rotRate_, imageHandle_, true, false);
 }
 
 BackGround::BackGround()
 {
-	lpImage.LoadDiv("sky", Vector2I(800, 600), Vector2I(3, 2));
-	lpImage.LoadDiv("sky_effect", Vector2I(800, 600), Vector2I(3, 2));
-	frame = 0;
+	Initialize();
 }
 
 BackGround::~BackGround()
 {
+}
+
+bool BackGround::Initialize(void)
+{
+	name_ = "Background";
+	type_ = ObjectType::BackGround;
+
+	Object::Initialize();
+	return true;
 }

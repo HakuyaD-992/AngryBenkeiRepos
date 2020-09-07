@@ -10,6 +10,7 @@ public:
 	// ‰Šú‰»
 	bool Initialize(void);
 	const Vector2I& GetPos(void);
+	void Draw(void);
 private:
 
 };

@@ -1,7 +1,13 @@
 #pragma once
+#include <map>
+#include <string>
+#include "ObjectType.h"
+#include "Actor.h"
 #include "Geometory.h"
 
+#define floor_z 166
 #define lpS_Effect ScreenEffectMng::GetInstance()
+
 
 enum class EFFECT_TYPE
 {
@@ -32,22 +38,23 @@ public:
 
 	void Init(void);
 	void UpDate(EFFECT_TYPE type, int shake_power = 1);
-	void DrawGraph(Vector2F pos,int g_handle,bool trans_flag);
-	void DrawRotaGraph(Vector2F pos, float rate, float angle, int g_handle,bool trans_flag, int ReverseXFlag = false, int ReverseYFlag = false);
+	void DrawGraph(Vector2F pos, int g_handle, bool trans_flag);
+	void DrawRotaGraph(Vector2F pos, float rate, float angle, int g_handle, bool trans_flag, int ReverseXFlag = false, int ReverseYFlag = false);
 
 	const void GetPlayer(shared_ptr<ControlledPlayer> player);
-	const float& GetMoveOffset(void);
 	Vector2F MoveAmountCalculator(ObjectType id);
+
+	Vector2F GetMoveOffset(void);
 private:
 	ScreenEffectMng();
 	~ScreenEffectMng();
 
-	map<string,Vector2F> offset;
+	map<string, Vector2F> offset;
 
 	std::shared_ptr<ControlledPlayer> player;
 	int frame;
 
-	Vector2I pos;
+	Vector2F pos;
 
 };
 

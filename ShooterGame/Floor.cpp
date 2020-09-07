@@ -23,3 +23,8 @@ const Vector2I& Floor::GetPos(void)
 {
 	return pos_;
 }
+
+void Floor::Draw(void)
+{
+	DrawRotaGraph(pos_.x, pos_.y + 30.0f, exRate_, rotRate_, imageHandle_, true, false);
+}

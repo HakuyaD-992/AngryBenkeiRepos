@@ -107,7 +107,7 @@ void Actor::Draw(void)
 	}
 	else
 	{
-		lpS_Effect.DrawRotaGraph(Vector2F(drawPos_.x , drawPos_.y + lpS_Effect.GetMoveOffset()) ,
+		lpS_Effect.DrawRotaGraph(Vector2F(drawPos_.x , drawPos_.y ),
 			exRate_, rotRate_,
 			imageMng.GetID(type_, currentAnimation_)[animationCount_],
 			true, isTurnLeft_);
