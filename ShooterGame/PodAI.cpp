@@ -105,17 +105,14 @@ bool PodAI::Attack(std::list<std::shared_ptr<Enemy>>& enemies)
 
 	if (me_.GetCurrentAnimation() == "attack_release")
 	{
-		if (!createBulletFlag_)
-		{
-			createBulletFlag_ = true;
-		}
-		if (me_.GetisAnimEnd())
+		me_.AddMuzzleFlashAnimationCount(0.1f);
+		if (me_.GetmuzzleFlashAnimationCount() >= 5.0f)
 		{
 			me_.GetisHitAICollider() = false;
+			me_.GetmuzzleFlashAnimationCount() = 0.0f;
 			me_.ChangeAnimation("walk");
 			me_.GetAIState() = AIState::Walk;
 			updater_ = &PodAI::Walk;
-			createBulletFlag_ = false;
 			return true;
 		}
 	}

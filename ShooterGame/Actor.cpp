@@ -40,7 +40,6 @@ bool Actor::OnFloor(void)
 	return false;
 }
 
-
 bool Actor::Initialize(void)
 {
 	// ImageLoader¸×½‚Ìg—p
@@ -89,9 +88,6 @@ void Actor::Draw(void)
 		exRate_, rotRate_,
 		imageMng.GetID(type_, currentAnimation_)[animationCount_],
 		true, isTurnLeft_);
-
-	DrawFormatString(100, 100, 0xffffff, "pos.x:%d,pos.y:%d,pos.z:%d", pos_.x, pos_.y, z_);
-	DrawFormatString(100, 150, 0xffffff, "animationCount:%f",animationCount_);
 
 	// ¡‚Ì±ÆÒ°¼®İ‚Å‚Ì‹éŒ`‚ğŒŸõ‚µ‚ÄŠi”[
 	auto it = rect_.find(currentAnimation_);

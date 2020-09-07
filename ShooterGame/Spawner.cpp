@@ -6,6 +6,7 @@
 #include "Pod.h"
 #include "Exoskeleton.h"
 #include "AIBase.h"
+#include "Floor.h"
 #include "BulletBase.h"
 
 Spawner::Spawner()
@@ -23,9 +24,9 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 	// ìGÇÃ¿≤Ãﬂ
 	auto enemyType = ActorType::Pod/* + GetRand(static_cast<int>(ActorType::Pod))*/;
 	// ÉXÉ|Å[ÉìŒﬂºﬁºÆ›
-	auto spawnPos = Vector2I(10 + GetRand(800 - 10),0);
+	auto spawnPos = Vector2I(10 + GetRand(floorX - 10),0);
 	// zé≤ŒﬂºﬁºÆ›
-	int z = -100 + GetRand(200);
+	int z = -floorZ + GetRand(floorZ);
 
 	enemyInstanceFunc_[enemyType](enemies,player, spawnPos, z,enemyType);
 }

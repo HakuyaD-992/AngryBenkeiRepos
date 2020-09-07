@@ -6,6 +6,7 @@
 #include "PodAI.h"
 #include "AICollider.h"
 #include "EnemyBullet.h"
+#include "ImageManager.h"
 
 // Zç¿ïWÇçáÇÌÇπÇÈçsìÆÇ…à⁄ÇÈãóó£
 constexpr int arrangementZDistance = 150;
@@ -25,6 +26,7 @@ Pod::Pod(Vector2I pos,
 
 	hp_ = 5;
 
+	lpImage.LoadDiv("podmuzzleFlash", Vector2I(55, 60), Vector2I(5, 1));
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("walk");
@@ -50,6 +52,20 @@ void Pod::UpDate(void)
 void Pod::Draw_(void)
 {
 	Actor::Draw();
+	if (isTurnLeft_)
+	{
+		muzzleFlashPos_ = Vector2I(pos_.x -40, pos_.y - 5 + (z_/2));
+	}
+	else
+	{
+		muzzleFlashPos_ = Vector2I(pos_.x +40, pos_.y - 5 + (z_ / 2));
+	}
+	if (currentAnimation_ == "attack_release")
+	{
+		DrawRotaGraph(muzzleFlashPos_.x, muzzleFlashPos_.y,
+			1.0f, 0.0f, lpImage.GetDivID("podmuzzleFlash")[muzzleFlashAnimationCount_],
+			true,isTurnLeft_,false);
+	}
 	DrawFormatString(300, 20, 0xffffff, currentAnimation_.c_str());
 }
 

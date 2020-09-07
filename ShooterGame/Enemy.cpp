@@ -18,6 +18,9 @@ Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	isBehindPlayer_ = false;
 	deleteFlag_ = false;
 	onDamaged_ = false;
+	isShot_ = true;
+
+	muzzleFlashAnimationCount_ = 0.0f;
 }
 
 Enemy::~Enemy()
@@ -26,11 +29,14 @@ Enemy::~Enemy()
 
 void Enemy::Action(void)
 {
-	if (!onDamaged_)
+	if (OnFloor())
 	{
-		if (currentAnimation_ != "death")
+		if (!onDamaged_)
 		{
-			onDamaged_ = CheckHitPlayerBullet(nearestPlayer_->GetCurrentWeapon()->GetBullets());
+			if (currentAnimation_ != "death")
+			{
+				onDamaged_ = CheckHitPlayerBullet(nearestPlayer_->GetCurrentWeapon()->GetBullets());
+			}
 		}
 	}
 	if (onDamaged_)
@@ -52,7 +58,6 @@ void Enemy::Action(void)
 			break;
 		}
 	}
-
 	UpDate();
 }
 
@@ -132,7 +137,16 @@ const std::unique_ptr<AICollider>& Enemy::GetAICollider(void)
 
 void Enemy::AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets)
 {
-	bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_));
+	if (isShot_)
+	{
+		bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_));
+		isShot_ = false;
+	}
+}
+
+void Enemy::ReadyToShot(void)
+{
+	isShot_ = true;
 }
 
 void Enemy::SetisBehindPlayer(bool& flg)

@@ -21,6 +21,11 @@ public:
 		return currentWeapon_;
 	}
 
+	virtual bool& GetisOnFloor(void)
+	{
+		return isOnFloor_;
+	}
+
 	void Draw_(void);
 
 private:
@@ -47,5 +52,8 @@ private:
 
 	// •Ší‚ğÌßÚ²Ô°‚ÌèŒ³‚É‡‚í‚¹‚é‚½‚ß‚Ì’²®—p•Ï”
 	Vector2I weaponsArrangementAmount_;
+
+	// °‚Ì‰Â“®”ÍˆÍ‚ÉÌßÚ²Ô°‚ª‚¢‚é‚©‚ÌÌ×¸Ş
+	bool isOnFloor_;
 };
 

@@ -52,15 +52,11 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		case ActorType::Pod:
 			if (enemy->GetCurrentAnimation() == "attack_release")
 			{
-				if (!createBullet_[static_cast<int>(type)])
-				{
-					enemy->AddBullet(enemyBullets_);
-					createBullet_[static_cast<int>(type)] = true;
-				}
+				enemy->AddBullet(enemyBullets_);
 			}
 			else
 			{
-				createBullet_[static_cast<int>(type)] = false;
+				enemy->ReadyToShot();
 			}
 			break;
 		case ActorType::Exoskeleton:
@@ -87,7 +83,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 	fps_.Wait();
 	frame_++;
-
 }
 
 void PlayScene::Draw(void)
@@ -181,15 +176,14 @@ void PlayScene::Initialize(void)
 		"Spacenaut"
 	};
 	zFlag_ = false;
-	createBullet_ = { false,false,false,false,false,false,false };
+
 	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player));
 
 	auto& app = Application::Instance();
-
+	AddObject(std::make_shared<BackGround>());
 	AddObject(std::make_shared<Floor>
 		(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
 			ObjectType::Floor));
-	AddObject(std::make_shared<BackGround>());
 
 	// ”wŒi‚ÌÎß¼Þ¼®Ý¾¯Ä
 	// ºÝ½Ä×¸À‚ÅÎß¼Þ¼®Ý¾¯Ä‚·‚é‚æ‚è‚à‚±‚±‚Å‚µ‚½‚Ù‚¤‚ª¶Ò×‚ð’Ç‰Á‚·‚é‚Æ‚«‚É‚·‚ñ‚È‚è‚¢‚­‚Ì‚Å
@@ -197,7 +191,7 @@ void PlayScene::Initialize(void)
 	{
 		if (obj->GetType() == ObjectType::BackGround)
 		{
-			obj->SetPos(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 - 106));
+			obj->SetPos(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2));
 		}
 	}
 

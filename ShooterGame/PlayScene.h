@@ -37,8 +37,6 @@ private:
 	bool is2PCreate_;
 	// 奥行ﾌﾗｸﾞ
 	bool zFlag_;
-	// 銃弾を作り出すﾌﾗｸﾞ
-	std::array<bool,static_cast<int>(ActorType::Max)> createBullet_;
 
 	// 各ﾌﾟﾚｲﾔｰ、敵の名前
 	std::array<std::string, static_cast<int>(ActorType::Max)> actorName_;

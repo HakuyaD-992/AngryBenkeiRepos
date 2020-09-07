@@ -101,7 +101,7 @@ const VecInt& ImageManager::GetDivID(std::string name)
 bool ImageManager::LoadStage(const ObjectType& objType, std::string objName)
 {
 	std::string filename = "";
-	stageResources_[static_cast<int>(objType)].divSize = Vector2I(800, 387);
+	stageResources_[static_cast<int>(objType)].divSize = Vector2I(800, 420);
 	stageResources_[static_cast<int>(objType)].divCount = Vector2I(1, 1);
 	filename = "Images/Objects/" + objName + ".png";
 
@@ -191,6 +191,7 @@ bool ImageManager::LoadBullet(const BulletType& bulletType, std::string bulletNa
 		bulletResources_[static_cast<int>(bulletType)].actionNameSet_.try_emplace("non", std::make_pair(0, 0), false);
 		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(1, 1);
 		bulletResources_[static_cast<int>(bulletType)].divSize_ = Vector2I(8, 8);
+
 		break;
 	default:
 		break;

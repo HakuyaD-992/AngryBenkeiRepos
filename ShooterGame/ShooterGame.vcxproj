@@ -181,6 +181,7 @@
     <ClCompile Include="PodAI.cpp" />
     <ClCompile Include="SceneController.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="ScreenEffectMng.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="SubMachinegun.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="PodAI.h" />
     <ClInclude Include="SceneController.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="ScreenEffectMng.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="SubMachinegun.h" />
     <ClInclude Include="TitleScene.h" />

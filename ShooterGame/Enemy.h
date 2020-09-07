@@ -71,6 +71,9 @@ public:
 	// e’e‚Ì’Ç‰Á
 	void AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets);
 
+	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
+	void ReadyToShot(void);
+
 	void SetisBehindPlayer(bool& flg);
 	const bool& GetisBehindPlayer(void)
 	{
@@ -80,6 +83,16 @@ public:
 	virtual bool& GetOnDamaged(void)
 	{
 		return onDamaged_;
+	}
+
+	virtual void AddMuzzleFlashAnimationCount(float cnt)
+	{
+		muzzleFlashAnimationCount_ += cnt;
+	}
+
+	float& GetmuzzleFlashAnimationCount(void)
+	{
+		return muzzleFlashAnimationCount_;
 	}
 private:
 
@@ -96,12 +109,17 @@ protected:
 	bool isBehindPlayer_;
 	// ÀŞÒ°¼Ş‚ğH‚ç‚Á‚½Ì×¸Ş
 	bool onDamaged_;
+	// ’e‚ğŒ‚‚ÂÌ×¸Ş
+	bool isShot_;
 	std::vector<std::shared_ptr<ControlledPlayer>>& player_;
 	std::shared_ptr<ControlledPlayer> nearestPlayer_;
 
 	std::unique_ptr<AICollider> aiCollider_;
 	// “G‚ÌÀ²Ìß‚É‰‚¶‚½AI¼½ÃÑ
 	std::shared_ptr<AIBase> aiSystem_;
-
+	// muzzleFlash‚ÌÎß¼Ş¼®İ
+	Vector2I muzzleFlashPos_;
+	// eŒû‚©‚ço‚émuzzleFlash‚Ì±ÆÒ°¼®İ¶³İÄ
+	float muzzleFlashAnimationCount_;
 };
 

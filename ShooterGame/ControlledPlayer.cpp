@@ -1,6 +1,7 @@
 #include "ControlledPlayer.h"
 #include "ImageManager.h"
 #include "Application.h"
+#include "Floor.h"
 #include "AK69.h"
 #include "SubMachinegun.h"
 #include "Pistol.h"
@@ -19,6 +20,9 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type/*,
 	z_ = z;
 	weaponsArrangementAmount_ = {0,0};
 	deleteFlag_ = false;
+
+	isOnFloor_ = true;
+
 	hp_ = 300;
 
 	playerNo_ = (PLAYER)player_;
@@ -229,6 +233,8 @@ void ControlledPlayer::UpDate(void)
 
 void ControlledPlayer::Draw_(void)
 {
+	DrawFormatString(100, 100, 0xffffff, "pos.x:%d,pos.y:%d,pos.z:%d", pos_.x, pos_.y, z_);
+
 	Actor::Draw();
 	for (auto weapon : weapons_)
 	{
@@ -237,6 +243,8 @@ void ControlledPlayer::Draw_(void)
 			bullet->Draw();
 		}
 	}
+	DrawFormatString(100, 150, 0xffffff, "flg:%d",isOnFloor_);
+
 	DrawFormatString(100, 120, 0xffffff, "bulletNum:%d", currentWeapon_->GetHavingBulletNum());
 }
 
@@ -249,7 +257,6 @@ bool ControlledPlayer::Initialize(void)
 	imageMng.Load(type_, "atlus", imageResource.divSize_, imageResource.divCount_);
 	//weapons_.emplace_back(std::make_shared<Gun>(pos_, z_, WeaponType::Pistol));
 
-
 	weapons_.emplace_back(std::make_shared<Pistol>(pos_, z_, WeaponType::Pistol));
 	weapons_.emplace_back(std::make_shared<AK69>(pos_, z_, WeaponType::ShotGun));
 	weapons_.emplace_back(std::make_shared<SubMachinegun>(pos_, z_, WeaponType::SubMachineGun));
@@ -261,7 +268,29 @@ bool ControlledPlayer::Initialize(void)
 void ControlledPlayer::Walk(const Vector2I& speed, const int& zSp)
 {
 	pos_.x += speed.x;
+
+	if (pos_.x <= 0)
+	{
+		pos_.x = 0;
+	}
+	if (pos_.x >= floorX - (size_.x / 2))
+	{
+		pos_.x = floorX - (size_.x / 2);
+	}
 	z_ += zSp;
+
+	isOnFloor_ = true;
+
+	if (z_ >= 0)
+	{
+		isOnFloor_ = false;
+		z_ = 0;
+	}
+	if (z_ <= -floorZ)
+	{
+		isOnFloor_ = false;
+		z_ = -floorZ;
+	}
 }
 
 void ControlledPlayer::Jump(void)

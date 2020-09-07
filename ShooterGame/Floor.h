@@ -1,5 +1,10 @@
 #pragma once
 #include "Object.h"
+
+constexpr int floorX = 800;
+constexpr int floorY = 0;
+constexpr int floorZ = 320;
+
 class Floor :
 	public Object
 {
