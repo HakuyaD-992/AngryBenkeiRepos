@@ -34,6 +34,11 @@ public:
 		return deleteFlag_;
 	}
 
+	virtual const BulletType& GetType(void) const
+	{
+		return type_;
+	}
+
 	void SetAnimation(std::string animName);
 
 private:

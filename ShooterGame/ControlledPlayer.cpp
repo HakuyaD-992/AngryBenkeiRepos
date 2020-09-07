@@ -1,5 +1,4 @@
 #include "ControlledPlayer.h"
-#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Application.h"
 #include "AK69.h"
@@ -20,6 +19,7 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type/*,
 	z_ = z;
 	weaponsArrangementAmount_ = {0,0};
 	deleteFlag_ = false;
+	hp_ = 300;
 
 	playerNo_ = (PLAYER)player_;
 	player_++;

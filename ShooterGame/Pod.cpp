@@ -23,6 +23,8 @@ Pod::Pod(Vector2I pos,
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<PodAI>(*this);
 
+	hp_ = 5;
+
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("walk");

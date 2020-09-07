@@ -25,7 +25,6 @@ public:
 	const std::string& GetCurrentAnimation(void);
 
 	virtual bool OnFloor(void);
-	virtual bool InFloor(void);
 
 	// ¿≤ÃﬂéÊìæä÷êî
 	virtual const ActorType& GetType(void)
@@ -48,6 +47,10 @@ public:
 	{
 		return z_;
 	}
+	bool& GetisTurnFlag(void)
+	{
+		return isTurnLeft_;
+	}
 	Vector2I& GetSpeed(void)
 	{
 		return speed_;
@@ -55,10 +58,6 @@ public:
 	int& GetZSpeed(void)
 	{
 		return zSpeed_;
-	}
-	bool& GetisTurnFlag(void)
-	{
-		return isTurnLeft_;
 	}
 
 	bool& GetisAnimEnd(void)
@@ -74,6 +73,11 @@ public:
 	virtual const bool& GetDeleteFlag(void)
 	{
 		return deleteFlag_;
+	}
+
+	virtual int& GetHp(void)
+	{
+		return hp_;
 	}
 
 private:
