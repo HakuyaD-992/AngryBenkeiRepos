@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Application.h"
 #include "PlayScene.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Input.h"
 #include "PLAYER.h"
@@ -198,6 +199,11 @@ void PlayScene::Initialize(void)
 		{
 			obj->SetPos(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 - 106));
 		}
+	}
+
+	for (auto player : playerList_)
+	{
+		lpS_Effect.GetPlayer(player);
 	}
 }
 
