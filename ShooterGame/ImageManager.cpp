@@ -22,7 +22,7 @@ bool ImageManager::Load(const ActorType& actor, std::string filepath, Vector2I d
 			resources_[static_cast<int>(actor)].divSize_ = Vector2I(55, 55);
 			resources_[static_cast<int>(actor)].divCount_ = Vector2I(5, 6);
 			break;
-		case ActorType::Exoskeleton :
+		case ActorType::Exoskeleton:
 			resources_[static_cast<int>(actor)].typeName = "Exoskeleton";
 			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
 			resources_[static_cast<int>(actor)].divCount_ = Vector2I(8, 1);
@@ -251,7 +251,8 @@ void ImageManager::SetUp(ActorType actor)
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack_prepare", std::make_pair(std::make_pair(6, 13), false));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack_release", std::make_pair(std::make_pair(15, 19), false));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("walk", std::make_pair(std::make_pair(20, 25), true));
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("hit", std::make_pair(std::make_pair(5, 8), false));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("hit", std::make_pair(std::make_pair(5, 6), false));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("death", std::make_pair(std::make_pair(26, 31), false));
 
 		break;
 	case ActorType::Exoskeleton:

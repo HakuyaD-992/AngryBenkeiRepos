@@ -17,6 +17,7 @@ Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	isHitAICollider_ = false;
 	isBehindPlayer_ = false;
 	deleteFlag_ = false;
+	onDamaged_ = false;
 }
 
 Enemy::~Enemy()
@@ -25,8 +26,34 @@ Enemy::~Enemy()
 
 void Enemy::Action(void)
 {
-	UpDate();
+	if (!onDamaged_)
+	{
+		if (currentAnimation_ != "death")
+		{
+			onDamaged_ = CheckHitPlayerBullet(nearestPlayer_->GetCurrentWeapon()->GetBullets());
+		}
+	}
+	if (onDamaged_)
+	{
+		switch (nearestPlayer_->GetCurrentWeapon()->GetType())
+		{
+		case WeaponType::Pistol:
+			hp_ -= 2;
+			break;
 
+		case WeaponType::ShotGun:
+			hp_ -= 5;
+			break;
+		case WeaponType::SubMachineGun:
+			hp_--;
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	UpDate();
 }
 
 bool Enemy::Initialize(void)

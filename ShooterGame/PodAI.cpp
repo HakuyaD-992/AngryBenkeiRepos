@@ -15,7 +15,7 @@ PodAI::~PodAI()
 
 void PodAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 {
-	if (me_.CheckHitPlayerBullet(me_.GetNearestPlayer()->GetCurrentWeapon()->GetBullets()))
+	if (me_.GetOnDamaged())
 	{
 		me_.ChangeAnimation("hit");
 		updater_ = &PodAI::OnDamaged;
@@ -138,10 +138,21 @@ bool PodAI::OnDamaged(std::list<std::shared_ptr<Enemy>>& enemies)
 {
 	if (me_.GetisAnimEnd())
 	{
-		me_.ChangeAnimation("walk");
-		updater_ = &PodAI::Walk;
-		return true;
+		if (me_.GetHp() <= 0)
+		{
+			me_.ChangeAnimation("death");
+			updater_ = &PodAI::Death;
+			return true;
+		}
+		else
+		{
+			me_.ChangeAnimation("walk");
+			updater_ = &PodAI::Walk;
+			return true;
+		}
 	}
+	me_.GetOnDamaged() = false;
+
 	return false;
 }
 
@@ -192,6 +203,16 @@ bool PodAI::Run(std::list<std::shared_ptr<Enemy>>& enemies)
 		}
 	}
 
+	return false;
+}
+
+bool PodAI::Death(std::list<std::shared_ptr<Enemy>>& enemies)
+{
+	if (me_.GetisAnimEnd())
+	{
+		me_.Delete();
+		return true;
+	}
 	return false;
 }
 

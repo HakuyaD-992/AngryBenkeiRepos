@@ -1,7 +1,6 @@
 #include <DxLib.h>
 
 #include "WeaponBase.h"
-#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "PlayerBullet.h"
 
@@ -94,7 +93,7 @@ void WeaponBase::Draw(const bool& turnFlag)
 	DrawFormatString(100, 50, 0xffffff, currentAnimation_.c_str());
 	DrawFormatString(100, 200, 0xffffff,"%f",muzzleFlashAnimationCount_);
 	// •Ší‚Ì•`‰æ
-	lpS_Effect.DrawRotaGraph(Vector2F(drawPos_.x,drawPos_.y),exRate_, rotRate_,
+	DrawRotaGraph(drawPos_.x,drawPos_.y,exRate_, rotRate_,
 		imageMng.GetWeaponResource(type_).imageHandle_.find(currentAnimation_)->second[animationCount_],
 		true, turnFlag);
 

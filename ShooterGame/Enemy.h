@@ -76,6 +76,11 @@ public:
 	{
 		return isBehindPlayer_;
 	}
+
+	virtual bool& GetOnDamaged(void)
+	{
+		return onDamaged_;
+	}
 private:
 
 protected:
@@ -89,6 +94,8 @@ protected:
 	bool isHitAICollider_;
 	// ÌßÚ²Ô°‚Ì”wŒã‚É‚¢‚éÌ×¸Ş
 	bool isBehindPlayer_;
+	// ÀŞÒ°¼Ş‚ğH‚ç‚Á‚½Ì×¸Ş
+	bool onDamaged_;
 	std::vector<std::shared_ptr<ControlledPlayer>>& player_;
 	std::shared_ptr<ControlledPlayer> nearestPlayer_;
 

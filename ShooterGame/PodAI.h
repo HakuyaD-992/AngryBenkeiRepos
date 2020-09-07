@@ -23,8 +23,10 @@ public:
 	bool OnDamaged(std::list<std::shared_ptr<Enemy>>& enemies);
 	// ÌßÚ²Ô°‚Æ‚ÌZ²‚ğ‚¸‚ç‚·(UŒ‚‰ñ”ğ)
 	bool Evacuate(std::list<std::shared_ptr<Enemy>>& enemies);
-
+	// ÌßÚ²Ô°‚Ì”wŒã‚É‰ñ‚è‚Ş
 	bool Run(std::list<std::shared_ptr<Enemy>>& enemies);
+	// €‚Ê
+	bool Death(std::list<std::shared_ptr<Enemy>>& enemies);
 
 private:
 

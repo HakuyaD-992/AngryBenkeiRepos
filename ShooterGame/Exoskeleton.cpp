@@ -16,6 +16,7 @@ Exoskeleton::Exoskeleton(Vector2I pos,
 	type_ = type;
 	size_ = Vector2I(48, 48);
 	id_ = enemyNo_;
+	hp_ = 20;
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("run");
@@ -31,6 +32,7 @@ void Exoskeleton::UpDate(void)
 {
 	gravity_->Apply(pos_);
 	aiCollider_->SetPos(pos_, z_);
+
 	if (CheckHitPlayerBullet(nearestPlayer_->GetCurrentWeapon()->GetBullets()))
 	{
 		Delete();
