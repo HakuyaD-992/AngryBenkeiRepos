@@ -11,7 +11,6 @@ void ScreenEffectMng::Init(void)
 
 void ScreenEffectMng::UpDate(EFFECT_TYPE type, int shake_power)
 {
-
 	switch (type)
 	{
 	case EFFECT_TYPE::non:
@@ -51,8 +50,8 @@ Vector2F ScreenEffectMng::MoveAmountCalculator(ObjectType id)
 	if (id != ObjectType::Floor && player->GetPos().x - 1 >= 0 && player->GetZSpeed() != 0/* && player->GetZPos() -1 >= 450 &&
 		player->GetPos().x + 65 <= 800 && player->GetZPos() + 65 <= (450 + 166)*/)
 	{
-		auto vec = player->GetZSpeed() / (-player->GetZSpeed());
-		offset["move"] += Vector2F(0, player->GetZSpeed() + (1.5*(-vec) * static_cast<int>(id)));
+		auto vec = player->GetZSpeed() / -2;
+		offset["move"] += Vector2F(0, player->GetZSpeed() + (1.5*vec * static_cast<int>(id)));
 	}
 	return offset["move"];
 }
