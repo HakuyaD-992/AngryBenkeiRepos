@@ -47,7 +47,7 @@ const void ScreenEffectMng::GetPlayer(std::shared_ptr<ControlledPlayer> player)
 
 Vector2F ScreenEffectMng::MoveAmountCalculator(ObjectType id)
 {
-	if (id != ObjectType::Floor && player->GetPos().x - 1 >= 0 && player->GetZSpeed() != 0/* && player->GetZPos() -1 >= 450 &&
+	if (id != ObjectType::Floor && player->GetZSpeed() != 0/* && player->GetZPos() -1 >= 450 &&
 		player->GetPos().x + 65 <= 800 && player->GetZPos() + 65 <= (450 + 166)*/)
 	{
 		auto vec = player->GetZSpeed() / -2;
