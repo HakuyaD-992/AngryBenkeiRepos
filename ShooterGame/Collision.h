@@ -20,3 +20,16 @@ struct CircleCollision
 		return false;
 	}
 };
+
+struct BoxOutCollision
+{
+	bool operator()(const Vector2I& target, const Vector2I& first, const Vector2I& size)
+	{
+		// “–‚½‚Á‚Ä‚¢‚½‚ç
+		if (target.x <= first.x || target.y <= first.y||target.x > first.x + size.x||target.y > first.y + size.y)
+		{
+			return true;
+		}
+		return false;
+	}
+};

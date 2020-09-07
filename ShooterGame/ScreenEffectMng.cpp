@@ -1,5 +1,5 @@
 #include <DxLib.h>
-
+#include "Enemy.h"
 #include "ControlledPlayer.h"
 #include "ScreenEffectMng.h"
 
@@ -14,7 +14,7 @@ void ScreenEffectMng::UpDate(EFFECT_TYPE type, int shake_power)
 	switch (type)
 	{
 	case EFFECT_TYPE::non:
-		if (frame > 0)
+		if (frame> 0)
 		{
 			frame = 0;
 		}
@@ -22,13 +22,12 @@ void ScreenEffectMng::UpDate(EFFECT_TYPE type, int shake_power)
 		break;
 	case EFFECT_TYPE::shake:
 		frame++;
-		offset["shake"] = 
-			Vector2F(((frame % 3) - 1) * shake_power,
-			((frame % 3) - 1) * shake_power);
+		offset["shake"] = Vector2F(((frame % 3) - 1) * shake_power, ((frame % 3) - 1) * shake_power);
 		break;
 	default:
 		break;
 	}
+
 }
 
 void ScreenEffectMng::DrawGraph(Vector2F pos, int g_handle, bool trans_flag)
@@ -41,9 +40,18 @@ void ScreenEffectMng::DrawRotaGraph(Vector2F pos, float rate, float angle, int g
 	DxLib::DrawRotaGraph(pos.x + offset["shake"].x, pos.y + offset["shake"].y, rate, angle, g_handle, trans_flag, ReverseXFlag, ReverseYFlag);
 }
 
+void ScreenEffectMng::DrawAfterimage(int handle)
+{
+}
+
 const void ScreenEffectMng::GetPlayer(std::shared_ptr<ControlledPlayer> player)
 {
 	this->player = player;
+}
+
+const void ScreenEffectMng::GetEnemy(shared_ptr<Enemy> enemy)
+{
+	this->enemy = enemy;
 }
 
 Vector2F ScreenEffectMng::MoveAmountCalculator(ObjectType id)
