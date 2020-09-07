@@ -19,7 +19,7 @@ bool Floor::Initialize(void)
 	return true;
 }
 
-void Floor::Draw(void)
+const Vector2I& Floor::GetPos(void)
 {
-	DrawRotaGraph(pos_.x, pos_.y + 30, exRate_, rotRate_, imageHandle_, true, false);
+	return pos_;
 }

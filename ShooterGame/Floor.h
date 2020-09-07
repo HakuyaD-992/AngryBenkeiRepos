@@ -9,8 +9,7 @@ public:
 
 	// ‰Šú‰»
 	bool Initialize(void);
-	void Draw(void);
-
+	const Vector2I& GetPos(void);
 private:
 
 };

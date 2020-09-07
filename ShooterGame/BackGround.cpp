@@ -1,26 +1,25 @@
 #include <DxLib.h>
+#include "ImageManager.h"
 #include "BackGround.h"
 
-BackGround::BackGround()
+void BackGround::UpData(void)
 {
-	Initialize();
-}
-
-BackGround::~BackGround()
-{
-}
-
-bool BackGround::Initialize(void)
-{
-	name_ = "Background";
-	type_ = ObjectType::BackGround;
-
-	Object::Initialize();
-	return false;
+	frame++;
 }
 
 void BackGround::Draw(void)
 {
-	DrawRotaGraph(pos_.x, pos_.y - 24, exRate_, rotRate_, imageHandle_, true, false);
+	DrawGraph(0, 0, lpImage.GetDivID("sky")[(frame/5) % 6], true);
+	DrawGraph(0, 0, lpImage.GetDivID("sky_effect")[(frame/5) % 6], true);
+}
 
+BackGround::BackGround()
+{
+	lpImage.LoadDiv("sky", Vector2I(800, 600), Vector2I(3, 2));
+	lpImage.LoadDiv("sky_effect", Vector2I(800, 600), Vector2I(3, 2));
+	frame = 0;
+}
+
+BackGround::~BackGround()
+{
 }

@@ -1,8 +1,10 @@
 #include <DxLib.h>
 #include "Application.h"
 #include "PlayScene.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Input.h"
+#include "BackGround.h"
 #include "PLAYER.h"
 #include "ControlledPlayer.h"
 #include "Floor.h"
@@ -77,10 +79,13 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		player->UpDate();
 		player->GetCurrentWeapon()->UpDate();
+		lpS_Effect.GetPlayer(player);
 	}
 
 	enemyList_.remove_if
 	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
+	lpBackGround.UpData();
+	lpS_Effect.UpDate(EFFECT_TYPE::shake);
 
 	fps_.Wait();
 	frame_++;
@@ -98,6 +103,8 @@ void PlayScene::Draw(void)
 	DrawRotaGraph(scr.x / 2, scr.y / 2 - 106,
 		1.0f, 0.0f,
 		lpImage.GetDivID(currentWeather_)[0], true);
+
+	lpBackGround.Draw();
 
 	for (auto obj : objList_)
 	{
@@ -123,6 +130,7 @@ void PlayScene::Draw(void)
 	fps_.Draw();
 	
 	//DrawRotaGraph(230, 100, 1.0f, 0.0f, lpImage.GetID("UI/enemy1_UI2"), true, false);
+
 
 	ScreenFlip();
 }

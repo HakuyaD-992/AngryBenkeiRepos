@@ -34,8 +34,8 @@ private:
 	void Jump(void);
 	void Fire(void);
 
-	// ÌßÚ²Ô°‚Ìs“®‚ÉŠÖ‚·‚éŠÖ”Îß²İÀ
-	void(ControlledPlayer::* updater_)(void);
+	//// ÌßÚ²Ô°‚Ìs“®‚ÉŠÖ‚·‚éŠÖ”Îß²İÀ
+	//void(ControlledPlayer::* updater_)(void);
 	// “G‚ÌØ½Ä
 	//std::list<std::shared_ptr<Enemy>>& enemies_;
 	std::vector<std::shared_ptr<WeaponBase>> weapons_;

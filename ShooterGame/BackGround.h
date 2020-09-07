@@ -1,19 +1,23 @@
 #pragma once
-#include "Object.h"
+#include <map>
+#define lpBackGround BackGround::GetInstance()
 
-class BackGround :
-	public Object
+using namespace std;
+class BackGround
 {
 public:
+	static BackGround& GetInstance(void)
+	{
+		static BackGround s_Instance;
+		return s_Instance;
+	}
+
+	void UpData(void);
+	void Draw(void);
+private:
 	BackGround();
 	~BackGround();
 
-	bool Initialize(void);
-	void Draw(void);
-
-private:
-
-protected:
-
+	int frame;
 };
 
