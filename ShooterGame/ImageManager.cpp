@@ -258,6 +258,7 @@ void ImageManager::SetUp(ActorType actor)
 		break;
 	case ActorType::Exoskeleton:
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 7), true));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("death", std::make_pair(std::make_pair(8, 13), false));
 
 
 		break;

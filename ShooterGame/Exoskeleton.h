@@ -1,7 +1,9 @@
 #pragma once
+#include <map>
+#include "Geometory.h"
 #include "Enemy.h"
 
-
+using namespace std;
 class Exoskeleton :
 	public Enemy
 {
@@ -26,5 +28,9 @@ private:
 	void Evacuation(void);
 	// íeÇÃï‚è[
 	void RefillBullet(void);
+
+	int frame;
+
+	vector<pair<Vector2F, int>> afterimage_limit;
 };
 

@@ -22,7 +22,7 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 	std::vector<std::shared_ptr<ControlledPlayer>>& player)
 {
 	// ìGÇÃ¿≤Ãﬂ
-	auto enemyType = ActorType::Pod/* + GetRand(static_cast<int>(ActorType::Pod))*/;
+	auto enemyType = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
 	// ÉXÉ|Å[ÉìŒﬂºﬁºÆ›
 	auto spawnPos = Vector2I(10 + GetRand(floorX - 10),0);
 	// zé≤ŒﬂºﬁºÆ›
@@ -36,7 +36,7 @@ bool Spawner::Initialize(void)
 	enemyInstanceFunc_.try_emplace(ActorType::Pod,
 		[&](std::list<std::shared_ptr<Enemy>>& enemies,
 			std::vector<std::shared_ptr<ControlledPlayer>>& player,
-			Vector2I pos,int z,ActorType type) {
+			Vector2I pos, int z, ActorType type) {
 
 				enemies.emplace_back(std::make_shared<Pod>(pos, z, type, player));
 

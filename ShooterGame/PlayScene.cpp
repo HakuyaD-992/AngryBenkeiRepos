@@ -34,10 +34,14 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
 	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
 
-	if (frame_ % 1000 == 0)
+	if (frame_ % 100 == 0)
 	{
 		// “G‚Ì•¡»
 		spawner_->MakeClone(enemyList_, playerList_);
+		for (auto enemy : enemyList_)
+		{
+			lpS_Effect.GetEnemy(enemy);
+		}
 	}
 	for (auto enemy : enemyList_)
 	{
@@ -77,7 +81,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		player->UpDate();
 		player->GetCurrentWeapon()->UpDate();
 	}
-
+	lpS_Effect.UpDate(EFFECT_TYPE::non);
 	enemyList_.remove_if
 	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
 
@@ -117,7 +121,6 @@ void PlayScene::Draw(void)
 		enemy->Draw_();
 		enemy->GetAICollider()->Draw();
 	}
-
 	fps_.Draw();
 	
 	//DrawRotaGraph(230, 100, 1.0f, 0.0f, lpImage.GetID("UI/enemy1_UI2"), true, false);
