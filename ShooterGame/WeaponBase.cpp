@@ -3,6 +3,7 @@
 #include "WeaponBase.h"
 #include "ImageManager.h"
 #include "PlayerBullet.h"
+#include "SoundManager.h"
 
 WeaponBase::WeaponBase()
 {
@@ -35,8 +36,6 @@ bool WeaponBase::Initialize(void)
 	}
 	return true;
 }
-
-
 
 void WeaponBase::Draw(const bool& turnFlag)
 {
@@ -120,5 +119,6 @@ void WeaponBase::SetAnimation(std::string animName)
 
 void WeaponBase::AddBullet(void)
 {
+
 	bullets_.emplace_back(std::make_shared<PlayerBullet>(pos_, z_, type_, isTurnLeft_));
 }

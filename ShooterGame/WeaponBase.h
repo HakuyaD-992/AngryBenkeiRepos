@@ -36,6 +36,12 @@ public:
 	{
 		return type_;
 	}
+
+	const std::string& GetWeaponName(void)
+	{
+		return name_;
+	}
+
 	// e’e‚Ì’Ç‰Á
 	void AddBullet(void);
 

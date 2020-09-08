@@ -1,3 +1,5 @@
+#include <DxLib.h>
+#include "SoundManager.h"
 #include "SubMachinegun.h"
 
 SubMachinegun::SubMachinegun(Vector2I pos, int z, WeaponType type)
