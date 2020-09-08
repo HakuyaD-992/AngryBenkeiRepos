@@ -13,7 +13,7 @@ TitleScene::TitleScene(SceneController& sCon):
 	BaseScene(sCon)
 {
 	Initialize();
-	lpSound.Play("title", 255 * 70 / 100, DX_PLAYTYPE_LOOP);
+	lpSound.Play("title", 255 * 50 / 100, DX_PLAYTYPE_LOOP);
 }
 
 TitleScene::~TitleScene()
@@ -24,7 +24,6 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 {
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
 	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
-
 
 	lpEffect.UpDate();
 
@@ -38,7 +37,6 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		stringSp_[1].y = 170;
 	}
-
 
 	if (fade_ == Fade::In)
 	{
@@ -57,6 +55,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
+					lpSound.Play("cursorMove", 255 * 60 / 100, DX_PLAYTYPE_BACK);
 					arrowPos_.y += 70;
 					if (arrowPos_.y >= stringPos_.y + 70)
 					{
@@ -70,6 +69,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
+					lpSound.Play("cursorMove", 255 * 60 / 100, DX_PLAYTYPE_BACK);
 					arrowPos_.y -= 70;
 					if (arrowPos_.y <= stringPos_.y)
 					{
@@ -84,6 +84,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
+					lpSound.Play("start", 255 * 50 / 100, DX_PLAYTYPE_BACK);
 					lpEffect.Play("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
 					isNext_ = true;
 				}
@@ -92,19 +93,12 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	}
 	if (isNext_)
 	{
-		if (nextFlag_ == Next::Manual && (lpEffect.IsPlayingEffect("thunder") == -1))
-		{
-			//return std::make_unique<>
-		}
 		// ¹Þ°Ñ½À°Ä
 		if (nextFlag_ == Next::Game && (lpEffect.IsPlayingEffect("thunder") == -1))
 		{
+			lpSound.Stop("title");
 			sceneCtl_.ChangeScene(std::make_shared<PlayScene>(sceneCtl_));
 		}
-	}
-	if (lpEffect.IsPlayingEffect("thunder") == 0)
-	{
-		int i = 0;
 	}
 
 
@@ -128,7 +122,6 @@ void TitleScene::Draw(void)
 	DrawGraph(arrowPos_.x, arrowPos_.y + stringSp_[0].y, lpImage.GetID("Title/arrow"), true);
 
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[0].y, lpImage.GetID("Title/start"), true);
-	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	lpEffect.Draw();
@@ -153,7 +146,9 @@ void TitleScene::Initialize(void)
 	lpImage.Load("Title/manual");
 	lpImage.Load("Title/arrow");
 
+	lpSound.Load("cursorMove", true);
 	lpSound.Load("title", true);
+	lpSound.Load("start", true);
 
 	// ´Ìª¸Ä‚ÌÛ°ÄÞ
 	lpEffect.Load("thunder");

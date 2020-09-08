@@ -47,5 +47,11 @@ private:
 	Next nextFlag_;
 	// 決定ﾎﾞﾀﾝを押したﾌﾗｸﾞ
 	bool isNext_;
+	// startの文字を広げるｶｳﾝﾄ
+	float extendCount_;
+	// 上記のｶｳﾝﾄを加算していくﾌﾗｸﾞ
+	bool extendFlag_;
+	// startの文字をだんだん透過させていくアルファ値
+	float alphaCount_;
 };
 
