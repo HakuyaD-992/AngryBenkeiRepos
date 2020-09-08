@@ -71,9 +71,6 @@ public:
 	// e’e‚Ì’Ç‰Á
 	void AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets);
 
-	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
-	void ReadyToShot(void);
-
 	void SetisBehindPlayer(bool& flg);
 	const bool& GetisBehindPlayer(void)
 	{
@@ -109,8 +106,7 @@ protected:
 	bool isBehindPlayer_;
 	// ÀŞÒ°¼Ş‚ğH‚ç‚Á‚½Ì×¸Ş
 	bool onDamaged_;
-	// ’e‚ğŒ‚‚ÂÌ×¸Ş
-	bool isShot_;
+
 	std::vector<std::shared_ptr<ControlledPlayer>>& player_;
 	std::shared_ptr<ControlledPlayer> nearestPlayer_;
 

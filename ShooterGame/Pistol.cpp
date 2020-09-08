@@ -1,4 +1,6 @@
+#include <DxLib.h>
 #include "Pistol.h"
+#include "SoundManager.h"
 
 Pistol::Pistol(Vector2I pos, int z, WeaponType type)
 {
@@ -45,6 +47,10 @@ void Pistol::UpDateAnimation(std::string animName)
 void Pistol::UpDate(void)
 {
 	UpDateAnimation(currentAnimation_);
+
+	if (currentAnimation_ == "fire")
+	{
+	}
 
 	if (currentAnimation_ == "reload")
 	{

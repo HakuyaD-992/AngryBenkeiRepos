@@ -144,11 +144,6 @@ void Enemy::AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets)
 	}
 }
 
-void Enemy::ReadyToShot(void)
-{
-	isShot_ = true;
-}
-
 void Enemy::SetisBehindPlayer(bool& flg)
 {
 	isBehindPlayer_ = flg;

@@ -31,6 +31,11 @@ Actor::~Actor()
 {
 }
 
+void Actor::ReadyToShot(void)
+{
+	isShot_ = true;
+}
+
 bool Actor::OnFloor(void)
 {
 	if (pos_.y >= 500)

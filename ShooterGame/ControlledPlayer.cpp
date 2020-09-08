@@ -1,3 +1,5 @@
+#include <DxLib.h>
+
 #include "ControlledPlayer.h"
 #include "ImageManager.h"
 #include "Application.h"
@@ -9,6 +11,7 @@
 #include "Input.h"
 #include "BulletBase.h"
 #include "Collision.h"
+#include "SoundManager.h"
 
 int ControlledPlayer::player_ = 0;
 
@@ -85,6 +88,9 @@ void ControlledPlayer::UpDate(void)
 							!inputData.second[static_cast<int>(TrgFlag::Old)])
 						{
 							currentWeapon_->SetAnimation("fire");
+							lpSound.Play(currentWeapon_->GetWeaponName() + "/" + currentWeapon_->GetAnimation(),
+								255 * 70 / 100,
+								DX_PLAYTYPE_BACK);
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
 						}
@@ -96,6 +102,17 @@ void ControlledPlayer::UpDate(void)
 							currentWeapon_->SetAnimation("fire");
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
+						}
+						if (inputData.second[static_cast<int>(TrgFlag::Now)] &&
+							!inputData.second[static_cast<int>(TrgFlag::Old)])
+						{
+							lpSound.Play(currentWeapon_->GetWeaponName() + "/fire",
+								255 * 70 / 100,
+								DX_PLAYTYPE_LOOP);
+						}
+						if (!inputData.second[static_cast<int>(TrgFlag::Now)])
+						{
+							lpSound.Stop(currentWeapon_->GetWeaponName() + "/fire");
 						}
 					}
 				}
@@ -144,6 +161,7 @@ void ControlledPlayer::UpDate(void)
 
 		if (currentWeapon_->GetAnimation() == "non")
 		{
+			ReadyToShot();
 			// ¡Œ»Ý‘•”õ’†‚Ì•Ší‚Ì•ÏX
 			if (inputData.first == KeyConfiguration::ChangeWeapon)
 			{
@@ -156,6 +174,7 @@ void ControlledPlayer::UpDate(void)
 			}
 		}
 	}
+
 
 	if ((speed_.x == 0) && (zSpeed_ == 0))
 	{
@@ -244,7 +263,7 @@ void ControlledPlayer::Draw_(void)
 		}
 	}
 	DrawFormatString(100, 150, 0xffffff, "flg:%d",isOnFloor_);
-
+	DrawFormatString(100, 180, 0xffffff, "sound:%d", CheckSoundMem(lpSound.GetHandle(currentWeapon_->GetWeaponName() + "/" + currentWeapon_->GetAnimation())));
 	DrawFormatString(100, 120, 0xffffff, "bulletNum:%d", currentWeapon_->GetHavingBulletNum());
 }
 

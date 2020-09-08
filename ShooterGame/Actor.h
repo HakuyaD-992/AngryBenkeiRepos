@@ -80,6 +80,9 @@ public:
 		return hp_;
 	}
 
+	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
+	virtual void ReadyToShot(void);
+
 private:
 	Vector2I drawPos_;
 
@@ -137,5 +140,8 @@ protected:
 
 	// Še±¸À°‚ÌHP
 	int hp_;
+
+	// ’e‚ğŒ‚‚ÂÌ×¸Ş
+	bool isShot_;
 };
 

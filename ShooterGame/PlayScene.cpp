@@ -15,6 +15,7 @@
 #include "EnemyAIManager.h"
 #include "PodAI.h"
 #include "EnemyBullet.h"
+#include "SoundManager.h"
 
 PlayScene::PlayScene(SceneController& sCon):
 	BaseScene(sCon)
@@ -65,7 +66,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		default:
 			break;
 		}
-
 	}
 
 	for (auto b : enemyBullets_)
@@ -158,6 +158,10 @@ void PlayScene::Initialize(void)
 	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
 
 	imageMng.Load("UI/enemy1_UI2");
+
+	lpSound.Load("pistol/fire", true);
+	lpSound.Load("sub_machinegun/fire", true);
+	lpSound.Load("explosion", false);
 
 	// “G‘S‘Ì‚ÌAI‚ÌŠÇ—¸×½
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
