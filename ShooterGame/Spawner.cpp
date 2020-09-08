@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "Pod.h"
 #include "Exoskeleton.h"
+#include "Spacenaut.h"
 #include "AIBase.h"
 #include "Floor.h"
 #include "BulletBase.h"
@@ -43,7 +44,7 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 	// zé≤ŒﬂºﬁºÆ›
 	int z = -floorZ + GetRand(floorZ);
 
-	enemyInstanceFunc_[enemyType](enemies,player, spawnPos, z,enemyType);
+	enemyInstanceFunc_[enemyType_](enemies,player, spawnPos, z,enemyType_);
 }
 
 bool Spawner::Initialize(void)
@@ -62,6 +63,12 @@ bool Spawner::Initialize(void)
 			Vector2I pos, int z, ActorType type) {
 
 				enemies.emplace_back(std::make_shared<Exoskeleton>(pos, z, type, player));
+		});
+	enemyInstanceFunc_.try_emplace(ActorType::Spacenaut,
+		[&](std::list<std::shared_ptr<Enemy>>& enemies,
+			std::vector<std::shared_ptr<ControlledPlayer>>& player,
+			Vector2I pos, int z, ActorType type) {
+				enemies.emplace_back(std::make_shared<Spacenaut>(pos, z, type, player));
 		});
 	/*enemyInstanceFunc_.try_emplace(ActorType::Pod,
 		[&](std::list<std::shared_ptr<Enemy>> enemies,

@@ -198,6 +198,11 @@ bool ImageManager::LoadBullet(const BulletType& bulletType, std::string bulletNa
 		bulletResources_[static_cast<int>(bulletType)].divSize_ = Vector2I(8, 8);
 
 		break;
+	case BulletType::SpacenautBullet:
+		bulletResources_[static_cast<int>(bulletType)].actionNameSet_.try_emplace("non", std::make_pair(0, 0), false);
+		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(1, 1);
+		bulletResources_[static_cast<int>(bulletType)].divSize_ = Vector2I(8, 4);
+		break;
 	default:
 		break;
 	}
@@ -284,8 +289,8 @@ void ImageManager::SetUp(ActorType actor)
 		break;
 	case ActorType::Spacenaut:
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack", std::make_pair(std::make_pair(1, 1), false));
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 9), false));
-
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("walk", std::make_pair(std::make_pair(0, 9), true));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("death", std::make_pair(std::make_pair(10, 15), false));
 		break;
 	case ActorType::Bigboy:
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("idle", std::make_pair(std::make_pair(0, 5), true));

@@ -241,6 +241,8 @@ void PlayScene::Initialize(void)
 	enemyCountinWave_ = { 0,0,0 };
 	enemyMaxNuminWave_ = { 20,30,1 };
 
+	changeWaveFlag_ = false;
+
 	waveStringPos_ = { -120,50 };
 	waveNumPos_ = { 530,50 };
 	waveNumExRate_ = 0.0f;
