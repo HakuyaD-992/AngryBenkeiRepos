@@ -40,7 +40,7 @@ void ScreenEffectMng::DrawRotaGraph(Vector2F pos, float rate, float angle, int g
 	DxLib::DrawRotaGraph(pos.x + offset["shake"].x, pos.y + offset["shake"].y, rate, angle, g_handle, trans_flag, ReverseXFlag, ReverseYFlag);
 }
 
-void ScreenEffectMng::DrawRotaGraph_AlphaEffect(ActorType type, Vector2F pos, float rate, float angle, int g_handle, bool trans_flag, float percent, int ReverseXFlag, int ReverseYFlag)
+void ScreenEffectMng::DrawRotaGraph_AlphaEffect(Vector2F pos, float rate, float angle, int g_handle, bool trans_flag, float percent, int ReverseXFlag, int ReverseYFlag)
 {
 	SetDrawBright(255, 255 * (percent / 100.0f), 255 * (percent / 100.0f));
 	DxLib::DrawRotaGraph(pos.x + offset["shake"].x, pos.y + offset["shake"].y, rate, angle, g_handle, trans_flag, ReverseXFlag, ReverseYFlag);

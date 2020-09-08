@@ -92,7 +92,7 @@ void Actor::Draw(void)
 
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
 
-	lpS_Effect.DrawRotaGraph_AlphaEffect(type_, Vector2F(drawPos_.x, drawPos_.y),
+	lpS_Effect.DrawRotaGraph_AlphaEffect(Vector2F(drawPos_.x, drawPos_.y),
 		exRate_, rotRate_,
 		imageMng.GetID(type_, currentAnimation_)[animationCount_],
 		true, alpha_percent, isTurnLeft_);

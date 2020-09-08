@@ -42,7 +42,7 @@ public:
 	void UpDate(EFFECT_TYPE type, int shake_power = 1);
 	void DrawGraph(Vector2F pos, int g_handle, bool trans_flag);
 	void DrawRotaGraph(Vector2F pos, float rate, float angle, int g_handle, bool trans_flag, int ReverseXFlag = false, int ReverseYFlag = false);
-	void DrawRotaGraph_AlphaEffect(ActorType type,Vector2F pos, float rate, float angle, int g_handle, bool trans_flag,float percent, int ReverseXFlag = false, int ReverseYFlag = false);
+	void DrawRotaGraph_AlphaEffect(Vector2F pos, float rate, float angle, int g_handle, bool trans_flag,float percent, int ReverseXFlag = false, int ReverseYFlag = false);
 
 	const void GetPlayer(shared_ptr<ControlledPlayer> player);
 	const void GetEnemy(shared_ptr<Enemy> player);
