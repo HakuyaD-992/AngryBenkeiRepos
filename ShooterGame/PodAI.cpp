@@ -17,8 +17,19 @@ void PodAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 {
 	if (me_.GetOnDamaged())
 	{
-		me_.ChangeAnimation("hit");
+		anim_flag = true;
 		updater_ = &PodAI::OnDamaged;
+	}
+	if (anim_flag)
+	{
+		damage_anim_frame++;
+		me_.GetAlpha() = (100 / (((damage_anim_frame / 10) % 2) + 1));
+	}
+	if (damage_anim_frame >= 60)
+	{
+		anim_flag = false;
+		damage_anim_frame = 0;
+		me_.GetAlpha() = 100.0f;
 	}
 	(this->*updater_)(enemies);
 }
@@ -215,5 +226,8 @@ bool PodAI::Death(std::list<std::shared_ptr<Enemy>>& enemies)
 
 void PodAI::Initialize(void)
 {
+	frame = 0;
+	damage_anim_frame = 0;
+	anim_flag = false;
 	updater_ = &PodAI::Walk;
 }
