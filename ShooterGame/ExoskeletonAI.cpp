@@ -43,8 +43,8 @@ bool ExoskeletonAI::Run(std::list<std::shared_ptr<Enemy>>& enemies)
 		player_pos = Vector2I(me_.GetNearestPlayer()->GetPos().x, me_.GetNearestPlayer()->GetZPos());
 		rad = atan2(player_pos.y - me_.GetZPos(), player_pos.x - me_.GetPos().x);
 	}
-	me_.GetPos().x += 4 * cos(rad);
-	me_.GetZPos() += 4 * sin(rad);
+	me_.GetPos().x += 5 * cos(rad);
+	me_.GetZPos() += 5 * sin(rad);
 
 	return false;
 }

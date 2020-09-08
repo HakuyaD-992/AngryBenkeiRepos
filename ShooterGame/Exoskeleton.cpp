@@ -30,6 +30,7 @@ Exoskeleton::Exoskeleton(Vector2I pos,
 	updater = &Exoskeleton::Run;
 	enemyNo_++;
 	frame = 0;
+	afterimage_limit.resize(10);
 }
 
 Exoskeleton::~Exoskeleton()
@@ -43,12 +44,10 @@ void Exoskeleton::UpDate(void)
 	if (frame % 10 == 1)
 	{
 		afterimage_limit.emplace_back(make_pair(Vector2F(pos_.x, pos_.y + (z_ / 2)), 10));
-	}
-
-	afterimage_limit.front().second--;
-	if (afterimage_limit.front().second <= 0)
-	{
-		afterimage_limit.erase(afterimage_limit.begin());
+		if (afterimage_limit.size() >= 10)
+		{
+			afterimage_limit.erase(afterimage_limit.begin());
+		}
 	}
 
 	gravity_->Apply(pos_);
