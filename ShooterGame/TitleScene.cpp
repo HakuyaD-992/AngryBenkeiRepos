@@ -6,12 +6,14 @@
 #include "ImageManager.h"
 #include "EffectManager.h"
 #include "SceneController.h"
+#include "SoundManager.h"
 
 
 TitleScene::TitleScene(SceneController& sCon):
 	BaseScene(sCon)
 {
 	Initialize();
+	lpSound.Play("title", 255 * 70 / 100, DX_PLAYTYPE_LOOP);
 }
 
 TitleScene::~TitleScene()
@@ -150,6 +152,8 @@ void TitleScene::Initialize(void)
 	lpImage.Load("Title/start");
 	lpImage.Load("Title/manual");
 	lpImage.Load("Title/arrow");
+
+	lpSound.Load("title", true);
 
 	// ´Ìª¸Ä‚ÌÛ°ÄÞ
 	lpEffect.Load("thunder");

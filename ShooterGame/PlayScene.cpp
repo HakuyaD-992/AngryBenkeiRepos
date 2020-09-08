@@ -21,6 +21,8 @@ PlayScene::PlayScene(SceneController& sCon):
 	BaseScene(sCon)
 {
 	Initialize();
+
+	lpSound.Play("bgm", 255 * 70 / 100, DX_PLAYTYPE_LOOP);
 }
 
 PlayScene::~PlayScene()
@@ -165,6 +167,7 @@ void PlayScene::Initialize(void)
 	lpSound.Load("pistol/fire", true);
 	lpSound.Load("sub_machinegun/fire", true);
 	lpSound.Load("explosion", false);
+	lpSound.Load("bgm", true);
 
 	// “G‘S‘Ì‚ÌAI‚ÌŠÇ—¸×½
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
