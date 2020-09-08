@@ -166,6 +166,7 @@
     <ClCompile Include="EnemyAIManager.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Exoskeleton.cpp" />
+    <ClCompile Include="ExoskeletonAI.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Geometory.cpp" />
     <ClCompile Include="Gravity.cpp" />
@@ -183,6 +184,8 @@
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="ScreenEffectMng.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Spacenaut.cpp" />
+    <ClCompile Include="SpacenautAI.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="SubMachinegun.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -208,6 +211,7 @@
     <ClInclude Include="EnemyAIManager.h" />
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Exoskeleton.h" />
+    <ClInclude Include="ExoskeletonAI.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Fps.h" />
     <ClInclude Include="Geometory.h" />
@@ -228,6 +232,8 @@
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="ScreenEffectMng.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Spacenaut.h" />
+    <ClInclude Include="SpacenautAI.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="SubMachinegun.h" />
     <ClInclude Include="TitleScene.h" />

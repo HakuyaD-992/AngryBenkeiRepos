@@ -60,6 +60,11 @@ public:
 		return zSpeed_;
 	}
 
+	float& GetAlpha(void)
+	{
+		return alpha_percent;
+	}
+
 	bool& GetisAnimEnd(void)
 	{
 		return isAnimEnd_;
@@ -137,6 +142,8 @@ protected:
 	double exRate_;
 	// ‰ñ“]—¦
 	double rotRate_;
+	// “§‰ß—¦
+	float alpha_percent;
 
 	// Še±¸À°‚ÌHP
 	int hp_;

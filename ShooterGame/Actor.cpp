@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "Actor.h"
+#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 
 Actor::Actor()
@@ -19,7 +20,6 @@ Actor::Actor()
 	isJump_ = false;
 	isAnimEnd_ = false;
 	isAttack_ = false;
-
 	// ‚Ü‚¸‘Ò‹@ó‘Ô‚É‰Šú‰»
 	//currentAnimation_ = "idle";
 
@@ -62,6 +62,8 @@ bool Actor::Initialize(void)
 		isLoop_.try_emplace(anim->first, anim->second.second);
 	}
 
+	alpha_percent = 100.0f;
+	isDamaged_ = false;
 	// ‹éŒ`î•ñ‚Ì‰Šú‰»
 	RectInitializer();
 
@@ -89,10 +91,11 @@ void Actor::Draw(void)
 	auto& imageMng = ImageManager::GetInstance();
 
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
-	DrawRotaGraph(drawPos_.x, drawPos_.y,
+
+	lpS_Effect.DrawRotaGraph_AlphaEffect(type_, Vector2F(drawPos_.x, drawPos_.y),
 		exRate_, rotRate_,
 		imageMng.GetID(type_, currentAnimation_)[animationCount_],
-		true, isTurnLeft_);
+		true, alpha_percent, isTurnLeft_);
 
 	// ¡‚Ì±ÆÒ°¼®İ‚Å‚Ì‹éŒ`‚ğŒŸõ‚µ‚ÄŠi”[
 	auto it = rect_.find(currentAnimation_);
