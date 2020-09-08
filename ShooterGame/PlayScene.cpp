@@ -36,59 +36,120 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
 	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
 
-	if (frame_ % 100 == 0)
+	if (!changeWaveFlag_)
 	{
-		// “G‚Ì•¡»
-		spawner_->MakeClone(enemyList_, playerList_);
+		if (defeatEnemyNum_ >= enemyMaxNuminWave_[static_cast<int>(wave_)])
+		{
+			changeWaveFlag_ = true;
+			wave_ = wave_ + 1;
+			defeatEnemyNum_ = 0;
+		}
+	}
+
+	if (!changeWaveFlag_)
+	{
+		if (frame_ % 100 == 0)
+		{
+			if (enemyCountinWave_[static_cast<int>(wave_)] <
+				enemyMaxNuminWave_[static_cast<int>(wave_)])
+			{
+				// “G‚Ì•¡»
+				spawner_->MakeClone(enemyList_, playerList_,wave_);
+				enemyCountinWave_[static_cast<int>(wave_)]++;
+
+				for (auto enemy : enemyList_)
+				{
+					lpS_Effect.GetEnemy(enemy);
+				}
+			}
+		}
+
 		for (auto enemy : enemyList_)
 		{
-			lpS_Effect.GetEnemy(enemy);
+			aiManager_->UpDate(enemy);
+
+			// “G‚Ì±ÆÒ°¼®ÝŠÖŒW
+			enemy->Action();
+
+			auto type = enemy->GetType();
+
+			switch (type)
+			{
+			case ActorType::Pod:
+				if (enemy->GetCurrentAnimation() == "attack_release")
+				{
+					enemy->AddBullet(enemyBullets_);
+				}
+				else
+				{
+					enemy->ReadyToShot();
+				}
+				break;
+			case ActorType::Exoskeleton:
+				break;
+			case ActorType::Spacenaut:
+				if (enemy->GetCurrentAnimation() == "attack")
+				{
+					if (frame_ % 10)
+					{
+						enemy->AddBullet(enemyBullets_);
+					}
+					else
+					{
+						enemy->ReadyToShot();
+					}
+				}
+				break;
+			case ActorType::Roboid:
+			default:
+				break;
+			}
+			// “G‚ªŽ€‚ñ‚¾‚çÌßÚ²Ô°‚ª“G‚ð“|‚µ‚½”‚ð‰ÁŽZ
+			if (enemy->GetType() != ActorType::Exoskeleton)
+			{
+				if (enemy->GetDeleteFlag())
+				{
+					defeatEnemyNum_++;
+				}
+			}
 		}
-	}
-	for (auto enemy : enemyList_)
-	{
-		aiManager_->UpDate(enemy);
 
-		// “G‚Ì±ÆÒ°¼®ÝŠÖŒW
-		enemy->Action();
-
-		auto type = enemy->GetType();
-
-		switch (type)
+		for (auto b : enemyBullets_)
 		{
-		case ActorType::Pod:
-			if (enemy->GetCurrentAnimation() == "attack_release")
+			b->UpDate();
+		}
+		lpS_Effect.UpDate(EFFECT_TYPE::non);
+		enemyList_.remove_if
+		([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
+
+		fps_.Wait();
+		frame_++;
+	}
+	else
+	{
+		waveStringPos_.x += 3;
+		if (waveStringPos_.x >= 350)
+		{
+			waveStringPos_.x = 350;
+			waveNumExRate_ += 0.05f;
+			if (waveNumExRate_ >= 1.0f)
 			{
-				enemy->AddBullet(enemyBullets_);
+				waveNumExRate_ = 1.0f;
+				waitFrame_ += 0.01f;
+				if (waitFrame_ >= 10.0f)
+				{
+					waitFrame_ = 0.0f;
+					changeWaveFlag_ = false;
+				}
 			}
-			else
-			{
-				enemy->ReadyToShot();
-			}
-			break;
-		case ActorType::Exoskeleton:
-			break;
-		case ActorType::Roboid:
-		default:
-			break;
 		}
 	}
 
-	for (auto b : enemyBullets_)
-	{
-		b->UpDate();
-	}
 	for (auto player : playerList_)
 	{
 		player->UpDate();
 		player->GetCurrentWeapon()->UpDate();
 	}
-	lpS_Effect.UpDate(EFFECT_TYPE::non);
-	enemyList_.remove_if
-	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
-
-	fps_.Wait();
-	frame_++;
 }
 
 void PlayScene::Draw(void)
@@ -125,6 +186,22 @@ void PlayScene::Draw(void)
 	}
 	fps_.Draw();
 	
+
+	if (changeWaveFlag_)
+	{
+		DrawRotaGraph(waveStringPos_.x, waveStringPos_.y, 1.0f, 0.0f,
+			lpImage.GetID("UI/wave"), true, false);
+
+		DrawRotaGraph(waveNumPos_.x, waveNumPos_.y, waveNumExRate_, 0.0f,
+			lpImage.GetDivID("UI/wave_num")[static_cast<int>(wave_)], true, false);
+		if (waveNumExRate_ >= 1.0f)
+		{
+			DrawRotaGraph(waveStringPos_.x, waveStringPos_.y + 60, 1.0f, 0.0f,
+				lpImage.GetID("UI/untilnext"), true, false);
+			DrawRotaGraph(waveNumPos_.x - 80, waveNumPos_.y + 75, waveNumExRate_, 0.0f,
+				lpImage.GetDivID("UI/number")[static_cast<int>(10 - waitFrame_)], true, false);
+		}
+	}
 	//DrawRotaGraph(230, 100, 1.0f, 0.0f, lpImage.GetID("UI/enemy1_UI2"), true, false);
 
 	ScreenFlip();
@@ -159,10 +236,25 @@ void PlayScene::Initialize(void)
 
 	currentWeather_ = "Normalsky";
 
+	wave_ = Wave::FirstWave;
+
+	enemyCountinWave_ = { 0,0,0 };
+	enemyMaxNuminWave_ = { 20,30,1 };
+
+	waveStringPos_ = { -120,50 };
+	waveNumPos_ = { 530,50 };
+	waveNumExRate_ = 0.0f;
+	waitFrame_ = 0.0f;
+	defeatEnemyNum_ = 0;
+
+
 	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
+	imageMng.LoadDiv("UI/wave_num", Vector2I(60, 60), Vector2I(3, 1));
+	imageMng.LoadDiv("UI/number", Vector2I(22, 40), Vector2I(10, 1));
 
-	imageMng.Load("UI/enemy1_UI2");
+	imageMng.Load("UI/wave");
+	imageMng.Load("UI/untilnext");
 
 	lpSound.Load("pistol/fire", true);
 	lpSound.Load("sub_machinegun/fire", true);

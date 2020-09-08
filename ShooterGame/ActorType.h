@@ -10,6 +10,7 @@ enum class ActorType
 	Robo_Soldier,
 	Soldier,
 	Spacenaut,
+	Bigboy,
 	Max
 };
 

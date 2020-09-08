@@ -52,6 +52,11 @@ bool ImageManager::Load(const ActorType& actor, std::string filepath, Vector2I d
 			resources_[static_cast<int>(actor)].divCount_ = Vector2I(10, 1);
 
 			break;
+		case ActorType::Bigboy:
+			resources_[static_cast<int>(actor)].typeName = "Bigboy";
+			resources_[static_cast<int>(actor)].divSize_ = Vector2I(180, 180);
+			resources_[static_cast<int>(actor)].divCount_ = Vector2I(6, 7);
+			break;
 		case ActorType::Max:
 		default:
 			return false;
@@ -280,6 +285,14 @@ void ImageManager::SetUp(ActorType actor)
 	case ActorType::Spacenaut:
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack", std::make_pair(std::make_pair(1, 1), false));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 9), false));
+
+		break;
+	case ActorType::Bigboy:
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("idle", std::make_pair(std::make_pair(0, 5), true));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("hit", std::make_pair(std::make_pair(6, 11), false));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("walk", std::make_pair(std::make_pair(12, 18), true));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack", std::make_pair(std::make_pair(19, 26), false));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("death", std::make_pair(std::make_pair(27, 39), false));
 
 		break;
 	case ActorType::Max:

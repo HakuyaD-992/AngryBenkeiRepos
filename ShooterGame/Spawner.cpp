@@ -19,10 +19,25 @@ Spawner::~Spawner()
 }
 
 void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
-	std::vector<std::shared_ptr<ControlledPlayer>>& player)
+	std::vector<std::shared_ptr<ControlledPlayer>>& player,
+	const Wave& wave)
 {
 	// ìGÇÃ¿≤Ãﬂ
-	auto enemyType = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
+	switch (wave)
+	{
+	case Wave::FirstWave:
+		enemyType_ = ActorType::Spacenaut;
+
+		break;
+	case Wave::SecondWave:
+		enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Exoskeleton));
+		break;
+	case Wave::ThirdWave:
+
+		break;
+	default:
+		break;
+	}
 	// ÉXÉ|Å[ÉìŒﬂºﬁºÆ›
 	auto spawnPos = Vector2I(10 + GetRand(floorX - 10),0);
 	// zé≤ŒﬂºﬁºÆ›

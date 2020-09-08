@@ -5,6 +5,7 @@
 #include <map>
 #include <functional>
 #include "Geometory.h"
+#include "Wave.h"
 
 #include "ActorType.h"
 
@@ -21,7 +22,8 @@ public:
 	~Spawner();
 
 	void MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
-		std::vector<std::shared_ptr<ControlledPlayer>>& player);
+		std::vector<std::shared_ptr<ControlledPlayer>>& player,
+		const Wave& wave);
 
 private:
 	bool Initialize(void);
@@ -29,5 +31,7 @@ private:
 	std::map<ActorType,std::function<void(std::list<std::shared_ptr<Enemy>>&,
 		std::vector<std::shared_ptr<ControlledPlayer>>&,
 		Vector2I pos, int z, ActorType type)>> enemyInstanceFunc_;
+	ActorType enemyType_;
+
 };
 

@@ -7,6 +7,7 @@
 #include "BaseScene.h"
 #include "ActorType.h"
 #include "Fps.h"
+#include "Wave.h"
 
 class ControlledPlayer;
 class Enemy;
@@ -37,6 +38,22 @@ private:
 	bool is2PCreate_;
 	// ‰œsÌ×¸Ş
 	bool zFlag_;
+
+	// Œ»İÌßÚ²Ô°‚ª‘¶İ‚·‚éwave”
+	Wave wave_;
+	Vector2I waveStringPos_;
+	Vector2I waveNumPos_;
+	float waitFrame_;
+	float waveNumExRate_;
+	bool changeWaveFlag_;
+	// ÌßÚ²Ô°‚ª“|‚µ‚½“G‚Ì”
+	int defeatEnemyNum_;
+
+	// 1Wave‚É‘Î‚·‚é“G‚Ì¶¬”Ši”[
+// “G‚ğ¶¬‚µ‚½‚ç‰ÁZ
+	std::array<int, static_cast<int>(Wave::Max)> enemyCountinWave_;
+	// 1Wave“à‚Ì“G‚ÌÅ‘å¶¬”
+	std::array<int, static_cast<int>(Wave::Max)> enemyMaxNuminWave_;
 
 	// ŠeÌßÚ²Ô°A“G‚Ì–¼‘O
 	std::array<std::string, static_cast<int>(ActorType::Max)> actorName_;
