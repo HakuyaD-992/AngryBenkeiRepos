@@ -111,6 +111,8 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 			// “G‚Ì±ÆÒ°¼®İŠÖŒW
 			enemy->Action();
+			// “G‚Ì’e‚ÆÌßÚ²Ô°‚Ì“–‚½‚è”»’è
+			enemy->CheckHitMyBulletToPlayer(enemyBullets_);
 
 			auto type = enemy->GetType();
 
@@ -213,6 +215,13 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 		itemList_.remove_if
 		([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
+
+		// “G‚Ì’e‚ÌÁ‹
+		enemyBullets_.erase(std::remove_if(enemyBullets_.begin(),
+			enemyBullets_.end(),
+			[&](std::shared_ptr<BulletBase>& bullet) {
+				return bullet->GetDeleteFlag();
+			}), enemyBullets_.end());
 
 		fps_.Wait();
 		frame_++;

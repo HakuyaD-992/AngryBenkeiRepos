@@ -35,9 +35,11 @@ public:
 	virtual void Draw_(void) = 0;
 	virtual bool Initialize(void);
 	virtual void SetPos(const Vector2I& pos,int z);
+
 	// ﾌﾟﾚｲﾔｰの銃弾との当たり判定
 	virtual bool CheckHitPlayerBullet(const std::vector<std::shared_ptr<BulletBase>>& playerBullets);
-
+	// ﾌﾟﾚｲﾔｰに自分の弾が当たったかの当たり判定
+	virtual bool CheckHitMyBulletToPlayer(std::vector<std::shared_ptr<BulletBase>>& bullets);
 	// 自分に一番近いプレイヤーを距離を計算してからの取得
 	virtual std::shared_ptr<ControlledPlayer> SearchNearestPlayer(void);
 	// 自分に一番近いプレイヤーを計算なしで取得
@@ -96,6 +98,8 @@ protected:
 	// ﾀｲﾌﾟ別のﾀﾞﾒｰｼﾞ率
 	// 敵皆はHPを同じ100にしておいて、ﾀﾞﾒｰｼﾞ率で食らうﾀﾞﾒｰｼﾞの割合を計算する
 	float damageRate_;
+	// 各敵の弾の攻撃力
+	float attackRate_;
 	// AIｽﾃｰﾄ変数
 	AIState AIstate_;
 	// 仲間のAIｺﾗｲﾀﾞｰに当たったかのﾌﾗｸﾞ

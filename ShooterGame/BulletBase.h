@@ -39,6 +39,11 @@ public:
 		return type_;
 	}
 
+	virtual const int& GetZPos(void) const
+	{
+		return z_;
+	}
+
 	void SetAnimation(std::string animName);
 
 private:

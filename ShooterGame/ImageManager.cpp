@@ -235,6 +235,7 @@ void ImageManager::SetUp(ActorType actor)
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(16, 23), true));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("jump", std::make_pair(std::make_pair(24, 24), false));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("fall", std::make_pair(std::make_pair(26, 29), false));
+		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("hit", std::make_pair(std::make_pair(9, 11), false));
 
 		break;
 

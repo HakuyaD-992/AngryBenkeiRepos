@@ -57,7 +57,7 @@ void ControlledPlayer::UpDate(void)
 
 	auto weaponMoveSmallAmount = animationCount_ - 3.0f;
 
-	if (currentAnimation_ == "attack")
+	if (currentAnimation_ == "hit")
 	{
 		if (isAnimEnd_)
 		{
@@ -252,6 +252,12 @@ void ControlledPlayer::UpDate(void)
 		jumpSpeed_ = 0;
 		jumpForce_ = 0.0f;
 		isJump_ = false;
+	}
+
+	if (onDamaged_)
+	{
+		//ChangeAnimation("hit");
+		onDamaged_ = false;
 	}
 
 	UpDateAnimation(currentAnimation_);

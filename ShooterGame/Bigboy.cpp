@@ -17,6 +17,7 @@ Bigboy::Bigboy(Vector2I pos, int z, ActorType type,
 
 	hp_ = 100;
 	damageRate_ = 1.0f;
+	attackRate_ = 10.0f;
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("idle");

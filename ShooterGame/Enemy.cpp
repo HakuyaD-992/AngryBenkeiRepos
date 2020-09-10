@@ -38,6 +38,7 @@ void Enemy::Action(void)
 			}
 		}
 	}
+
 	if (onDamaged_)
 	{
 		switch (nearestPlayer_->GetCurrentWeapon()->GetType())
@@ -86,6 +87,23 @@ bool Enemy::CheckHitPlayerBullet(const std::vector<std::shared_ptr<BulletBase>>&
 			))
 		{
 			// ’e‚ðÁ‚·
+			bullet->Delete();
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Enemy::CheckHitMyBulletToPlayer(std::vector<std::shared_ptr<BulletBase>>& bullets)
+{
+	for (auto bullet : bullets)
+	{
+		if (CircleCollision()(nearestPlayer_->GetType(),
+			nearestPlayer_->GetPos() - bullet->GetPos(), nearestPlayer_->GetSize() - bullet->GetSize(),
+			nearestPlayer_->GetZPos() - bullet->GetZPos()))
+		{
+			nearestPlayer_->GetHp() -= (int)attackRate_;
+			nearestPlayer_->GetOnDamaged() = true;
 			bullet->Delete();
 			return true;
 		}

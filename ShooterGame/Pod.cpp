@@ -24,6 +24,7 @@ Pod::Pod(Vector2I pos,
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<PodAI>(*this);
 	damageRate_ = 10.0f;
+	attackRate_ = 2.0f;
 	hp_ = 100;
 
 	lpImage.LoadDiv("podmuzzleFlash", Vector2I(55, 60), Vector2I(5, 1));
