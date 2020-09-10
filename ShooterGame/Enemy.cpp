@@ -1,3 +1,5 @@
+#include <DxLib.h>
+
 #include "Enemy.h"
 #include "ImageManager.h"
 #include "ControlledPlayer.h"
@@ -6,6 +8,7 @@
 #include "EnemyBullet.h"
 #include "Collision.h"
 #include "WeaponBase.h"
+#include "SoundManager.h"
 
 int Enemy::enemyNo_ = 0;
 
@@ -18,6 +21,7 @@ Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	isBehindPlayer_ = false;
 	deleteFlag_ = false;
 	isShot_ = true;
+	friendlyFireFlag_ = false;
 
 	muzzleFlashAnimationCount_ = 0.0f;
 }
@@ -157,6 +161,7 @@ void Enemy::AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets)
 	if (isShot_)
 	{
 		bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_));
+		lpSound.Play(name_ + "/fire", DX_PLAYTYPE_BACK);
 		isShot_ = false;
 	}
 }

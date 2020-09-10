@@ -79,6 +79,11 @@ public:
 		return isBehindPlayer_;
 	}
 
+	bool& GetFriendlyFireFlag(void)
+	{
+		return friendlyFireFlag_;
+	}
+
 	virtual void AddMuzzleFlashAnimationCount(float cnt)
 	{
 		muzzleFlashAnimationCount_ += cnt;
@@ -107,6 +112,9 @@ protected:
 	// ÌßÚ²Ô°‚Ì”wŒã‚É‚¢‚éÌ×¸Ş
 	bool isBehindPlayer_;
 
+	// ©•ª‚ª–¡•û‚É“–‚½‚Á‚½Ì×¸Ş(Exoskeleton‚Ì‚İ‚É‘Î‚µ‚Ä‚µ‚©g—p‚µ‚È‚¢)
+	bool friendlyFireFlag_;
+
 	std::vector<std::shared_ptr<ControlledPlayer>>& player_;
 	std::shared_ptr<ControlledPlayer> nearestPlayer_;
 
@@ -117,5 +125,7 @@ protected:
 	Vector2I muzzleFlashPos_;
 	// eŒû‚©‚ço‚émuzzleFlash‚Ì±ÆÒ°¼®İ¶³İÄ
 	float muzzleFlashAnimationCount_;
+
+	std::string name_;
 };
 

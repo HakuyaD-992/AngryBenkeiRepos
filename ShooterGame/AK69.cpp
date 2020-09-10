@@ -23,17 +23,17 @@ AK69::~AK69()
 
 void AK69::UpDate(void)
 {
-	if (currentAnimation_ == "reload")
-	{
-		if (isTurnLeft_)
-		{
-			rotRate_ = 45.0f;
-		}
-		else
-		{
-			rotRate_ = -45.0f;
-		}
-	}
+	//if (currentAnimation_ == "reload")
+	//{
+	//	if (isTurnLeft_)
+	//	{
+	//		rotRate_ = 45.0f;
+	//	}
+	//	else
+	//	{
+	//		rotRate_ = -45.0f;
+	//	}
+	//}
 
 	if (currentAnimation_ == "fire")
 	{
@@ -59,20 +59,20 @@ void AK69::UpDateAnimation(std::string animName)
 {
 	if (animName == "fire")
 	{
-		animationCount_ += 0.35f;
+		animationCount_ += 0.15f;
 		if ((int)animationCount_ >= animMaxNum_[animName] - 1)
 		{
 			animationCount_ = animMaxNum_[animName] - 1;
 		}
 	}
-	if (currentAnimation_ == "reload")
-	{
-		animationCount_ += 0.35f;
-		if ((int)animationCount_ >= animMaxNum_[animName] - 1)
-		{
-			isAnimEnd_ = true;
-		}
-	}
+	//if (currentAnimation_ == "reload")
+	//{
+	//	animationCount_ += 0.35f;
+	//	if ((int)animationCount_ >= animMaxNum_[animName] - 1)
+	//	{
+	//		isAnimEnd_ = true;
+	//	}
+	//}
 
 	if (currentAnimation_ == "fire")
 	{

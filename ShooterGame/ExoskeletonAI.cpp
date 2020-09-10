@@ -24,6 +24,32 @@ void ExoskeletonAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 		me_.ChangeAnimation("death");
 		updater_ = &ExoskeletonAI::Death;
 	}
+
+	if (CircleCollision()(me_.GetType(),
+		me_.SearchNearestPlayer()->GetPos() - me_.GetPos(),
+		me_.GetSize() + me_.GetNearestPlayer()->GetSize(),
+		me_.GetZPos() - me_.GetNearestPlayer()->GetZPos()))
+	{
+		me_.ChangeAnimation("death");
+		me_.GetNearestPlayer()->GetOnDamaged() = true;
+		updater_ = &ExoskeletonAI::Death;
+	}
+
+	for (auto enemy : enemies)
+	{
+		if (me_.GetId() != enemy->GetId())
+		{
+			if (CircleCollision()(enemy->GetType(),
+				enemy->GetPos() - me_.GetPos(), enemy->GetSize() + me_.GetSize(),
+				enemy->GetZPos() - me_.GetZPos()))
+			{
+				enemy->GetFriendlyFireFlag() = true;
+				me_.ChangeAnimation("death");
+				updater_ = &ExoskeletonAI::Death;
+			}
+		}
+	}
+
 	if (rad >= 0)
 	{
 		me_.GetisTurnFlag() = false;

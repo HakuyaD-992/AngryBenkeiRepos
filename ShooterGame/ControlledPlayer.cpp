@@ -178,6 +178,7 @@ void ControlledPlayer::UpDate(void)
 				{
 					currentWeaponNo_ = (currentWeaponNo_ < (int)WeaponType::SubMachineGun) ? ++currentWeaponNo_ : 0;
 					currentWeapon_ = weapons_[currentWeaponNo_];
+					lpSound.Play(currentWeapon_->GetWeaponName() + "/get", DX_PLAYTYPE_BACK);
 				}
 			}
 		}

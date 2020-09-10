@@ -20,6 +20,13 @@ void PodAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 		me_.ChangeAnimation("hit");
 		updater_ = &PodAI::OnDamaged;
 	}
+
+	if (me_.GetFriendlyFireFlag())
+	{
+		me_.ChangeAnimation("death");
+		updater_ = &PodAI::Death;
+	}
+	
 	(this->*updater_)(enemies);
 }
 

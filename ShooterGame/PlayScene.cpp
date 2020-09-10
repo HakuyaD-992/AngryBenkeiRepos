@@ -46,27 +46,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		}
 	}
 
-	//// WaveïœçXéûÇÕâπâ∫Ç∞ÇÈ
-	//if (changeVolFlag_)
-	//{
-	//	bgmVolume_--;
-	//	if (bgmVolume_ <= 0)
-	//	{
-	//		bgmVolume_ = 0;
-	//		isNextWave_ = true;
-	//		changeVolFlag_ = false;
-	//	}
-	//}
-	//else
-	//{
-	//	// WaveïœçXå„ÇÕâπÇè„Ç∞ÇÈ
-	//	bgmVolume_ += 3;
-	//	if (bgmVolume_ >= 255)
-	//	{
-	//		bgmVolume_ = 255;
-	//	}
-	//}
-
 	if (!drawNextWaveFlag_)
 	{
 		bgmVolume_+= 3;
@@ -166,19 +145,38 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			// ìGÇ™éÄÇÒÇæÇÁÃﬂ⁄≤‘∞Ç™ìGÇì|ÇµÇΩêîÇâ¡éZ
 			if (enemy->GetType() != ActorType::Exoskeleton)
 			{
-				if (enemy->GetDeleteFlag())
+				if (wave_ < Wave::ThirdWave)
 				{
-					defeatEnemyNum_++;
-					existEnemyCount_--;
-					if (GetRand(droppingRate_) == 1 ||
-						GetRand(droppingRate_) == 2)
+					if (enemy->GetDeleteFlag())
 					{
-						DropItem(enemy->GetPos(), enemy->GetZPos());
+						defeatEnemyNum_++;
+						existEnemyCount_--;
+						if (GetRand(droppingRate_) == 1 ||
+							GetRand(droppingRate_) == 2)
+						{
+							DropItem(enemy->GetPos(), enemy->GetZPos());
+						}
+					}
+				}
+				else
+				{
+				
+					if (enemy->GetDeleteFlag())
+					{
+						if (enemy->GetType() == ActorType::Bigboy)
+						{
+							defeatEnemyNum_++;
+							existEnemyCount_--;
+						}
+						if (GetRand(droppingRate_) == 1 ||
+							GetRand(droppingRate_) == 2)
+						{
+							DropItem(enemy->GetPos(), enemy->GetZPos());
+						}
 					}
 				}
 			}
 		}
-
 
 		for (auto b : enemyBullets_)
 		{
@@ -202,7 +200,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 		// effectTypeÇïœçXÇ∑ÇÈÇ±Ç∆Ç≈óhÇÁÇ∑éñÇ™â¬î\
 		lpS_Effect.UpDate(shakeEffect_,5);
-
 
 		fps_.Wait();
 		frame_++;
@@ -245,6 +242,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	if (changeWaveFlag_)
 	{
 		wave_ = wave_ + 1;
+		ChangeWeather();
 		changeWaveFlag_ = false;
 	}
 
@@ -288,6 +286,26 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		[&](std::shared_ptr<BulletBase>& bullet) {
 			return bullet->GetDeleteFlag();
 		}), enemyBullets_.end());
+
+	if (currentWeather_ == "Thundersky")
+	{
+		weatherAnimationCount_ += 0.05f;
+		if (weatherAnimationCount_ >= 5)
+		{
+			weatherAnimationCount_ = 0.0f;
+		}
+	}
+	else
+	{
+		for (auto& sky : skyPos_)
+		{
+			sky.x++;
+			if (sky.x >= 1200)
+			{
+				sky.x = -400;
+			}
+		}
+	}
 }
 
 void PlayScene::Draw(void)
@@ -297,9 +315,15 @@ void PlayScene::Draw(void)
 
 	ClearDrawScreen();
 
-	DrawRotaGraph(scr.x / 2, scr.y / 2 - 106,
+	DrawRotaGraph(skyPos_[0].x,skyPos_[0].y,
 		1.0f, 0.0f,
-		lpImage.GetDivID(currentWeather_)[0], true);
+		lpImage.GetDivID(currentWeather_)[weatherAnimationCount_], true);
+	if (currentWeather_ == "Normalsky")
+	{
+		DrawRotaGraph(skyPos_[1].x, skyPos_[1].y,
+			1.0f, 0.0f,
+			lpImage.GetDivID(currentWeather_)[weatherAnimationCount_], true);
+	}
 
 
 	for (auto obj : objList_)
@@ -373,6 +397,9 @@ void PlayScene::DrawPlayer(const std::shared_ptr<ControlledPlayer>& player)
 
 void PlayScene::Initialize(void)
 {
+	auto& app = Application::Instance();
+
+	auto scr = app.GetViewport().GetSize();
 	auto& imageMng = ImageManager::GetInstance();
 
 	wave_ = Wave::FirstWave;
@@ -388,6 +415,8 @@ void PlayScene::Initialize(void)
 
 	waveStringPos_ = { -120,50 };
 	waveNumPos_ = { 530,50 };
+	skyPos_[0] = { scr.x / 2, scr.y / 2 - 106 };
+	skyPos_[1] = { -scr.x / 2, scr.y / 2 - 106 };
 	waveNumExRate_ = 0.0f;
 	waitFrame_ = 0.0f;
 	bgmVolume_ = 0.0f;
@@ -402,6 +431,7 @@ void PlayScene::Initialize(void)
 	goNextWave_ = false;
 	drawNextWaveFlag_ = true;
 	currentWeather_ = "Normalsky";
+	weatherAnimationCount_ = 0.0f;
 
 	changeWaveFlag_ = false;
 
@@ -419,8 +449,11 @@ void PlayScene::Initialize(void)
 	lpSound.Load("pistol/fire", true);
 	lpSound.Load("sub_machinegun/fire", true);
 	lpSound.Load("shotgun/fire", true);
-	lpSound.Load("damage", true);
 
+	lpSound.Load("Pod/fire", true);
+	lpSound.Load("Spacenaut/fire", true);
+
+	lpSound.Load("damage", true);
 
 	lpSound.Load("pistol/get", true);
 	lpSound.Load("sub_machinegun/get", true);
@@ -453,7 +486,7 @@ void PlayScene::Initialize(void)
 
 	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_));
 
-	auto& app = Application::Instance();
+
 	AddObject(std::make_shared<BackGround>());
 	AddObject(std::make_shared<Floor>
 		(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
@@ -484,4 +517,30 @@ void PlayScene::DropItem(const Vector2I& pos, const int& z)
 {
 	dropItemType_ = (BulletType)GetRand(static_cast<int>(BulletType::MachineBullet));
 	itemList_.emplace_back(std::make_shared<Item>(pos, z, dropItemType_));
+}
+
+void PlayScene::ChangeWeather(void)
+{
+	auto& app = Application::Instance();
+	switch (wave_)
+	{
+	case Wave::FirstWave:
+	case Wave::SecondWave:
+		currentWeather_ = "Normalsky";
+
+		break;
+	case Wave::ThirdWave:
+		// âÊëúÇÃŒﬂºﬁºÆ›ÇÃèâä˙âª
+		skyPos_[0] = { app.GetViewport().GetSize().x/2,
+			app.GetViewport().GetSize().y / 2 - 106 };
+		skyPos_[1] = { -app.GetViewport().GetSize().x / 2,
+			app.GetViewport().GetSize().y / 2 - 106 };
+		currentWeather_ = "Thundersky";
+		lpSound.Play("thunder", DX_PLAYTYPE_BACK);
+		break;
+	case Wave::Max:
+		break;
+	default:
+		break;
+	}
 }

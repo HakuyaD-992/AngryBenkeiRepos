@@ -23,6 +23,12 @@ void BigboyAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 		updater_ = &BigboyAI::OnDamaged;
 	}
 
+	if (me_.GetFriendlyFireFlag())
+	{
+		me_.ChangeAnimation("hit");
+		updater_ = &BigboyAI::OnDamaged;
+	}
+
 	(this->*updater_)(enemies);
 }
 

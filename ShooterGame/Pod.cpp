@@ -27,6 +27,8 @@ Pod::Pod(Vector2I pos,
 	attackRate_ = 2.0f;
 	hp_ = 100;
 
+	name_ = "Pod";
+
 	lpImage.LoadDiv("podmuzzleFlash", Vector2I(55, 60), Vector2I(5, 1));
 	Initialize();
 	Actor::Initialize();

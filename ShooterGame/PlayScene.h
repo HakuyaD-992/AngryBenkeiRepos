@@ -39,6 +39,8 @@ private:
 	void AddObject(ObjectPtr object);
 	// 敵がｱｲﾃﾑをドロップする処理
 	void DropItem(const Vector2I& pos,const int& z);
+
+	void ChangeWeather(void);
 	// 2ﾌﾟﾚｲﾔｰｲﾝｽﾀﾝｽ制御用ﾌﾗｸﾞ
 	bool is2PCreate_;
 	// 奥行ﾌﾗｸﾞ
@@ -60,13 +62,16 @@ private:
 	// ﾌﾚｰﾑﾚｰﾄ
 	Fps fps_;
 
+	std::array<Vector2I, 2> skyPos_;
+
 	int frame_;
 	// ｽﾎﾟｰﾅｰ
 	std::shared_ptr<Spawner> spawner_;
 
 	// 現在ﾌﾟﾚｲﾔｰがいる位置の天候
 	std::string currentWeather_;
-
+	float weatherAnimationCount_;
+	float thunderVol_;
 	// 地面を揺らすかのﾀｲﾌﾟ変数
 	EFFECT_TYPE shakeEffect_;
 	bool isShaking_;

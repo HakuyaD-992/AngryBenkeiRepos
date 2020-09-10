@@ -43,6 +43,12 @@ void AIBase::AIAction(std::list<std::shared_ptr<Enemy>>& enemies)
 			lpSound.Play("explosion",DX_PLAYTYPE_BACK);
 		}
 	}
+
+	if (me_.GetFriendlyFireFlag())
+	{
+		lpSound.Play("explosion", DX_PLAYTYPE_BACK);
+	}
+
 	// Ž©•ª‚ªÌßÚ²Ô°‚Ì”wŒã‚É‚¢‚é‚©‚¢‚È‚¢‚©Ì×¸Þ‚ð¾¯Ä
 	me_.SetisBehindPlayer(isBehind);
 
