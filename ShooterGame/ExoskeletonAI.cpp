@@ -37,14 +37,21 @@ void ExoskeletonAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 
 bool ExoskeletonAI::Run(std::list<std::shared_ptr<Enemy>>& enemies)
 {
-	Vector2I player_pos = Vector2I(0, 0);
-	if ((frame / 2) % 60 == 59)
+	if (me_.OnFloor() == true)
+	{
+		if ((frame / 2) % 60 == 59)
+		{
+			player_pos = Vector2I(me_.GetNearestPlayer()->GetPos().x, me_.GetNearestPlayer()->GetZPos());
+			rad = atan2(player_pos.y - me_.GetZPos(), player_pos.x - me_.GetPos().x);
+		}
+		me_.GetPos().x += 5 * cos(rad);
+		me_.GetZPos() += 5 * sin(rad);
+	}
+	else
 	{
 		player_pos = Vector2I(me_.GetNearestPlayer()->GetPos().x, me_.GetNearestPlayer()->GetZPos());
-		rad = atan2(player_pos.y - me_.GetZPos(), player_pos.x - me_.GetPos().x);
+			rad = atan2(player_pos.y - me_.GetZPos(), player_pos.x - me_.GetPos().x);
 	}
-	me_.GetPos().x += 5 * cos(rad);
-	me_.GetZPos() += 5 * sin(rad);
 
 	return false;
 }

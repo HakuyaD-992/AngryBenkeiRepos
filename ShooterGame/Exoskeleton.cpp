@@ -30,7 +30,7 @@ Exoskeleton::Exoskeleton(Vector2I pos,
 	updater = &Exoskeleton::Run;
 	enemyNo_++;
 	frame = 0;
-	afterimage_limit.resize(10);
+	afterimage_limit;
 }
 
 Exoskeleton::~Exoskeleton()
@@ -39,14 +39,17 @@ Exoskeleton::~Exoskeleton()
 
 void Exoskeleton::UpDate(void)
 {
-	frame++;
-
-	if (frame % 10 == 1)
+	if (OnFloor() == true)
 	{
-		afterimage_limit.emplace_back(make_pair(Vector2F(pos_.x, pos_.y + (z_ / 2)), 10));
-		if (afterimage_limit.size() >= 10)
+		frame++;
+
+		if (frame % 10 == 1)
 		{
-			afterimage_limit.erase(afterimage_limit.begin());
+			afterimage_limit.emplace_back(make_pair(Vector2F(pos_.x, pos_.y + (z_ / 2)), 10));
+			if (afterimage_limit.size() >= 10)
+			{
+				afterimage_limit.erase(afterimage_limit.begin());
+			}
 		}
 	}
 
@@ -64,9 +67,12 @@ void Exoskeleton::UpDate(void)
 void Exoskeleton::Draw_(void)
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
-	for (auto pos : afterimage_limit)
+	if (OnFloor() == true)
 	{
-		lpS_Effect.DrawRotaGraph(pos.first, 1, 0,lpImage.GetID(type_, "run")[animationCount_], true);
+		for (auto pos : afterimage_limit)
+		{
+			lpS_Effect.DrawRotaGraph(pos.first, 1, 0, lpImage.GetID(type_, "run")[animationCount_], true);
+		}
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 100);
 	Actor::Draw();

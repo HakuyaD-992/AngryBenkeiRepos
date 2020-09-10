@@ -20,5 +20,6 @@ private:
 
 	int frame;
 	float rad;	//ƒ‰ƒWƒAƒ“Šp“x
+	Vector2I player_pos;
 };
 
