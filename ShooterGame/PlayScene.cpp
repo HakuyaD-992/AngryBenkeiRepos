@@ -36,53 +36,45 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
 
 	// ìGëSàıì|Ç∑
-	if (!changeWaveFlag_)
+	if (!drawNextWaveFlag_)
 	{
 		if (defeatEnemyNum_ >= enemyMaxNuminWave_[static_cast<int>(wave_)])
 		{
+			drawNextWaveFlag_ = true;
+			// waveïœçXÃ◊∏ﬁÇtrue
 			changeVolFlag_ = true;
 		}
 	}
 
-	// WaveïœçXéûÇÕâπâ∫Ç∞ÇÈ
-	if (changeVolFlag_)
+	//// WaveïœçXéûÇÕâπâ∫Ç∞ÇÈ
+	//if (changeVolFlag_)
+	//{
+	//	bgmVolume_--;
+	//	if (bgmVolume_ <= 0)
+	//	{
+	//		bgmVolume_ = 0;
+	//		isNextWave_ = true;
+	//		changeVolFlag_ = false;
+	//	}
+	//}
+	//else
+	//{
+	//	// WaveïœçXå„ÇÕâπÇè„Ç∞ÇÈ
+	//	bgmVolume_ += 3;
+	//	if (bgmVolume_ >= 255)
+	//	{
+	//		bgmVolume_ = 255;
+	//	}
+	//}
+
+	if (!drawNextWaveFlag_)
 	{
-		bgmVolume_--;
-		if (bgmVolume_ <= 0)
-		{
-			bgmVolume_ = 0;
-			isNextWave_ = true;
-			changeVolFlag_ = false;
-		}
-	}
-	else
-	{
-		// WaveïœçXå„ÇÕâπÇè„Ç∞ÇÈ
-		bgmVolume_ += 3;
+		bgmVolume_+= 3;
 		if (bgmVolume_ >= 255)
 		{
 			bgmVolume_ = 255;
 		}
-	}
 
-	if (isNextWave_)
-	{
-		wave_ = wave_ + 1;
-		isPlayBGM_ = true;
-		isNextWave_ = false;
-	}
-
-	if (isPlayBGM_)
-	{
-		lpSound.Play("bgm_wave" + std::to_string(static_cast<int>(wave_)), DX_PLAYTYPE_LOOP);
-		isPlayBGM_ = false;
-		changeWaveFlag_ = true;
-	}
-	lpSound.ChangeVolume("bgm_wave" + std::to_string(static_cast<int>(wave_)),
-		bgmVolume_);
-
-	if (!changeWaveFlag_)
-	{
 		if (frame_ % 100 == 0)
 		{
 			if (enemyCountinWave_[static_cast<int>(wave_)] <
@@ -210,24 +202,24 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 		// effectTypeÇïœçXÇ∑ÇÈÇ±Ç∆Ç≈óhÇÁÇ∑éñÇ™â¬î\
 		lpS_Effect.UpDate(shakeEffect_,5);
-		enemyList_.remove_if
-		([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
 
-		itemList_.remove_if
-		([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
-
-		// ìGÇÃíeÇÃè¡ãé
-		enemyBullets_.erase(std::remove_if(enemyBullets_.begin(),
-			enemyBullets_.end(),
-			[&](std::shared_ptr<BulletBase>& bullet) {
-				return bullet->GetDeleteFlag();
-			}), enemyBullets_.end());
 
 		fps_.Wait();
 		frame_++;
 	}
 	else
 	{
+		if (changeVolFlag_)
+		{
+			bgmVolume_ -= 0.4f;
+			if (bgmVolume_ <= 0)
+			{
+				bgmVolume_ = 0;
+				lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_)));
+				changeVolFlag_ = false;
+				changeWaveFlag_ = true;
+			}
+		}
 		waveStringPos_.x += 3;
 		if (waveStringPos_.x >= 350)
 		{
@@ -242,22 +234,32 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 					waitFrame_ = 0.0f;
 					waveNumExRate_ = 0.0f;
 					waveStringPos_.x = -120;
-					goNextWave_ = true;
+					// ï`âÊÃ◊∏ﬁÇfalse
+					drawNextWaveFlag_ = false;
+					// BGMÃﬂ⁄≤Ã◊∏ﬁÇtrue
+					isPlayBGM_ = true;
 				}
 			}
 		}
 	}
-
-
-	if (goNextWave_)
+	if (changeWaveFlag_)
 	{
-		lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ - 1)));
+		wave_ = wave_ + 1;
+		changeWaveFlag_ = false;
+	}
+
+	lpSound.ChangeVolume("bgm_wave" + std::to_string(static_cast<int>(wave_+1)),
+		bgmVolume_);
+
+	if (isPlayBGM_)
+	{
 		defeatEnemyNum_ = 0;
 		changeWaveFlag_ = false;
 		isNextWave_ = false;
 		isPlayBGM_ = false;
 		goNextWave_ = false;
-		bgmVolume_ = 255;
+		lpSound.Play("bgm_wave" + std::to_string(static_cast<int>(wave_+1)), DX_PLAYTYPE_LOOP);
+		isPlayBGM_ = false;
 	}
 
 	for (auto item : itemList_)
@@ -273,6 +275,19 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			player->GetCurrentWeapon()->UpDate();
 		}
 	}
+
+	enemyList_.remove_if
+	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
+
+	itemList_.remove_if
+	([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
+
+	// ìGÇÃíeÇÃè¡ãé
+	enemyBullets_.erase(std::remove_if(enemyBullets_.begin(),
+		enemyBullets_.end(),
+		[&](std::shared_ptr<BulletBase>& bullet) {
+			return bullet->GetDeleteFlag();
+		}), enemyBullets_.end());
 }
 
 void PlayScene::Draw(void)
@@ -313,13 +328,13 @@ void PlayScene::Draw(void)
 		item->Draw();
 	}
 
-	if (changeWaveFlag_)
+	if (drawNextWaveFlag_)
 	{
 		DrawRotaGraph(waveStringPos_.x, waveStringPos_.y, 1.0f, 0.0f,
 			lpImage.GetID("UI/wave"), true, false);
 
 		DrawRotaGraph(waveNumPos_.x,waveNumPos_.y, waveNumExRate_, 0.0f,
-			lpImage.GetDivID("UI/wave_num")[static_cast<int>(wave_-1)], true, false);
+			lpImage.GetDivID("UI/wave_num")[static_cast<int>(wave_)], true, false);
 		if (waveNumExRate_ >= 1.0f)
 		{
 			DrawRotaGraph(waveStringPos_.x, waveStringPos_.y + 60, 1.0f, 0.0f,
@@ -360,14 +375,14 @@ void PlayScene::Initialize(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
 
-	wave_ = Wave::NonWave;
+	wave_ = Wave::FirstWave;
 
 	shakeEffect_ = EFFECT_TYPE::non;
 	shakeTime_ = 0.0f;
 	isShaking_ = false;
 
 	enemyCountinWave_ = { 0,0,0 };
-	enemyMaxNuminWave_ = { 0,30,30,1 };
+	enemyMaxNuminWave_ = { 30,30,1 };
 	enemyNum_display_ = 7;
 	existEnemyCount_ = 0;
 
@@ -375,7 +390,7 @@ void PlayScene::Initialize(void)
 	waveNumPos_ = { 530,50 };
 	waveNumExRate_ = 0.0f;
 	waitFrame_ = 0.0f;
-	bgmVolume_ = 0;
+	bgmVolume_ = 0.0f;
 	defeatEnemyNum_ = 0;
 	droppingRate_ = 5;
 
@@ -383,12 +398,12 @@ void PlayScene::Initialize(void)
 
 	isPlayBGM_ = false;
 	isNextWave_ = false;
-	changeVolFlag_ = true;
+	changeVolFlag_ = false;
 	goNextWave_ = false;
-
+	drawNextWaveFlag_ = true;
 	currentWeather_ = "Normalsky";
 
-	changeWaveFlag_ = true;
+	changeWaveFlag_ = false;
 
 	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
@@ -404,6 +419,8 @@ void PlayScene::Initialize(void)
 	lpSound.Load("pistol/fire", true);
 	lpSound.Load("sub_machinegun/fire", true);
 	lpSound.Load("shotgun/fire", true);
+	lpSound.Load("damage", true);
+
 
 	lpSound.Load("pistol/get", true);
 	lpSound.Load("sub_machinegun/get", true);

@@ -57,13 +57,13 @@ void ControlledPlayer::UpDate(void)
 
 	auto weaponMoveSmallAmount = animationCount_ - 3.0f;
 
-	if (currentAnimation_ == "hit")
+	/*if (currentAnimation_ == "hit")
 	{
 		if (isAnimEnd_)
 		{
 			ChangeAnimation("idle");
 		}
-	}
+	}*/
 
 	speed_ = { 0,0 };
 	zSpeed_ = 0;
@@ -256,8 +256,13 @@ void ControlledPlayer::UpDate(void)
 
 	if (onDamaged_)
 	{
-		//ChangeAnimation("hit");
-		onDamaged_ = false;
+		alpha_percent -= 10;
+		if (alpha_percent <= 0.0f)
+		{
+			lpSound.Play("damage", DX_PLAYTYPE_BACK);
+			alpha_percent = 100.0f;
+			onDamaged_ = false;
+		}
 	}
 
 	UpDateAnimation(currentAnimation_);

@@ -3,7 +3,6 @@
 // ŠeWave
 enum class Wave
 {
-	NonWave,
 	FirstWave,
 	SecondWave,
 	ThirdWave,
@@ -12,7 +11,7 @@ enum class Wave
 
 static Wave begin(Wave)
 {
-	return Wave::NonWave;
+	return Wave::FirstWave;
 }
 
 static Wave end(Wave)

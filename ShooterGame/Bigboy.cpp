@@ -9,7 +9,7 @@ Bigboy::Bigboy(Vector2I pos, int z, ActorType type,
 	Enemy(player)
 {
 	pos_ = pos;
-	size_ = Vector2I(180, 180);
+	size_ = Vector2I(300, 300);
 	z_ = z;
 	type_ = type;
 	aiCollider_ = std::make_unique<AICollider>();

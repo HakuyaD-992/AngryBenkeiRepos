@@ -29,15 +29,32 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 	switch (wave)
 	{
 	case Wave::FirstWave:
+		//if (bossFlag_)
+		//{
+		//	enemyType_ = ActorType::Bigboy;
+		//	// スポーンﾎﾟｼﾞｼｮﾝ
+		//	spawnPos_ = Vector2I(floorX - 100, 0);
+		//	// z軸ﾎﾟｼﾞｼｮﾝ
+		//	spawnPosZ_ = -floorZ + 80;
+		//	bossFlag_ = false;
+		//}
+		//else
+		//{
+		//	enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
+		//	// スポーンﾎﾟｼﾞｼｮﾝ
+		//	spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
+		//	// z軸ﾎﾟｼﾞｼｮﾝ
+		//	spawnPosZ_ = -floorZ + 30 + GetRand(floorZ);
+		//}
 		enemyType_ = ActorType::Pod;
 		// スポーンﾎﾟｼﾞｼｮﾝ
 		spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
 		// z軸ﾎﾟｼﾞｼｮﾝ
 		spawnPosZ_ = -floorZ + GetRand(floorZ);
-		//// スポーンﾎﾟｼﾞｼｮﾝ
-		//spawnPos_ = Vector2I(floorX - 100, 0);
-		//// z軸ﾎﾟｼﾞｼｮﾝ
-		//spawnPosZ_ = -floorZ + 80;
+		// スポーンﾎﾟｼﾞｼｮﾝ
+		spawnPos_ = Vector2I(floorX - 100, 0);
+		// z軸ﾎﾟｼﾞｼｮﾝ
+		spawnPosZ_ = -floorZ + 80;
 		break;
 	case Wave::SecondWave:
 		enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));

@@ -72,7 +72,7 @@ private:
 	bool isShaking_;
 	float shakeTime_;
 
-	int bgmVolume_;
+	float bgmVolume_;
 
 	// Œ»İÌßÚ²Ô°‚ª‘¶İ‚·‚éwave”
 	Wave wave_;
@@ -80,6 +80,8 @@ private:
 	Vector2I waveNumPos_;
 	float waitFrame_;
 	float waveNumExRate_;
+
+	bool drawNextWaveFlag_;
 	bool changeWaveFlag_;
 	bool isNextWave_;
 	bool changeVolFlag_;

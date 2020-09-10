@@ -37,7 +37,7 @@ bool ImageManager::Load(const ActorType& actor, std::string filepath, Vector2I d
 
 		case ActorType::Bigboy:
 			resources_[static_cast<int>(actor)].typeName = "Bigboy";
-			resources_[static_cast<int>(actor)].divSize_ = Vector2I(180, 180);
+			resources_[static_cast<int>(actor)].divSize_ = Vector2I(300, 300);
 			resources_[static_cast<int>(actor)].divCount_ = Vector2I(6, 7);
 			break;
 		case ActorType::Max:
