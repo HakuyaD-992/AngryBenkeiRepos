@@ -12,21 +12,24 @@
 #include "BulletBase.h"
 #include "Collision.h"
 #include "SoundManager.h"
+#include "Item.h"
 
 int ControlledPlayer::player_ = 0;
 
-ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type/*, std::list<std::shared_ptr<Enemy>>& enemyList*/)
+ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,std::list<std::shared_ptr<Item>>& itemList):
+	items_(itemList)
 {
 	pos_ = pos;
 	type_ = type;
 	// ‰œs
 	z_ = z;
+	size_ = { 64,64 };
 	weaponsArrangementAmount_ = {0,0};
 	deleteFlag_ = false;
 
 	isOnFloor_ = true;
 
-	hp_ = 300;
+	hp_ = 100;
 
 	playerNo_ = (PLAYER)player_;
 	player_++;
@@ -73,6 +76,9 @@ void ControlledPlayer::UpDate(void)
 		}
 	}
 
+	// ÌßÚ²Ô°‚Ì±²ÃÑŽæ“¾
+	GetItems();
+
 	for (auto inputData : input)
 	{
 		if (currentWeapon_->GetAnimation() == "non")
@@ -89,7 +95,6 @@ void ControlledPlayer::UpDate(void)
 						{
 							currentWeapon_->SetAnimation("fire");
 							lpSound.Play(currentWeapon_->GetWeaponName() + "/" + currentWeapon_->GetAnimation(),
-								255 * 70 / 100,
 								DX_PLAYTYPE_BACK);
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
@@ -107,7 +112,6 @@ void ControlledPlayer::UpDate(void)
 							!inputData.second[static_cast<int>(TrgFlag::Old)])
 						{
 							lpSound.Play(currentWeapon_->GetWeaponName() + "/fire",
-								255 * 70 / 100,
 								DX_PLAYTYPE_LOOP);
 						}
 						if (!inputData.second[static_cast<int>(TrgFlag::Now)])
@@ -116,6 +120,10 @@ void ControlledPlayer::UpDate(void)
 						}
 					}
 				}
+			}
+			else
+			{
+				lpSound.Stop(currentWeapon_->GetWeaponName() + "/fire");
 			}
 
 			if (inputData.first == KeyConfiguration::Reload)
@@ -174,7 +182,6 @@ void ControlledPlayer::UpDate(void)
 			}
 		}
 	}
-
 
 	if ((speed_.x == 0) && (zSpeed_ == 0))
 	{
@@ -252,8 +259,6 @@ void ControlledPlayer::UpDate(void)
 
 void ControlledPlayer::Draw_(void)
 {
-	DrawFormatString(100, 100, 0xffffff, "pos.x:%d,pos.y:%d,pos.z:%d", pos_.x, pos_.y, z_);
-
 	Actor::Draw();
 	for (auto weapon : weapons_)
 	{
@@ -262,9 +267,69 @@ void ControlledPlayer::Draw_(void)
 			bullet->Draw();
 		}
 	}
-	DrawFormatString(100, 150, 0xffffff, "flg:%d",isOnFloor_);
-	DrawFormatString(100, 180, 0xffffff, "sound:%d", CheckSoundMem(lpSound.GetHandle(currentWeapon_->GetWeaponName() + "/" + currentWeapon_->GetAnimation())));
-	DrawFormatString(100, 120, 0xffffff, "bulletNum:%d", currentWeapon_->GetHavingBulletNum());
+
+	DrawRotaGraph(weaponsUIPos_.x, weaponsUIPos_.y, 1.0f, 0.0f,
+		lpImage.GetDivID("UI/weapons")[currentWeaponNo_], true, false);
+	DrawRotaGraph(weaponsUIPos_.x + 130, weaponsUIPos_.y, 1.0f, 0.0f,
+		lpImage.GetID("UI/bullets"), true, false);
+	switch (currentWeapon_->GetType())
+	{
+	case WeaponType::Pistol:
+		if (currentWeapon_->GetHavingBulletNum() <= 3)
+		{
+			addBlendFlag_ = true;
+		}
+		else
+		{
+			addBlendFlag_ = false;
+		}
+		break;
+	case WeaponType::ShotGun:
+		if (currentWeapon_->GetHavingBulletNum() <= 10)
+		{
+			addBlendFlag_ = true;
+		}
+		else
+		{
+			addBlendFlag_ = false;
+		}
+		break;
+
+	case WeaponType::SubMachineGun:
+		if (currentWeapon_->GetHavingBulletNum() <= 30)
+		{
+			addBlendFlag_ = true;
+		}
+		else
+		{
+			addBlendFlag_ = false;
+		}
+		break;
+	default:
+		break;
+	}
+	if (addBlendFlag_)
+	{
+		addBlendval_ -= 3;
+		if (addBlendval_ <= 0)
+		{
+			addBlendval_ = 255;
+		}
+	}
+	else
+	{
+		addBlendval_ = 255;
+	}
+
+	SetDrawBright(255, abs(addBlendval_), abs(addBlendval_));
+	DrawRotaGraph(bulletNumPos_.x, bulletNumPos_.y, 1.0f, 0.0f,
+		lpImage.GetDivID("UI/number")[currentWeapon_->GetHavingBulletNum() / 100], true, false);
+	DrawRotaGraph(bulletNumPos_.x + 30, bulletNumPos_.y, 1.0f, 0.0f,
+		lpImage.GetDivID("UI/number")[currentWeapon_->GetHavingBulletNum() % 100 / 10], true, false);
+	DrawRotaGraph(bulletNumPos_.x + 60, bulletNumPos_.y, 1.0f, 0.0f,
+		lpImage.GetDivID("UI/number")[currentWeapon_->GetHavingBulletNum() % 10], true, false);
+	SetDrawBright(255, 255, 255);
+
 }
 
 bool ControlledPlayer::Initialize(void)
@@ -280,6 +345,13 @@ bool ControlledPlayer::Initialize(void)
 	weapons_.emplace_back(std::make_shared<AK69>(pos_, z_, WeaponType::ShotGun));
 	weapons_.emplace_back(std::make_shared<SubMachinegun>(pos_, z_, WeaponType::SubMachineGun));
 	currentWeapon_ = weapons_[currentWeaponNo_];
+
+	lpImage.LoadDiv("UI/weapons", Vector2I(110,64), Vector2I(1, 3));
+
+	weaponsUIPos_ = { 130,160 };
+	bulletNumPos_ = { weaponsUIPos_.x + 150,weaponsUIPos_.y + 30 };
+	addBlendval_ = 255;
+	addBlendFlag_ = false;
 	Actor::Initialize();
 	return true;
 }
@@ -330,4 +402,23 @@ void ControlledPlayer::Jump(void)
 
 void ControlledPlayer::Fire(void)
 {
+}
+
+void ControlledPlayer::GetItems(void)
+{
+	for (auto item : items_)
+	{
+		if(CircleCollision()(type_, item->GetPos() - pos_,
+			Vector2I(size_.x + item->GetSize(), size_.y + item->GetSize()),
+			item->GetZPos() - z_))
+		{
+			if (currentWeapon_->GetcanSetBulletType() ==
+				item->GetType())
+			{
+				currentWeapon_->GetHavingBulletNum() += item->GetBulletNum();
+				lpSound.Play(currentWeapon_->GetWeaponName() + "/get", DX_PLAYTYPE_BACK);
+				item->Delete();
+			}
+		}
+	}
 }

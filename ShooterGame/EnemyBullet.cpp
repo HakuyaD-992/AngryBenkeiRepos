@@ -23,24 +23,24 @@ EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor, bool isLef
 			speed_ = 4.0f;
 		}
 		break;
-	case ActorType::Spacenaut:
-		type_ = BulletType::SpacenautBullet;
-		bulletName_ = "pistolbullet";
-		size_ = Vector2I(8, 4);
-		if (isLeft)
-		{
-			pos_ = Vector2I(pos.x - 20, pos.y - 3);
-			speed_ = -4.0f;
-		}
-		else
-		{
-			pos_ = Vector2I(pos.x + 20, pos.y - 3);
-			speed_ = 4.0f;
-		}
-		break;
 		case ActorType::Exoskeleton:
+
 		break;
-	
+		case ActorType::Spacenaut:
+			type_ = BulletType::SpacenautBullet;
+			bulletName_ = "pistolbullet";
+			size_ = Vector2I(8, 4);
+			if (isLeft)
+			{
+				pos_ = Vector2I(pos.x - 20, pos.y - 3);
+				speed_ = -4.0f;
+			}
+			else
+			{
+				pos_ = Vector2I(pos.x + 20, pos.y - 3);
+				speed_ = 4.0f;
+			}
+			break;
 	default:
 		break;
 	}

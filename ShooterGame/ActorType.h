@@ -6,9 +6,6 @@ enum class ActorType
 	Player,
 	Pod,
 	Exoskeleton,
-	Roboid,
-	Robo_Soldier,
-	Soldier,
 	Spacenaut,
 	Bigboy,
 	Max

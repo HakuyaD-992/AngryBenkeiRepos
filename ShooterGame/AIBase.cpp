@@ -1,3 +1,5 @@
+#include <DxLib.h>
+#include "SoundManager.h"
 #include "AIBase.h"
 #include "Enemy.h"
 #include "PodAI.h"
@@ -32,6 +34,13 @@ void AIBase::AIAction(std::list<std::shared_ptr<Enemy>>& enemies)
 		if (me_.GetPos().x < playerPos.x)
 		{
 			isBehind = true;
+		}
+	}
+	if (me_.GetOnDamaged())
+	{
+		if (me_.GetHp() <= 0)
+		{
+			lpSound.Play("explosion",DX_PLAYTYPE_BACK);
 		}
 	}
 	// Ž©•ª‚ªÌßÚ²Ô°‚Ì”wŒã‚É‚¢‚é‚©‚¢‚È‚¢‚©Ì×¸Þ‚ð¾¯Ä

@@ -10,6 +10,8 @@ Pistol::Pistol(Vector2I pos, int z, WeaponType type)
 	reloadCnt_ = 0.0f;
 
 	name_ = "pistol";
+	canSetBulletType_ = BulletType::PistolBullet;
+
 	havingBulletNum_ = PISTOLBULLETNUM;
 	muzzleFlashName_ = "Bullets/muzzleflash_pistol";
 	muzzleFlashSize_ = Vector2I(8, 5);

@@ -13,7 +13,7 @@ TitleScene::TitleScene(SceneController& sCon):
 	BaseScene(sCon)
 {
 	Initialize();
-	lpSound.Play("title", 255 * 50 / 100, DX_PLAYTYPE_LOOP);
+	lpSound.Play("title",DX_PLAYTYPE_LOOP);
 }
 
 TitleScene::~TitleScene()
@@ -36,8 +36,13 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	if (stringSp_[1].y >= 170)
 	{
 		stringSp_[1].y = 170;
+		lpSound.Play("fadein",DX_PLAYTYPE_BACK);
+		pushFadeCnt_++;
+		if (pushFadeCnt_ >= 255)
+		{
+			pushFadeCnt_ = 255;
+		}
 	}
-
 	if (fade_ == Fade::In)
 	{
 		fadeCnt_ += 2;
@@ -55,7 +60,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
-					lpSound.Play("cursorMove", 255 * 60 / 100, DX_PLAYTYPE_BACK);
+					lpSound.Play("cursorMove",DX_PLAYTYPE_BACK);
 					arrowPos_.y += 70;
 					if (arrowPos_.y >= stringPos_.y + 70)
 					{
@@ -69,7 +74,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
-					lpSound.Play("cursorMove", 255 * 60 / 100, DX_PLAYTYPE_BACK);
+					lpSound.Play("cursorMove",DX_PLAYTYPE_BACK);
 					arrowPos_.y -= 70;
 					if (arrowPos_.y <= stringPos_.y)
 					{
@@ -84,7 +89,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
-					lpSound.Play("start", 255 * 50 / 100, DX_PLAYTYPE_BACK);
+					lpSound.Play("start",DX_PLAYTYPE_BACK);
 					lpEffect.Play("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
 					isNext_ = true;
 				}
@@ -122,6 +127,11 @@ void TitleScene::Draw(void)
 	DrawGraph(arrowPos_.x, arrowPos_.y + stringSp_[0].y, lpImage.GetID("Title/arrow"), true);
 
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[0].y, lpImage.GetID("Title/start"), true);
+	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, pushFadeCnt_);
+	DrawGraph(stringPos_.x - 180, stringPos_.y + stringSp_[1].y + 100, lpImage.GetID("Title/push"), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	lpEffect.Draw();
@@ -145,10 +155,12 @@ void TitleScene::Initialize(void)
 	lpImage.Load("Title/start");
 	lpImage.Load("Title/manual");
 	lpImage.Load("Title/arrow");
+	lpImage.Load("Title/push");
 
 	lpSound.Load("cursorMove", true);
 	lpSound.Load("title", true);
-	lpSound.Load("start", true);
+	lpSound.Load("start", false);
+	lpSound.Load("fadein", false);
 
 	// ¥Ã™∏ƒÇÃ€∞ƒﬁ
 	lpEffect.Load("thunder");
@@ -160,6 +172,7 @@ void TitleScene::Initialize(void)
 
 	// Ã™∞ƒﬁ∂≥›ƒÇÃèâä˙âª
 	fadeCnt_ = 0;
+	pushFadeCnt_ = 0;
 	fade_ = Fade::In;
 	//return true;
 }

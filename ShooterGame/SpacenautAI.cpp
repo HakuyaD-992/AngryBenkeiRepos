@@ -2,7 +2,7 @@
 #include "ControlledPlayer.h"
 #include "SpacenautAI.h"
 
-SpacenautAI::SpacenautAI(Enemy& enemy):
+SpacenautAI::SpacenautAI(Enemy& enemy) :
 	AIBase(enemy)
 {
 	Initialize();
@@ -21,7 +21,7 @@ void SpacenautAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 	if (anim_flag)
 	{
 		damage_anim_frame++;
-		me_.GetAlpha() = (100 / (((damage_anim_frame/10) % 2) + 1));
+		me_.GetAlpha() = (100 / (((damage_anim_frame / 10) % 2) + 1));
 	}
 	if (damage_anim_frame >= 60)
 	{

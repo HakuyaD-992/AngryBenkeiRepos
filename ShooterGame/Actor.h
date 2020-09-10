@@ -60,11 +60,6 @@ public:
 		return zSpeed_;
 	}
 
-	float& GetAlpha(void)
-	{
-		return alpha_percent;
-	}
-
 	bool& GetisAnimEnd(void)
 	{
 		return isAnimEnd_;
@@ -85,6 +80,21 @@ public:
 		return hp_;
 	}
 
+	float& GetAlpha(void)
+	{
+		return alpha_percent;
+	}
+
+	bool& IsJumping(void)
+	{
+		return isJump_;
+	}
+
+	virtual bool& GetOnDamaged(void)
+	{
+		return onDamaged_;
+	}
+
 	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
 	virtual void ReadyToShot(void);
 
@@ -99,6 +109,7 @@ protected:
 	Vector2I speed_;
 	// ©•ª‚Ì»²½Ş
 	Vector2I size_;
+	Vector2I hpPos_;
 	// ‰œ‚ä‚«‚Ì½Ëß°ÄŞ
 	int zSpeed_;
 	int z_;
@@ -106,8 +117,12 @@ protected:
 	int jumpSpeed_;
 	float jumpFirstSpeed_;
 	float jumpForce_;
+	// ÀŞÒ°¼Ş‚ğH‚ç‚Á‚½Ì×¸Ş
+	bool onDamaged_;
 	// ¼Ş¬İÌßÌ×¸Ş
 	bool isJump_;
+	int drawHpCnt_;
+	bool isDrawHp_;
 
 	// d—Í
 	Gravity* gravity_;
@@ -123,9 +138,6 @@ protected:
 	bool isAnimEnd_;
 	// UŒ‚‚µ‚Ä‚¢‚é‚©‚ÌÌ×¸Ş
 	bool isAttack_;
-	// “G‚©‚ç‚ÌUŒ‚H‚ç‚¢”»’è
-	bool isDamaged_;
-
 	// ±ÆÒ°¼®İ‚ÌÛ‚Ì±ÆÒ°¼®İ–¼‚Æ±ÆÒ°¼®İÌÚ°Ñ”
 	std::map<std::string, int> animationSet_;
 	std::string currentAnimation_;
@@ -142,13 +154,13 @@ protected:
 	double exRate_;
 	// ‰ñ“]—¦
 	double rotRate_;
-	// “§‰ß—¦
-	float alpha_percent;
 
 	// Še±¸À°‚ÌHP
 	int hp_;
 
 	// ’e‚ğŒ‚‚ÂÌ×¸Ş
 	bool isShot_;
+	// “§‰ß—¦
+	float alpha_percent;
 };
 

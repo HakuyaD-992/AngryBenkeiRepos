@@ -60,6 +60,11 @@ public:
 		return havingBulletNum_;
 	}
 
+	const BulletType& GetcanSetBulletType(void)
+	{
+		return canSetBulletType_;
+	}
+
 private:
 
 	Vector2I drawPos_;
@@ -68,6 +73,9 @@ protected:
 	Vector2I pos_;
 	int z_;
 	WeaponType type_;
+	// •Ší–ˆ‚ÌØÛ°ÄŞ‰Â”\‚ÈÀ²Ìß
+	BulletType canSetBulletType_;
+
 	std::string name_;
 	std::string muzzleFlashName_;
 	Vector2I muzzleFlashSize_;

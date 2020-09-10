@@ -17,7 +17,6 @@ Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	isHitAICollider_ = false;
 	isBehindPlayer_ = false;
 	deleteFlag_ = false;
-	onDamaged_ = false;
 	isShot_ = true;
 
 	muzzleFlashAnimationCount_ = 0.0f;
@@ -44,14 +43,14 @@ void Enemy::Action(void)
 		switch (nearestPlayer_->GetCurrentWeapon()->GetType())
 		{
 		case WeaponType::Pistol:
-			hp_ -= 2;
+			hp_ -= 2 * damageRate_;
 			break;
 
 		case WeaponType::ShotGun:
-			hp_ -= 5;
+			hp_ -= 5 * damageRate_;
 			break;
 		case WeaponType::SubMachineGun:
-			hp_--;
+			hp_ -= 1 * damageRate_;
 			break;
 
 		default:
@@ -81,7 +80,7 @@ bool Enemy::CheckHitPlayerBullet(const std::vector<std::shared_ptr<BulletBase>>&
 {
 	for (auto bullet : playerBullets)
 	{
-		if (CircleCollision()(bullet->GetPos() - pos_,
+		if (CircleCollision()(type_,bullet->GetPos() - pos_,
 			size_,
 			nearestPlayer_->GetZPos() - z_
 			))

@@ -6,12 +6,13 @@
 
 //class Enemy;
 class WeaponBase;
+class Item;
 
 class ControlledPlayer :
 	public Actor
 {
 public:
-	ControlledPlayer(Vector2I pos, int z, const ActorType& type/*, std::list<std::shared_ptr<Enemy>>& enemyList*/);
+	ControlledPlayer(Vector2I pos, int z, const ActorType& type,std::list<std::shared_ptr<Item>>& itemList);
 	~ControlledPlayer();
 
 	void UpDate(void);
@@ -38,6 +39,8 @@ private:
 	void Walk(const Vector2I& speed, const int& zSp);
 	void Jump(void);
 	void Fire(void);
+	// ±²ÃÑæ“¾
+	void GetItems(void);
 
 	// ÌßÚ²Ô°‚Ìs“®‚ÉŠÖ‚·‚éŠÖ”Îß²İÀ
 	void(ControlledPlayer::* updater_)(void);
@@ -55,5 +58,13 @@ private:
 
 	// °‚Ì‰Â“®”ÍˆÍ‚ÉÌßÚ²Ô°‚ª‚¢‚é‚©‚ÌÌ×¸Ş
 	bool isOnFloor_;
+	Vector2I weaponsUIPos_;
+
+	Vector2I bulletNumPos_;
+	// ‰ÁZ’l
+	int addBlendval_;
+	bool addBlendFlag_;
+
+	std::list<std::shared_ptr<Item>>& items_;
 };
 

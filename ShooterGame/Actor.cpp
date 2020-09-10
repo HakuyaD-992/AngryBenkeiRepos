@@ -1,7 +1,7 @@
 #include <DxLib.h>
 #include "Actor.h"
-#include "ScreenEffectMng.h"
 #include "ImageManager.h"
+#include "ScreenEffectMng.h"
 
 Actor::Actor()
 {
@@ -15,11 +15,15 @@ Actor::Actor()
 	speed_ = { 0,0 };
 	zSpeed_ = 0;
 	jumpSpeed_ = 0;
+	drawHpCnt_ = 0;
 	jumpFirstSpeed_ = -13.0f;
 	jumpForce_ = 0.0f;
 	isJump_ = false;
 	isAnimEnd_ = false;
 	isAttack_ = false;
+	onDamaged_ = false;
+	isDrawHp_ = false;
+
 	// ‚Ü‚¸‘Ò‹@ó‘Ô‚É‰Šú‰»
 	//currentAnimation_ = "idle";
 
@@ -54,6 +58,17 @@ bool Actor::Initialize(void)
 	// ±ÆÒ°¼®ÝÌÚ°ÑA±ÆÒ°¼®Ý–¼‚Ì’Ý‚èã‚°
 	auto animSet = imageMng.GetActionSet(type_);
 
+	alpha_percent = 100.0f;
+
+	if (type_ != ActorType::Player)
+	{
+		hpPos_ = Vector2I(650, 65);
+	}
+	else
+	{
+		hpPos_ = Vector2I(150, 85);
+	}
+	lpImage.LoadDiv("UI/hp", Vector2I(230, 64), Vector2I(1, 4));
 	// À²Ìß•Ê‚ÉŒÂX‚Ì±ÆÒ°¼®Ý–¼‚Æ±ÆÒ°¼®ÝÌÚ°Ñ‚ÌŠi”[
 	// ‚à‚µ‚©‚µ‚½‚ç‚±‚ê‚Í‚¢‚ç‚È‚¢...??
 	for (auto anim = animSet.begin(); anim != animSet.end(); anim++)
@@ -62,8 +77,6 @@ bool Actor::Initialize(void)
 		isLoop_.try_emplace(anim->first, anim->second.second);
 	}
 
-	alpha_percent = 100.0f;
-	isDamaged_ = false;
 	// ‹éŒ`î•ñ‚Ì‰Šú‰»
 	RectInitializer();
 
@@ -90,8 +103,46 @@ void Actor::Draw(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
 
-	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
+	if (type_ != ActorType::Player)
+	{
+		if (onDamaged_)
+		{
+			isDrawHp_ = true;
+		}
+		if (isDrawHp_)
+		{
+			drawHpCnt_++;
+		}
 
+		if (drawHpCnt_ >= 1 && drawHpCnt_ <= 75)
+		{
+			DrawRotaGraph(hpPos_.x, hpPos_.y, 1.0f, 0.0f,
+				lpImage.GetDivID("UI/hp")[static_cast<int>(type_)], true, false);
+			DrawBox(hpPos_.x - 105, hpPos_.y + 10, (hpPos_.x - 105) + hp_, hpPos_.y + 25, 0x0000ff, true);
+		}
+		else
+		{
+			if (drawHpCnt_ > 100)
+			{
+				isDrawHp_ = false;
+				drawHpCnt_ = 0;
+			}
+		}
+	}
+	else
+	{
+		DrawRotaGraph(hpPos_.x, hpPos_.y, 1.0f, 0.0f,
+			lpImage.GetDivID("UI/hp")[static_cast<int>(type_)], true, false);
+	}
+
+	if (type_ != ActorType::Bigboy)
+	{
+		drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
+	}
+	else
+	{
+		drawPos_ = Vector2I(pos_.x, pos_.y - 30 + (z_ / 2));
+	}
 	lpS_Effect.DrawRotaGraph_AlphaEffect(Vector2F(drawPos_.x, drawPos_.y),
 		exRate_, rotRate_,
 		imageMng.GetID(type_, currentAnimation_)[animationCount_],

@@ -47,7 +47,12 @@ void ScreenEffectMng::DrawRotaGraph_AlphaEffect(Vector2F pos, float rate, float 
 	SetDrawBright(255, 255, 255);
 }
 
-
+void ScreenEffectMng::DrawRotaAlphaGraph(const Vector2I& pos,const int& alphaval, const float& exRate,int handle)
+{
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alphaval);
+	DxLib::DrawRotaGraph(pos.x, pos.y, exRate, 0.0f, handle, true, false, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
 
 const void ScreenEffectMng::GetPlayer(std::shared_ptr<ControlledPlayer> player)
 {

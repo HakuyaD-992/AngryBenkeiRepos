@@ -2,6 +2,8 @@
 #include <map>
 #include <string>
 
+#include "Wave.h"
+
 // ‰¹ŠÇ—‚Ì¼İ¸ŞÙÄİ¸×½
 #define lpSound SoundManager::GetInstance()
 
@@ -31,8 +33,10 @@ public:
 	}
 	void Load(std::string soundName, bool loop);
 
-	bool Play(std::string soundName, int vol, int playType);
+	bool Play(std::string soundName,int playType);
 	void Stop(std::string soundName);
+
+	void ChangeVolume(std::string soundName, int vol);
 
 	const int& GetHandle(std::string soundName)
 	{

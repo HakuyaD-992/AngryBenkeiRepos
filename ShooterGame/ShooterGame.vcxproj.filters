@@ -96,6 +96,9 @@
     <ClCompile Include="BaseScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
     <ClCompile Include="EffectManager.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
@@ -178,7 +181,13 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ExoskeletonAI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="BigboyAI.cpp">
+      <Filter>ソース ファイル\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Bigboy.cpp">
+      <Filter>ソース ファイル\Actor\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Spacenaut.cpp">
       <Filter>ソース ファイル</Filter>
@@ -186,8 +195,8 @@
     <ClCompile Include="SpacenautAI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ImageManager.cpp">
-      <Filter>ソース ファイル\Manager</Filter>
+    <ClCompile Include="Item.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,12 +333,24 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ExoskeletonAI.h">
+      <Filter>ヘッダー ファイル\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="BigboyAI.h">
+      <Filter>ヘッダー ファイル\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Bigboy.h">
+      <Filter>ヘッダー ファイル\Actor\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Wave.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Spacenaut.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SpacenautAI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

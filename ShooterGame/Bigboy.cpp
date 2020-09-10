@@ -9,14 +9,14 @@ Bigboy::Bigboy(Vector2I pos, int z, ActorType type,
 	Enemy(player)
 {
 	pos_ = pos;
-	size_ = Vector2I(55, 55);
+	size_ = Vector2I(180, 180);
 	z_ = z;
 	type_ = type;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<BigboyAI>(*this);
 
-	hp_ = 400;
-
+	hp_ = 100;
+	damageRate_ = 1.0f;
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("idle");
@@ -30,7 +30,10 @@ Bigboy::~Bigboy()
 
 void Bigboy::UpDate(void)
 {
-	gravity_->Apply(pos_);
+	if (!isJump_)
+	{
+		gravity_->Apply(pos_);
+	}
 	aiCollider_->SetPos(pos_, z_);
 
 	// ±ÆÒ°¼®Ý

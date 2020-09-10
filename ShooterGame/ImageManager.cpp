@@ -28,30 +28,13 @@ bool ImageManager::Load(const ActorType& actor, std::string filepath, Vector2I d
 			resources_[static_cast<int>(actor)].divCount_ = Vector2I(8, 1);
 
 			break;
-		case ActorType::Roboid:
-			resources_[static_cast<int>(actor)].typeName = "Roboid";
-			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
-			resources_[static_cast<int>(actor)].divCount_ = Vector2I(8, 1);
-
-			break;
-		case ActorType::Robo_Soldier:
-			resources_[static_cast<int>(actor)].typeName = "Robo-Soldier";
-			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
-			resources_[static_cast<int>(actor)].divCount_ = Vector2I(6, 1);
-
-			break;
-		case ActorType::Soldier:
-			resources_[static_cast<int>(actor)].typeName = "Soldier";
-			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
-			resources_[static_cast<int>(actor)].divCount_ = Vector2I(7, 1);
-
-			break;
 		case ActorType::Spacenaut:
 			resources_[static_cast<int>(actor)].typeName = "Spacenaut";
 			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
 			resources_[static_cast<int>(actor)].divCount_ = Vector2I(10, 1);
 
 			break;
+
 		case ActorType::Bigboy:
 			resources_[static_cast<int>(actor)].typeName = "Bigboy";
 			resources_[static_cast<int>(actor)].divSize_ = Vector2I(180, 180);
@@ -196,8 +179,6 @@ bool ImageManager::LoadBullet(const BulletType& bulletType, std::string bulletNa
 		bulletResources_[static_cast<int>(bulletType)].actionNameSet_.try_emplace("non", std::make_pair(0, 0), false);
 		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(1, 1);
 		bulletResources_[static_cast<int>(bulletType)].divSize_ = Vector2I(8, 8);
-
-		break;
 	case BulletType::SpacenautBullet:
 		bulletResources_[static_cast<int>(bulletType)].actionNameSet_.try_emplace("non", std::make_pair(0, 0), false);
 		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(1, 1);
@@ -269,22 +250,6 @@ void ImageManager::SetUp(ActorType actor)
 	case ActorType::Exoskeleton:
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 7), true));
 		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("death", std::make_pair(std::make_pair(8, 13), false));
-
-
-		break;
-	case ActorType::Roboid:
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack", std::make_pair(std::make_pair(0, 0), false));
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 5), true));
-
-		break;
-	case ActorType::Robo_Soldier:
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack", std::make_pair(std::make_pair(0, 0), false));
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 5), true));
-
-		break;
-	case ActorType::Soldier:
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("attack", std::make_pair(std::make_pair(6, 6), false));
-		resources_[static_cast<int>(actor)].actionNameSet.try_emplace("run", std::make_pair(std::make_pair(0, 6), true));
 
 		break;
 	case ActorType::Spacenaut:

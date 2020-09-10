@@ -77,11 +77,6 @@ public:
 		return isBehindPlayer_;
 	}
 
-	virtual bool& GetOnDamaged(void)
-	{
-		return onDamaged_;
-	}
-
 	virtual void AddMuzzleFlashAnimationCount(float cnt)
 	{
 		muzzleFlashAnimationCount_ += cnt;
@@ -98,14 +93,15 @@ protected:
 	static int enemyNo_;
 	// 自分自身の固有識別番号
 	int id_;
+	// ﾀｲﾌﾟ別のﾀﾞﾒｰｼﾞ率
+	// 敵皆はHPを同じ100にしておいて、ﾀﾞﾒｰｼﾞ率で食らうﾀﾞﾒｰｼﾞの割合を計算する
+	float damageRate_;
 	// AIｽﾃｰﾄ変数
 	AIState AIstate_;
 	// 仲間のAIｺﾗｲﾀﾞｰに当たったかのﾌﾗｸﾞ
 	bool isHitAICollider_;
 	// ﾌﾟﾚｲﾔｰの背後にいるﾌﾗｸﾞ
 	bool isBehindPlayer_;
-	// ﾀﾞﾒｰｼﾞを食らったﾌﾗｸﾞ
-	bool onDamaged_;
 
 	std::vector<std::shared_ptr<ControlledPlayer>>& player_;
 	std::shared_ptr<ControlledPlayer> nearestPlayer_;

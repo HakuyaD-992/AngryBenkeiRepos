@@ -7,6 +7,7 @@ SubMachinegun::SubMachinegun(Vector2I pos, int z, WeaponType type)
 	pos_ = pos;
 	z_ = z;
 	type_ = type;
+	canSetBulletType_ = BulletType::MachineBullet;
 	name_ = "sub_machinegun";
 	muzzleFlashName_ = "Bullets/muzzleflash_machine";
 	muzzleFlashSize_ = Vector2I(13, 5);

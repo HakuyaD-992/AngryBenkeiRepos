@@ -1,7 +1,6 @@
 #include <DxLib.h>
 #include "Application.h"
 #include "PlayScene.h"
-#include "ScreenEffectMng.h"
 #include "ImageManager.h"
 #include "Input.h"
 #include "PLAYER.h"
@@ -16,13 +15,13 @@
 #include "PodAI.h"
 #include "EnemyBullet.h"
 #include "SoundManager.h"
+#include "Item.h"
+
 
 PlayScene::PlayScene(SceneController& sCon):
 	BaseScene(sCon)
 {
 	Initialize();
-
-	lpSound.Play("bgm", 255 * 70 / 100, DX_PLAYTYPE_LOOP);
 }
 
 PlayScene::~PlayScene()
@@ -36,15 +35,51 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
 	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
 
+	// ìGëSàıì|Ç∑
 	if (!changeWaveFlag_)
 	{
 		if (defeatEnemyNum_ >= enemyMaxNuminWave_[static_cast<int>(wave_)])
 		{
-			changeWaveFlag_ = true;
-			wave_ = wave_ + 1;
-			defeatEnemyNum_ = 0;
+			changeVolFlag_ = true;
 		}
 	}
+
+	// WaveïœçXéûÇÕâπâ∫Ç∞ÇÈ
+	if (changeVolFlag_)
+	{
+		bgmVolume_--;
+		if (bgmVolume_ <= 0)
+		{
+			bgmVolume_ = 0;
+			isNextWave_ = true;
+			changeVolFlag_ = false;
+		}
+	}
+	else
+	{
+		// WaveïœçXå„ÇÕâπÇè„Ç∞ÇÈ
+		bgmVolume_ += 3;
+		if (bgmVolume_ >= 255)
+		{
+			bgmVolume_ = 255;
+		}
+	}
+
+	if (isNextWave_)
+	{
+		wave_ = wave_ + 1;
+		isPlayBGM_ = true;
+		isNextWave_ = false;
+	}
+
+	if (isPlayBGM_)
+	{
+		lpSound.Play("bgm_wave" + std::to_string(static_cast<int>(wave_)), DX_PLAYTYPE_LOOP);
+		isPlayBGM_ = false;
+		changeWaveFlag_ = true;
+	}
+	lpSound.ChangeVolume("bgm_wave" + std::to_string(static_cast<int>(wave_)),
+		bgmVolume_);
 
 	if (!changeWaveFlag_)
 	{
@@ -53,17 +88,23 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			if (enemyCountinWave_[static_cast<int>(wave_)] <
 				enemyMaxNuminWave_[static_cast<int>(wave_)])
 			{
-				// ìGÇÃï°êª
-				spawner_->MakeClone(enemyList_, playerList_,wave_);
-				enemyCountinWave_[static_cast<int>(wave_)]++;
-
-				for (auto enemy : enemyList_)
+				if (existEnemyCount_ < enemyNum_display_)
 				{
-					lpS_Effect.GetEnemy(enemy);
+					// ìGÇÃï°êª
+					spawner_->MakeClone(enemyList_, playerList_, wave_);
+					if (enemyList_.back()->GetType() != ActorType::Exoskeleton)
+					{
+						enemyCountinWave_[static_cast<int>(wave_)]++;
+						existEnemyCount_++;
+					}
+
+					for (auto enemy : enemyList_)
+					{
+						lpS_Effect.GetEnemy(enemy);
+					}
 				}
 			}
 		}
-
 		for (auto enemy : enemyList_)
 		{
 			aiManager_->UpDate(enemy);
@@ -100,7 +141,31 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 					}
 				}
 				break;
-			case ActorType::Roboid:
+
+			case ActorType::Bigboy:
+				if (!isShaking_)
+				{
+					if (enemy->OnFloor())
+					{
+						auto fallEnemyNum = 2 + GetRand(5);
+						for (int i = 0; i < fallEnemyNum; i++)
+						{
+							// ìGÇÃï°êª
+							spawner_->MakeClone(enemyList_, playerList_, wave_);
+						}
+						lpSound.Play("onFloor",DX_PLAYTYPE_BACK);
+						isShaking_ = true;
+						shakeEffect_ = EFFECT_TYPE::shake;
+					}
+				}
+				else
+				{
+					if (enemy->IsJumping())
+					{
+						isShaking_ = false;
+					}
+				}
+				break;
 			default:
 				break;
 			}
@@ -110,17 +175,44 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (enemy->GetDeleteFlag())
 				{
 					defeatEnemyNum_++;
+					existEnemyCount_--;
+					if (GetRand(droppingRate_) == 1 ||
+						GetRand(droppingRate_) == 2)
+					{
+						DropItem(enemy->GetPos(), enemy->GetZPos());
+					}
 				}
 			}
 		}
+
 
 		for (auto b : enemyBullets_)
 		{
 			b->UpDate();
 		}
-		lpS_Effect.UpDate(EFFECT_TYPE::non);
+
+		if (isShaking_)
+		{
+			shakeTime_ += 0.3f;
+			if (shakeTime_ >= 6.0f)
+			{
+				shakeEffect_ = EFFECT_TYPE::non;
+				shakeTime_ = 0.0f;
+			}
+		}
+		else
+		{
+			shakeEffect_ = EFFECT_TYPE::non;
+			shakeTime_ = 0.0f;
+		}
+
+		// effectTypeÇïœçXÇ∑ÇÈÇ±Ç∆Ç≈óhÇÁÇ∑éñÇ™â¬î\
+		lpS_Effect.UpDate(shakeEffect_,5);
 		enemyList_.remove_if
 		([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
+
+		itemList_.remove_if
+		([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
 
 		fps_.Wait();
 		frame_++;
@@ -139,16 +231,38 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (waitFrame_ >= 10.0f)
 				{
 					waitFrame_ = 0.0f;
-					changeWaveFlag_ = false;
+					waveNumExRate_ = 0.0f;
+					waveStringPos_.x = -120;
+					goNextWave_ = true;
 				}
 			}
 		}
 	}
 
-	for (auto player : playerList_)
+
+	if (goNextWave_)
 	{
-		player->UpDate();
-		player->GetCurrentWeapon()->UpDate();
+		lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ - 1)));
+		defeatEnemyNum_ = 0;
+		changeWaveFlag_ = false;
+		isNextWave_ = false;
+		isPlayBGM_ = false;
+		goNextWave_ = false;
+		bgmVolume_ = 255;
+	}
+
+	for (auto item : itemList_)
+	{
+		item->UpDate();
+	}
+
+	if (shakeEffect_ != EFFECT_TYPE::shake)
+	{
+		for (auto player : playerList_)
+		{
+			player->UpDate();
+			player->GetCurrentWeapon()->UpDate();
+		}
 	}
 }
 
@@ -159,10 +273,10 @@ void PlayScene::Draw(void)
 
 	ClearDrawScreen();
 
-	DrawFormatString(0, 0, 0xffffff, "GamePlay");
 	DrawRotaGraph(scr.x / 2, scr.y / 2 - 106,
 		1.0f, 0.0f,
 		lpImage.GetDivID(currentWeather_)[0], true);
+
 
 	for (auto obj : objList_)
 	{
@@ -182,28 +296,31 @@ void PlayScene::Draw(void)
 	for (auto enemy : enemyList_)
 	{
 		enemy->Draw_();
-		enemy->GetAICollider()->Draw();
+		//enemy->GetAICollider()->Draw();
 	}
-	fps_.Draw();
-	
+
+	for (auto item : itemList_)
+	{
+		item->Draw();
+	}
 
 	if (changeWaveFlag_)
 	{
 		DrawRotaGraph(waveStringPos_.x, waveStringPos_.y, 1.0f, 0.0f,
 			lpImage.GetID("UI/wave"), true, false);
 
-		DrawRotaGraph(waveNumPos_.x, waveNumPos_.y, waveNumExRate_, 0.0f,
-			lpImage.GetDivID("UI/wave_num")[static_cast<int>(wave_)], true, false);
+		DrawRotaGraph(waveNumPos_.x,waveNumPos_.y, waveNumExRate_, 0.0f,
+			lpImage.GetDivID("UI/wave_num")[static_cast<int>(wave_-1)], true, false);
 		if (waveNumExRate_ >= 1.0f)
 		{
 			DrawRotaGraph(waveStringPos_.x, waveStringPos_.y + 60, 1.0f, 0.0f,
 				lpImage.GetID("UI/untilnext"), true, false);
-			DrawRotaGraph(waveNumPos_.x - 80, waveNumPos_.y + 75, waveNumExRate_, 0.0f,
+			DrawRotaGraph(waveNumPos_.x-80, waveNumPos_.y + 75, waveNumExRate_, 0.0f,
 				lpImage.GetDivID("UI/number")[static_cast<int>(10 - waitFrame_)], true, false);
 		}
 	}
-	//DrawRotaGraph(230, 100, 1.0f, 0.0f, lpImage.GetID("UI/enemy1_UI2"), true, false);
-
+	//fps_.Draw();
+	
 	ScreenFlip();
 }
 
@@ -234,34 +351,63 @@ void PlayScene::Initialize(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
 
-	currentWeather_ = "Normalsky";
+	wave_ = Wave::NonWave;
 
-	wave_ = Wave::FirstWave;
+	shakeEffect_ = EFFECT_TYPE::non;
+	shakeTime_ = 0.0f;
+	isShaking_ = false;
 
 	enemyCountinWave_ = { 0,0,0 };
-	enemyMaxNuminWave_ = { 20,30,1 };
-
-	changeWaveFlag_ = false;
+	enemyMaxNuminWave_ = { 0,30,30,1 };
+	enemyNum_display_ = 7;
+	existEnemyCount_ = 0;
 
 	waveStringPos_ = { -120,50 };
 	waveNumPos_ = { 530,50 };
 	waveNumExRate_ = 0.0f;
 	waitFrame_ = 0.0f;
+	bgmVolume_ = 0;
 	defeatEnemyNum_ = 0;
+	droppingRate_ = 5;
 
+	dropItemType_ = BulletType::Max;
+
+	isPlayBGM_ = false;
+	isNextWave_ = false;
+	changeVolFlag_ = true;
+	goNextWave_ = false;
+
+	currentWeather_ = "Normalsky";
+
+	changeWaveFlag_ = true;
 
 	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
 	imageMng.LoadDiv("UI/wave_num", Vector2I(60, 60), Vector2I(3, 1));
 	imageMng.LoadDiv("UI/number", Vector2I(22, 40), Vector2I(10, 1));
+	imageMng.LoadDiv("Item/items", Vector2I(32, 32), Vector2I(3, 1));
 
+	imageMng.Load("UI/enemy1_UI2");
 	imageMng.Load("UI/wave");
 	imageMng.Load("UI/untilnext");
+	imageMng.Load("UI/bullets");
 
 	lpSound.Load("pistol/fire", true);
 	lpSound.Load("sub_machinegun/fire", true);
-	lpSound.Load("explosion", false);
+	lpSound.Load("shotgun/fire", true);
+
+	lpSound.Load("pistol/get", true);
+	lpSound.Load("sub_machinegun/get", true);
+	lpSound.Load("shotgun/get", true);
+
+	lpSound.Load("explosion", true);
 	lpSound.Load("bgm", true);
+	lpSound.Load("onFloor", true);
+
+	for (int i = 0; i < static_cast<int>(Wave::Max); i++)
+	{
+		lpSound.Load("bgm_wave" + std::to_string(i + 1), true);
+	}
 
 	// ìGëSëÃÇÃAIÇÃä«óù∏◊Ω
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
@@ -274,14 +420,12 @@ void PlayScene::Initialize(void)
 		"Player",
 		"Pod",
 		"Exoskeleton",
-		"Roboid",
-		"Robo-Soldier",
-		"Soldier",
-		"Spacenaut"
+		"Spacenaut",
+		"Bigboy"
 	};
 	zFlag_ = false;
 
-	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player));
+	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_));
 
 	auto& app = Application::Instance();
 	AddObject(std::make_shared<BackGround>());
@@ -308,4 +452,10 @@ void PlayScene::Initialize(void)
 void PlayScene::AddObject(ObjectPtr object)
 {
 	objList_.push_back(object);
+}
+
+void PlayScene::DropItem(const Vector2I& pos, const int& z)
+{
+	dropItemType_ = (BulletType)GetRand(static_cast<int>(BulletType::MachineBullet));
+	itemList_.emplace_back(std::make_shared<Item>(pos, z, dropItemType_));
 }

@@ -31,7 +31,10 @@ private:
 	std::map<ActorType,std::function<void(std::list<std::shared_ptr<Enemy>>&,
 		std::vector<std::shared_ptr<ControlledPlayer>>&,
 		Vector2I pos, int z, ActorType type)>> enemyInstanceFunc_;
-	ActorType enemyType_;
 
+	ActorType enemyType_;
+	Vector2I spawnPos_;
+	int spawnPosZ_;
+	bool bossFlag_;
 };
 

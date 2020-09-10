@@ -19,11 +19,11 @@ Exoskeleton::Exoskeleton(Vector2I pos,
 	type_ = type;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<ExoskeletonAI>(*this);
-
+	damageRate_ = 6.0f;
 
 	size_ = Vector2I(48, 48);
 	id_ = enemyNo_;
-	hp_ = 20;
+	hp_ = 100;
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("run");

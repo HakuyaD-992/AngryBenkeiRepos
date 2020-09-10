@@ -33,9 +33,5 @@ private:
 	void Initialize(void);
 	bool(PodAI::* updater_)(std::list<std::shared_ptr<Enemy>>&);
 
-	int frame;
-	int damage_anim_frame;
-
-	bool anim_flag;
 };
 

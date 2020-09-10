@@ -8,6 +8,8 @@ AK69::AK69(Vector2I pos, int z, WeaponType type)
 	z_ = z;
 	type_ = type;
 	name_ = "shotgun";
+	canSetBulletType_ = BulletType::ShotBullet;
+
 	muzzleFlashName_ = "Bullets/muzzleflash_shot";
 	muzzleFlashSize_ = Vector2I(20, 33);
 	muzzleFlashDivCount_ = Vector2I(3, 2);

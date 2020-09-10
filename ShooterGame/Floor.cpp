@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "Floor.h"
+#include "ScreenEffectMng.h"
 
 Floor::Floor(Vector2I pos, ObjectType type)
 {
@@ -26,5 +27,5 @@ const Vector2I& Floor::GetPos(void)
 
 void Floor::Draw(void)
 {
-	DrawRotaGraph(pos_.x, pos_.y + 30.0f, exRate_, rotRate_, imageHandle_, true, false);
+	lpS_Effect.DrawRotaGraph(Vector2F(pos_.x, pos_.y + 30.0f), exRate_, rotRate_, imageHandle_, true, false);
 }

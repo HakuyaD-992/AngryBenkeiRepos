@@ -4,7 +4,7 @@
 class Enemy;
 
 class SpacenautAI :
-    public AIBase
+	public AIBase
 {
 public:
 	SpacenautAI(Enemy& enemy);
@@ -26,7 +26,7 @@ public:
 private:
 
 	void Initialize(void);
-	bool(SpacenautAI::* updater_)(std::list<std::shared_ptr<Enemy>>& );
+	bool(SpacenautAI::* updater_)(std::list<std::shared_ptr<Enemy>>&);
 
 	int frame;
 	int damage_anim_frame;
@@ -34,4 +34,3 @@ private:
 
 	bool anim_flag;
 };
-

@@ -89,8 +89,6 @@ void WeaponBase::Draw(const bool& turnFlag)
 		break;
 	}
 
-	DrawFormatString(100, 50, 0xffffff, currentAnimation_.c_str());
-	DrawFormatString(100, 200, 0xffffff,"%f",muzzleFlashAnimationCount_);
 	// •Ší‚Ì•`‰æ
 	DrawRotaGraph(drawPos_.x,drawPos_.y,exRate_, rotRate_,
 		imageMng.GetWeaponResource(type_).imageHandle_.find(currentAnimation_)->second[animationCount_],
