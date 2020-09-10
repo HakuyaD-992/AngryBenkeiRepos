@@ -21,6 +21,7 @@ Spacenaut::Spacenaut(Vector2I pos, int z, ActorType type, std::vector<std::share
 	size_ = Vector2I(48, 48);
 	id_ = enemyNo_;
 	hp_ = 20;
+	name_ = "Spacenaut";
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("walk");
