@@ -98,6 +98,11 @@ public:
 	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
 	virtual void ReadyToShot(void);
 
+	virtual const bool& GetisShot(void)
+	{
+		return isShot_;
+	}
+
 private:
 	Vector2I drawPos_;
 

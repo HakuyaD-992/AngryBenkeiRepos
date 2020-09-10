@@ -66,5 +66,7 @@ private:
 	bool addBlendFlag_;
 
 	std::list<std::shared_ptr<Item>>& items_;
+
+	std::list<std::pair<std::pair<Vector2I,int>,int>> getBulletNumPos_;
 };
 

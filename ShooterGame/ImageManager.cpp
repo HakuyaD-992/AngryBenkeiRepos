@@ -25,13 +25,13 @@ bool ImageManager::Load(const ActorType& actor, std::string filepath, Vector2I d
 		case ActorType::Exoskeleton:
 			resources_[static_cast<int>(actor)].typeName = "Exoskeleton";
 			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
-			resources_[static_cast<int>(actor)].divCount_ = Vector2I(8, 1);
+			resources_[static_cast<int>(actor)].divCount_ = Vector2I(8, 2);
 
 			break;
 		case ActorType::Spacenaut:
 			resources_[static_cast<int>(actor)].typeName = "Spacenaut";
-			resources_[static_cast<int>(actor)].divSize_ = Vector2I(48, 48);
-			resources_[static_cast<int>(actor)].divCount_ = Vector2I(10, 1);
+			resources_[static_cast<int>(actor)].divSize_ = Vector2I(68, 68);
+			resources_[static_cast<int>(actor)].divCount_ = Vector2I(10, 2);
 
 			break;
 

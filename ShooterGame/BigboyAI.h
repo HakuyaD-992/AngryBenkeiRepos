@@ -1,5 +1,12 @@
 #pragma once
+#include <vector>
 #include "AIBase.h"
+
+#include "Geometory.h"
+
+constexpr int LaserSizeX = 0;
+constexpr int LaserSizeY = 50;
+
 class BigboyAI :
 	public AIBase
 {
@@ -29,9 +36,7 @@ private:
 	// 死ぬ
 	bool Death(std::list<std::shared_ptr<Enemy>>& enemies);
 	// タックル
-	bool Tackle(std::list<std::shared_ptr<Enemy>>& enemies);
-	// タックルした後に後ろに下がりながら攻撃
-	bool GoBack(std::list<std::shared_ptr<Enemy>>& enemies);
+	bool LaserAttack(std::list<std::shared_ptr<Enemy>>& enemies);
 
 	float jumpSp_;
 	float jumpForce_;
@@ -41,7 +46,12 @@ private:
 	float tackleSp_;
 	float tackleFirstSp_;
 
+	bool isShotLaser_[2];
+
 	int walkFrame_;
-	int jumpActionFrame_;
+	bool isJumpAction_;
+	int jumpInterval_;
+
+	Vector2I laserRect_;
 };
 

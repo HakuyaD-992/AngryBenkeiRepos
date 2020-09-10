@@ -31,6 +31,10 @@ private:
 	int frame;
 	int damage_anim_frame;
 	int target_pos_z;
+	Vector2I partnerPos_;
+
+	bool moveRight_;
+	bool moveLeft_;
 
 	bool anim_flag;
 };

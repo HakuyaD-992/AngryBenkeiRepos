@@ -16,6 +16,7 @@
 #include "EnemyBullet.h"
 #include "SoundManager.h"
 #include "Item.h"
+#include "EffectManager.h"
 
 
 PlayScene::PlayScene(SceneController& sCon):
@@ -31,9 +32,7 @@ PlayScene::~PlayScene()
 void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 {
 	fps_.Update();
-
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
-	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
 
 	// “G‘Sˆõ“|‚·
 	if (!drawNextWaveFlag_)
@@ -45,7 +44,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			changeVolFlag_ = true;
 		}
 	}
-
+	lpEffect.UpDate();
 	if (!drawNextWaveFlag_)
 	{
 		bgmVolume_+= 3;
@@ -53,26 +52,24 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			bgmVolume_ = 255;
 		}
-
+		existEnemyCount_ = enemyList_.size();
 		if (frame_ % 100 == 0)
 		{
 			if (enemyCountinWave_[static_cast<int>(wave_)] <
 				enemyMaxNuminWave_[static_cast<int>(wave_)])
 			{
-				if (existEnemyCount_ < enemyNum_display_)
+				if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)])
 				{
 					// “G‚Ì•¡»
 					spawner_->MakeClone(enemyList_, playerList_, wave_);
 					if (enemyList_.back()->GetType() != ActorType::Exoskeleton)
 					{
 						enemyCountinWave_[static_cast<int>(wave_)]++;
-						existEnemyCount_++;
 					}
-
-					for (auto enemy : enemyList_)
-					{
-						lpS_Effect.GetEnemy(enemy);
-					}
+				}
+				for (auto enemy : enemyList_)
+				{
+					lpS_Effect.GetEnemy(enemy);
 				}
 			}
 		}
@@ -118,14 +115,19 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			case ActorType::Bigboy:
 				if (!isShaking_)
 				{
+					if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)] + 1)
+					{
+						createEnemyFlag_ = true;
+					}
+					else
+					{
+						createEnemyFlag_ = false;
+					}
+
 					if (enemy->OnFloor())
 					{
-						auto fallEnemyNum = 2 + GetRand(5);
-						for (int i = 0; i < fallEnemyNum; i++)
-						{
-							// “G‚Ì•¡»
-							spawner_->MakeClone(enemyList_, playerList_, wave_);
-						}
+						// “G‚Ì•¡»
+						spawner_->MakeClone(enemyList_, playerList_, wave_,createEnemyFlag_);
 						lpSound.Play("onFloor",DX_PLAYTYPE_BACK);
 						isShaking_ = true;
 						shakeEffect_ = EFFECT_TYPE::shake;
@@ -160,7 +162,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				}
 				else
 				{
-				
 					if (enemy->GetDeleteFlag())
 					{
 						if (enemy->GetType() == ActorType::Bigboy)
@@ -341,6 +342,7 @@ void PlayScene::Draw(void)
 		DrawPlayer(player);
 	}
 
+
 	for (auto enemy : enemyList_)
 	{
 		enemy->Draw_();
@@ -367,6 +369,8 @@ void PlayScene::Draw(void)
 				lpImage.GetDivID("UI/number")[static_cast<int>(10 - waitFrame_)], true, false);
 		}
 	}
+
+	lpEffect.Draw();
 	//fps_.Draw();
 	
 	ScreenFlip();
@@ -402,7 +406,7 @@ void PlayScene::Initialize(void)
 	auto scr = app.GetViewport().GetSize();
 	auto& imageMng = ImageManager::GetInstance();
 
-	wave_ = Wave::FirstWave;
+	wave_ = Wave::ThirdWave;
 
 	shakeEffect_ = EFFECT_TYPE::non;
 	shakeTime_ = 0.0f;
@@ -410,7 +414,7 @@ void PlayScene::Initialize(void)
 
 	enemyCountinWave_ = { 0,0,0 };
 	enemyMaxNuminWave_ = { 30,30,1 };
-	enemyNum_display_ = 7;
+	enemyNum_display_ = {5,6,2};
 	existEnemyCount_ = 0;
 
 	waveStringPos_ = { -120,50 };
@@ -430,10 +434,14 @@ void PlayScene::Initialize(void)
 	changeVolFlag_ = false;
 	goNextWave_ = false;
 	drawNextWaveFlag_ = true;
+	createEnemyFlag_ = false;
 	currentWeather_ = "Normalsky";
 	weatherAnimationCount_ = 0.0f;
 
 	changeWaveFlag_ = false;
+
+	lpEffect.Load("laserRight");
+	lpEffect.Load("laserLeft");
 
 	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
@@ -452,6 +460,8 @@ void PlayScene::Initialize(void)
 
 	lpSound.Load("Pod/fire", true);
 	lpSound.Load("Spacenaut/fire", true);
+	lpSound.Load("Bigboy/fire", true);
+
 
 	lpSound.Load("damage", true);
 

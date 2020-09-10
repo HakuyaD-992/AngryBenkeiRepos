@@ -15,7 +15,11 @@ bool PadInput::Setup(const PLAYER& playerNo)
 						{KeyConfiguration::Left,PAD_INPUT_LEFT},
 						{KeyConfiguration::Up,PAD_INPUT_UP},
 						{KeyConfiguration::Down,PAD_INPUT_DOWN},
-						{KeyConfiguration::Fire,PAD_INPUT_6},
+						{KeyConfiguration::Fire,PAD_INPUT_2},
+						{KeyConfiguration::ChangeWeapon,PAD_INPUT_6},
+						{KeyConfiguration::Jump,PAD_INPUT_7},
+						{KeyConfiguration::Decision,PAD_INPUT_2},
+						{KeyConfiguration::Reset,PAD_INPUT_10},
 		};
 	}
 	else
@@ -35,7 +39,7 @@ bool PadInput::Setup(const PLAYER& playerNo)
 
 void PadInput::UpDate(void)
 {
-	padInfo_ = GetJoypadInputState((int)player_);
+	padInfo_ = GetJoypadInputState((int)player_ + 1);
 
 	for (auto config : KeyConfiguration())
 	{

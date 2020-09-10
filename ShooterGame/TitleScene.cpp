@@ -23,7 +23,6 @@ TitleScene::~TitleScene()
 void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 {
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
-	auto inputData2_ = input[static_cast<int>(PLAYER::TWO)]->GetPeriData();
 
 	lpEffect.UpDate();
 
@@ -121,6 +120,13 @@ void TitleScene::Draw(void)
 	auto& app = Application::Instance();
 	ClearDrawScreen();
 	int col = 0;
+
+	//int Pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);        //入力状態をPadに格納
+	//for (int i = 0; i < 28; i++) {      //ボタン28個分ループ
+	//	if (Pad & (1 << i)) {             //ボタンiの入力フラグが立っていたら
+	//		DrawFormatString(0, i * 15, GetColor(255, 255, 255), "%dのキーが押されています", i);
+	//	}
+	//}
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, fadeCnt_);
 	DrawGraph(stringPos_.x, stringPos_.y, lpImage.GetID("Title/title"), true);

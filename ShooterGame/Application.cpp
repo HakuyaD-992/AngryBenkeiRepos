@@ -1,6 +1,7 @@
 #include <DxLib.h>
 
 #include "KeyInput.h"
+#include "PadInput.h"
 #include "Application.h"
 #include "SceneController.h"
 #include "EffectManager.h"
@@ -33,12 +34,12 @@ bool Application::Initialize(void)
 	sceneCtl_ = std::make_shared<SceneController>();
 	sceneCtl_->PushScene(std::make_shared<TitleScene>(*sceneCtl_));
 
-	input_.emplace_back(std::make_shared<KeyInput>());
-	input_.emplace_back(std::make_shared<KeyInput>());
+	input_.emplace_back(std::make_shared<PadInput>());
+	//input_.emplace_back(std::make_shared<KeyInput>());
 	// 1P controller
 	input_[static_cast<int>(PLAYER::ONE)]->Setup(PLAYER::ONE);
 	// 2P controller
-	input_[static_cast<int>(PLAYER::TWO)]->Setup(PLAYER::TWO);
+	//input_[static_cast<int>(PLAYER::TWO)]->Setup(PLAYER::TWO);
 
 	return true;
 }

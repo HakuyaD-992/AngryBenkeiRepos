@@ -50,3 +50,18 @@ struct BoxOutCollision
 		return false;
 	}
 };
+
+struct BoxCollision
+{
+	bool operator()(const Vector2I& pos1, const Vector2I& pos2, const Vector2I& size1, const Vector2I& size2,const int& zdiff)
+	{
+		if (abs(zdiff) <= 50)
+		{
+			if ((pos1.y + size1.y >= pos2.y) || (pos1.y <= pos2.y + size2.y))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+};

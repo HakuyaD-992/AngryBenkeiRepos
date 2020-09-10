@@ -23,7 +23,12 @@ public:
 
 	void MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 		std::vector<std::shared_ptr<ControlledPlayer>>& player,
-		const Wave& wave);
+		const Wave& wave, const bool& flg = false);
+
+	const bool& GetBossCreateFlag(void)
+	{
+		return bossFlag_;
+	}
 
 private:
 	bool Initialize(void);

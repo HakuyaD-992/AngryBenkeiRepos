@@ -23,7 +23,7 @@ Spawner::~Spawner()
 
 void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 	std::vector<std::shared_ptr<ControlledPlayer>>& player,
-	const Wave& wave)
+	const Wave& wave,const bool& flg)
 {
 	// 敵のﾀｲﾌﾟ
 	switch (wave)
@@ -40,7 +40,7 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 		//}
 		//else
 		//{
-		//	enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
+		//	enemyType_ = ActorType::Pod/* + GetRand(static_cast<int>(ActorType::Pod))*/;
 		//	// スポーンﾎﾟｼﾞｼｮﾝ
 		//	spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
 		//	// z軸ﾎﾟｼﾞｼｮﾝ
@@ -55,6 +55,9 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 		spawnPos_ = Vector2I(floorX - 100, 0);
 		// z軸ﾎﾟｼﾞｼｮﾝ
 		spawnPosZ_ = -floorZ + 80;
+
+		enemyInstanceFunc_[enemyType_](enemies, player, spawnPos_, spawnPosZ_, enemyType_);
+
 		break;
 	case Wave::SecondWave:
 		enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
@@ -62,6 +65,8 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 		spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
 		// z軸ﾎﾟｼﾞｼｮﾝ
 		spawnPosZ_ = -floorZ + GetRand(floorZ);
+		enemyInstanceFunc_[enemyType_](enemies, player, spawnPos_, spawnPosZ_, enemyType_);
+
 		break;
 	case Wave::ThirdWave:
 		if (bossFlag_)
@@ -72,21 +77,34 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 			// z軸ﾎﾟｼﾞｼｮﾝ
 			spawnPosZ_ = -floorZ + 80;
 			bossFlag_ = false;
+			enemyInstanceFunc_[enemyType_](enemies, player, spawnPos_, spawnPosZ_, enemyType_);
 		}
 		else
 		{
-			enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
-			// スポーンﾎﾟｼﾞｼｮﾝ
-			spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
-			// z軸ﾎﾟｼﾞｼｮﾝ
-			spawnPosZ_ = -floorZ + GetRand(floorZ);
+			if (flg)
+			{
+				enemyType_ = ActorType::Spacenaut;
+				// スポーンﾎﾟｼﾞｼｮﾝ
+				spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
+				// z軸ﾎﾟｼﾞｼｮﾝ
+				spawnPosZ_ = -floorZ + 50 + GetRand(floorZ);
+				bossFlag_ = false;
+				enemyInstanceFunc_[enemyType_](enemies, player, spawnPos_, spawnPosZ_, enemyType_);
+			}
 		}
+		//else
+		//{
+		//	enemyType_ = ActorType::Pod + GetRand(static_cast<int>(ActorType::Pod));
+		//	// スポーンﾎﾟｼﾞｼｮﾝ
+		//	spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
+		//	// z軸ﾎﾟｼﾞｼｮﾝ
+		//	spawnPosZ_ = -floorZ + GetRand(floorZ);
+		//}
 		break;
 	default:
 		break;
 	}
 
-	enemyInstanceFunc_[enemyType_](enemies,player, spawnPos_, spawnPosZ_,enemyType_);
 }
 
 bool Spawner::Initialize(void)

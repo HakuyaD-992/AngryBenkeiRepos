@@ -101,12 +101,13 @@ private:
 	std::array<int, static_cast<int>(Wave::Max)> enemyMaxNuminWave_;
 
 	bool isPlayBGM_;
+	bool createEnemyFlag_;
 	// 敵がドロップしたｱｲﾃﾑのﾀｲﾌﾟ
 	BulletType dropItemType_;
 	// ｱｲﾃﾑドロップの確率
 	int droppingRate_;
 	// 画面に出現することのできる敵数
-	int enemyNum_display_;
+	std::array<int, static_cast<int>(Wave::Max)> enemyNum_display_;
 
 	int existEnemyCount_;
 };

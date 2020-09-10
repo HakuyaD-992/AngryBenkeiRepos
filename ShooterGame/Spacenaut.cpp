@@ -18,7 +18,7 @@ Spacenaut::Spacenaut(Vector2I pos, int z, ActorType type, std::vector<std::share
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<SpacenautAI>(*this);
 
-	size_ = Vector2I(48, 48);
+	size_ = Vector2I(68, 68);
 	id_ = enemyNo_;
 	hp_ = 20;
 	name_ = "Spacenaut";

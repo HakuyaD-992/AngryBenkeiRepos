@@ -1,4 +1,5 @@
 #pragma once
+#include <EffekseerForDXLib.h>
 #include <string>
 #include <map>
 #include <list>
@@ -45,7 +46,6 @@ private:
 	std::map<std::string, int> handles_;
 	// ÌßÚ²ÊÝÄÞÙ‚ðŠi”[‚µ‚½Ø½Ä
 	std::list<int> playList_;
-
 };
 
 

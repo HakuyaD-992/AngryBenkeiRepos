@@ -31,7 +31,6 @@ bool EffectManager::StopAll(void)
 bool EffectManager::Play(std::string effectName, const Vector2I& pos)
 {
 	playList_.push_front(PlayEffekseer2DEffect(GetHandle(effectName)));
-
 	SetPosPlayingEffekseer2DEffect(*(playList_.begin()),
 		static_cast<float>(pos.x), static_cast<float>(pos.y), 0.0f);
 	return true;

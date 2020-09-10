@@ -1,3 +1,5 @@
+#include <DxLib.h>
+
 #include "Bigboy.h"
 #include "BigboyAI.h"
 #include "AICollider.h"
@@ -45,4 +47,5 @@ void Bigboy::UpDate(void)
 void Bigboy::Draw_(void)
 {
 	Actor::Draw();
+	DrawFormatString(100, 100, 0xffffff, "z_:%d", z_);
 }

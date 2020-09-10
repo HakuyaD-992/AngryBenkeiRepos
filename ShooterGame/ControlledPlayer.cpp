@@ -13,6 +13,7 @@
 #include "Collision.h"
 #include "SoundManager.h"
 #include "Item.h"
+#include "EffectManager.h"
 
 int ControlledPlayer::player_ = 0;
 
@@ -279,6 +280,22 @@ void ControlledPlayer::Draw_(void)
 			bullet->Draw();
 		}
 	}
+	auto eraseFlag = false;
+
+	for (auto& numPos : getBulletNumPos_)
+	{
+		numPos.first.first.y--;
+		numPos.first.second -= 2;
+		if (numPos.first.second <= 0)
+		{
+			numPos.first.second = 0;
+			eraseFlag = true;
+		}
+	}
+	if (eraseFlag)
+	{
+		getBulletNumPos_.pop_front();
+	}
 
 	DrawRotaGraph(weaponsUIPos_.x, weaponsUIPos_.y, 1.0f, 0.0f,
 		lpImage.GetDivID("UI/weapons")[currentWeaponNo_], true, false);
@@ -342,6 +359,16 @@ void ControlledPlayer::Draw_(void)
 		lpImage.GetDivID("UI/number")[currentWeapon_->GetHavingBulletNum() % 10], true, false);
 	SetDrawBright(255, 255, 255);
 
+
+	for (auto num : getBulletNumPos_)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, num.first.second);
+		DrawRotaGraph(num.first.first.x, num.first.first.y, 1.0f, 0.0f,
+			lpImage.GetDivID("UI/number")[num.second % 100 / 10], true, false);
+		DrawRotaGraph(num.first.first.x + 25, num.first.first.y, 1.0f, 0.0f,
+			lpImage.GetDivID("UI/number")[num.second % 10], true, false);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	}
 }
 
 bool ControlledPlayer::Initialize(void)
@@ -427,6 +454,10 @@ void ControlledPlayer::GetItems(void)
 			if (currentWeapon_->GetcanSetBulletType() ==
 				item->GetType())
 			{
+				getBulletNumPos_.emplace_back(std::make_pair
+				(std::make_pair
+				(Vector2I(weaponsUIPos_.x + 150,weaponsUIPos_.y + 20),255),
+					item->GetBulletNum()));
 				currentWeapon_->GetHavingBulletNum() += item->GetBulletNum();
 				lpSound.Play(currentWeapon_->GetWeaponName() + "/get", DX_PLAYTYPE_BACK);
 				item->Delete();

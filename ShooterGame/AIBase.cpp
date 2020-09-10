@@ -5,6 +5,7 @@
 #include "PodAI.h"
 #include "AICollider.h"
 #include "ControlledPlayer.h"
+#include "Floor.h"
 
 AIBase::AIBase(Enemy& enemy):
 	me_(enemy)
@@ -47,6 +48,33 @@ void AIBase::AIAction(std::list<std::shared_ptr<Enemy>>& enemies)
 	if (me_.GetFriendlyFireFlag())
 	{
 		lpSound.Play("explosion", DX_PLAYTYPE_BACK);
+	}
+
+	if (me_.GetPos().x <= 50)
+	{
+		me_.GetPos().x = 50;
+	}
+	if (me_.GetPos().x >= floorX - 40)
+	{
+		me_.GetPos().x = floorX - 40;
+	}
+	if (me_.GetZPos() <= -floorZ)
+	{
+		me_.GetZPos() = -floorZ;
+	}
+	if (me_.GetType() == ActorType::Bigboy)
+	{
+		if (me_.GetZPos() >= -120)
+		{
+			me_.GetZPos() = -120;
+		}
+	}
+	else
+	{
+		if (me_.GetZPos() >= 0)
+		{
+			me_.GetZPos() = 0;
+		}
 	}
 
 	// Ž©•ª‚ªÌßÚ²Ô°‚Ì”wŒã‚É‚¢‚é‚©‚¢‚È‚¢‚©Ì×¸Þ‚ð¾¯Ä
