@@ -2,14 +2,16 @@
 
 #include "ResultScene.h"
 #include "Input.h"
+
 #include "SceneController.h"
 #include "TitleScene.h"
 #include "ImageManager.h"
 #include "Application.h"
 
-ResultScene::ResultScene(SceneController& sCon):
+ResultScene::ResultScene(SceneController& sCon, int useBullet):
 	BaseScene(sCon)
 {
+	this->useBullet = useBullet;
 	Initialize();
 }
 
@@ -47,5 +49,6 @@ void ResultScene::Draw(void)
 		30, 1.0f, 0.0f,
 		lpImage.GetID("Result/result"),
 		true, false);
+	DrawFormatString(0, 0, 0xffffff, "%d", useBullet);
 	ScreenFlip();
 }

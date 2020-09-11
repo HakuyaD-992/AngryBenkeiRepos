@@ -8,7 +8,7 @@ class BackGround:
 	public Object
 {
 public:
-	BackGround();
+	BackGround(std::vector<std::shared_ptr<ControlledPlayer>>& player);
 	~BackGround();
 	bool Initialize(void);
 		void Draw(void);

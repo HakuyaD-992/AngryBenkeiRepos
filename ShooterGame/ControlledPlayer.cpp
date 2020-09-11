@@ -35,6 +35,8 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,st
 	playerNo_ = (PLAYER)player_;
 	player_++;
 
+	use_Bullet = 0;
+
 	Initialize();
 }
 
@@ -90,6 +92,7 @@ void ControlledPlayer::UpDate(void)
 							currentWeapon_->SetAnimation("fire");
 							lpSound.Play(currentWeapon_->GetWeaponName() + "/" + currentWeapon_->GetAnimation(),
 								DX_PLAYTYPE_BACK);
+							use_Bullet++;
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
 						}
@@ -99,6 +102,7 @@ void ControlledPlayer::UpDate(void)
 						if (inputData.second[static_cast<int>(TrgFlag::Now)])
 						{
 							currentWeapon_->SetAnimation("fire");
+							use_Bullet++;
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
 						}

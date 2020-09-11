@@ -1,9 +1,11 @@
 #include <DxLib.h>
 #include "Object.h"
+#include "ControlledPlayer.h"
 #include "ScreenEffectMng.h"
 #include "ImageManager.h"
 
-Object::Object()
+Object::Object(std::vector<std::shared_ptr<ControlledPlayer>>& player):
+	player_(player)
 {
 	exRate_ = 1.0;
 	rotRate_ = 0.0;

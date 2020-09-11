@@ -54,25 +54,15 @@ void ScreenEffectMng::DrawRotaAlphaGraph(const Vector2I& pos,const int& alphaval
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
-const void ScreenEffectMng::GetPlayer(std::shared_ptr<ControlledPlayer> player)
+Vector2F ScreenEffectMng::MoveAmountCalculator(ObjectType id,shared_ptr<ControlledPlayer>& player_)
 {
-	this->player = player;
-}
-
-const void ScreenEffectMng::GetEnemy(shared_ptr<Enemy> enemy)
-{
-	this->enemy = enemy;
-}
-
-Vector2F ScreenEffectMng::MoveAmountCalculator(ObjectType id)
-{
-	if (id != ObjectType::Floor && player->GetZSpeed() != 0/* && player->GetZPos() -1 >= 450 &&
+	if (id != ObjectType::Floor && player_->GetZSpeed() != 0/* && player->GetZPos() -1 >= 450 &&
 		player->GetPos().x + 65 <= 800 && player->GetZPos() + 65 <= (450 + 166)*/)
 	{
-		if (player->GetisOnFloor())
+		if (player_->GetisOnFloor())
 		{
-			auto vec = player->GetZSpeed() / -2;
-			offset["move"] += Vector2F(0, player->GetZSpeed() + (1.5 * vec * static_cast<int>(id)));
+			auto vec = player_->GetZSpeed() / -2;
+			offset["move"] += Vector2F(0, player_->GetZSpeed() + (1.5 * vec * static_cast<int>(id)));
 		}
 	}
 	return offset["move"];

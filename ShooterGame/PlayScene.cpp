@@ -29,6 +29,18 @@ PlayScene::PlayScene(SceneController& sCon):
 
 PlayScene::~PlayScene()
 {
+	for (auto itr : enemyList_)
+	{
+		itr.reset();
+	}
+	for (auto itr : itemList_)
+	{
+		itr.reset();
+	}
+	for (auto itr : playerList_)
+	{
+		itr.reset();
+	}
 }
 
 void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
@@ -70,10 +82,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 						{
 							enemyCountinWave_[static_cast<int>(wave_)]++;
 						}
-					}
-					for (auto enemy : enemyList_)
-					{
-						lpS_Effect.GetEnemy(enemy);
 					}
 				}
 			}
@@ -296,17 +304,18 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			}
 		}
 	}
-	playerList_.erase(std::remove_if(playerList_.begin(),
-		playerList_.end(),
-		[&](std::shared_ptr<ControlledPlayer>& player) {
-			return player->GetDeleteFlag();
-		}), playerList_.end());
-
 	enemyList_.remove_if
 	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
 
 	itemList_.remove_if
 	([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
+
+	/*playerList_.erase(std::remove_if(playerList_.begin(),
+		playerList_.end(),
+		[&](std::shared_ptr<ControlledPlayer>& player) {
+			return player->GetDeleteFlag();
+		}), playerList_.end());*/
+
 
 	// ìGÇÃíeÇÃè¡ãé
 	enemyBullets_.erase(std::remove_if(enemyBullets_.begin(),
@@ -322,7 +331,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			goResultAddVal_ = 0;
 			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1)));
-			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
+			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_,playerList_.front()->GetUseBullet()));
 		}
 	}
 
@@ -412,6 +421,7 @@ void PlayScene::Draw(void)
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	//DrawFormatString(0, 0, 0xffffff, "%d", playerList_.front().use_count());
 	//fps_.Draw();
 	
 	ScreenFlip();
@@ -442,10 +452,11 @@ void PlayScene::DrawPlayer(const std::shared_ptr<ControlledPlayer>& player)
 
 void PlayScene::Initialize(void)
 {
+	lpS_Effect.Init();
+
 	auto& app = Application::Instance();
 
 	auto scr = app.GetViewport().GetSize();
-	auto& imageMng = ImageManager::GetInstance();
 
 	wave_ = Wave::FirstWave;
 
@@ -483,41 +494,6 @@ void PlayScene::Initialize(void)
 	goResult_ = false;
 	goResultAddVal_ = 255;
 
-	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
-	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
-	imageMng.LoadDiv("UI/wave_num", Vector2I(60, 60), Vector2I(3, 1));
-	imageMng.LoadDiv("UI/number", Vector2I(22, 40), Vector2I(10, 1));
-	imageMng.LoadDiv("Item/items", Vector2I(32, 32), Vector2I(3, 1));
-
-	imageMng.Load("UI/enemy1_UI2");
-	imageMng.Load("UI/wave");
-	imageMng.Load("UI/untilnext");
-	imageMng.Load("UI/bullets");
-
-	lpSound.Load("pistol/fire", true);
-	lpSound.Load("sub_machinegun/fire", true);
-	lpSound.Load("shotgun/fire", true);
-
-	lpSound.Load("Pod/fire", true);
-	lpSound.Load("Spacenaut/fire", true);
-	lpSound.Load("Bigboy/fire", true);
-
-
-	lpSound.Load("damage", true);
-
-	lpSound.Load("pistol/get", true);
-	lpSound.Load("sub_machinegun/get", true);
-	lpSound.Load("shotgun/get", true);
-
-	lpSound.Load("explosion", true);
-	lpSound.Load("bgm", true);
-	lpSound.Load("onFloor", true);
-
-	for (int i = 0; i < static_cast<int>(Wave::Max); i++)
-	{
-		lpSound.Load("bgm_wave" + std::to_string(i + 1), true);
-	}
-
 	// ìGëSëÃÇÃAIÇÃä«óù∏◊Ω
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
 
@@ -536,11 +512,11 @@ void PlayScene::Initialize(void)
 
 	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_));
 
-
-	AddObject(std::make_shared<BackGround>());
-	AddObject(std::make_shared<Floor>
-		(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
-			ObjectType::Floor));
+		AddObject(std::make_shared<BackGround>(playerList_));
+		AddObject(std::make_shared<Floor>
+			(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
+				ObjectType::Floor, playerList_));
+	
 
 	// îwåiÇÃŒﬂºﬁºÆ›æØƒ
 	// ∫›Ωƒ◊∏¿Ç≈ŒﬂºﬁºÆ›æØƒÇ∑ÇÈÇÊÇËÇ‡Ç±Ç±Ç≈ÇµÇΩÇŸÇ§Ç™∂“◊Çí«â¡Ç∑ÇÈÇ∆Ç´Ç…Ç∑ÇÒÇ»ÇËÇ¢Ç≠ÇÃÇ≈
@@ -550,11 +526,6 @@ void PlayScene::Initialize(void)
 		{
 			obj->SetPos(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2));
 		}
-	}
-
-	for (auto player : playerList_)
-	{
-		lpS_Effect.GetPlayer(player);
 	}
 }
 

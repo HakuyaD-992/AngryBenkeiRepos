@@ -1,13 +1,15 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 #include "Geometory.h"
 #include "ObjectType.h"
 
+class ControlledPlayer;
 class Object
 {
 public:
-	Object();
+	Object(std::vector<std::shared_ptr<ControlledPlayer>>& player_);
 	~Object();
 	// •`‰æ
 	virtual void Draw(void) = 0;
@@ -42,5 +44,7 @@ protected:
 	int imageHandle_;
 	// ©g‚ÌµÌŞ¼Şª¸ÄÈ°Ñ
 	std::string name_;
+
+	std::vector<std::shared_ptr<ControlledPlayer>>& player_;
 };
 

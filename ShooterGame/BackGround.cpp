@@ -5,10 +5,14 @@
 
 void BackGround::Draw(void)
 {
-	DrawRotaGraph(pos_.x, pos_.y - 24 + lpS_Effect.MoveAmountCalculator(type_).y, exRate_, rotRate_, imageHandle_, true, false);
+	for (auto itr : player_)
+	{
+		DrawRotaGraph(pos_.x, pos_.y - 24 + lpS_Effect.MoveAmountCalculator(type_, itr).y, exRate_, rotRate_, imageHandle_, true, false);
+	}
 }
 
-BackGround::BackGround()
+BackGround::BackGround(std::vector<std::shared_ptr<ControlledPlayer>>& player) :
+	Object(player)
 {
 	Initialize();
 }
