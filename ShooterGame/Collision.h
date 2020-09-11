@@ -57,7 +57,7 @@ struct BoxCollision
 	{
 		if (abs(zdiff) <= 50)
 		{
-			if ((pos1.y + size1.y >= pos2.y) || (pos1.y <= pos2.y + size2.y))
+			if ((pos1.y + (size1.y/2) >= pos2.y) || (pos1.y <= pos2.y + size2.y))
 			{
 				return true;
 			}

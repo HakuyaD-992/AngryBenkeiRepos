@@ -30,7 +30,7 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,st
 
 	isOnFloor_ = true;
 
-	hp_ = 100;
+	hp_ = 5;
 
 	playerNo_ = (PLAYER)player_;
 	player_++;
@@ -40,6 +40,7 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,st
 
 ControlledPlayer::~ControlledPlayer()
 {
+	player_ = 0;
 }
 
 void ControlledPlayer::UpDate(void)
@@ -57,14 +58,6 @@ void ControlledPlayer::UpDate(void)
 		}), currentWeapon_->GetBullets().end());
 
 	auto weaponMoveSmallAmount = animationCount_ - 3.0f;
-
-	/*if (currentAnimation_ == "hit")
-	{
-		if (isAnimEnd_)
-		{
-			ChangeAnimation("idle");
-		}
-	}*/
 
 	speed_ = { 0,0 };
 	zSpeed_ = 0;
@@ -255,7 +248,7 @@ void ControlledPlayer::UpDate(void)
 		jumpForce_ = 0.0f;
 		isJump_ = false;
 	}
-
+	// ÀŞÒ°¼Ş‚ğH‚ç‚Á‚½ˆ—
 	if (onDamaged_)
 	{
 		alpha_percent -= 10;
@@ -265,6 +258,12 @@ void ControlledPlayer::UpDate(void)
 			alpha_percent = 100.0f;
 			onDamaged_ = false;
 		}
+	}
+
+	// Hp‚ª0‚É‚È‚Á‚½‚ç€‚Ê
+	if (hp_ <= 0)
+	{
+		Delete();
 	}
 
 	UpDateAnimation(currentAnimation_);

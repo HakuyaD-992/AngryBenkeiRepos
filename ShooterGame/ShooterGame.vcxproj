@@ -183,6 +183,7 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Pod.cpp" />
     <ClCompile Include="PodAI.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SceneController.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="ScreenEffectMng.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Pod.h" />
     <ClInclude Include="PodAI.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SceneController.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="ScreenEffectMng.h" />

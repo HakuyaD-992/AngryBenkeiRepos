@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "EnemyBullet.h"
 #include "ImageManager.h"
+#include "EffectManager.h"
 
 EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor, bool isLeft)
 {
@@ -41,6 +42,20 @@ EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor, bool isLef
 				speed_ = 4.0f;
 			}
 			break;
+		case ActorType::Bigboy:
+			pos_ = Vector2I(pos.x, pos.y - 10);
+			type_ = BulletType::LaserBullet;
+			size_ = Vector2I(0, 100);
+			if (isLeft)
+			{
+				bulletName_ = "laserRight";
+			}
+			else
+			{
+				bulletName_ = "laserLeft";
+			}
+			break;
+
 	default:
 		break;
 	}
@@ -56,6 +71,7 @@ EnemyBullet::~EnemyBullet()
 void EnemyBullet::UpDate(void)
 {
 	pos_.x += speed_;
+
 }
 
 void EnemyBullet::Draw(void)
@@ -64,17 +80,30 @@ void EnemyBullet::Draw(void)
 
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
 
-	DrawRotaGraph(drawPos_.x, drawPos_.y,
-		exRate_, rotRate_,
-		imageMng.GetBulletResource(type_).imageHandle_.find(currentAnimation_)->second[animationCount_],
-		true, false);
+	if (type_ != BulletType::LaserBullet)
+	{
+		DrawRotaGraph(drawPos_.x, drawPos_.y,
+			exRate_, rotRate_,
+			imageMng.GetBulletResource(type_).imageHandle_.find(currentAnimation_)->second[animationCount_],
+			true, false);
+	}
+	else
+	{
+		lpEffect.Draw();
+	}
 }
 
 bool EnemyBullet::Initialize(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
-
-	imageMng.LoadBullet(type_, bulletName_);
+	if (type_ != BulletType::LaserBullet)
+	{
+		imageMng.LoadBullet(type_, bulletName_);
+	}
+	else
+	{
+		lpEffect.Load(bulletName_);
+	}
 	return true;
 }
 

@@ -17,6 +17,8 @@
 #include "SoundManager.h"
 #include "Item.h"
 #include "EffectManager.h"
+#include "SceneController.h"
+#include "ResultScene.h"
 
 
 PlayScene::PlayScene(SceneController& sCon):
@@ -47,61 +49,49 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	lpEffect.UpDate();
 	if (!drawNextWaveFlag_)
 	{
-		bgmVolume_+= 3;
-		if (bgmVolume_ >= 255)
+		if (!goResult_)
 		{
-			bgmVolume_ = 255;
-		}
-		existEnemyCount_ = enemyList_.size();
-		if (frame_ % 100 == 0)
-		{
-			if (enemyCountinWave_[static_cast<int>(wave_)] <
-				enemyMaxNuminWave_[static_cast<int>(wave_)])
+			bgmVolume_ += 3;
+			if (bgmVolume_ >= 255)
 			{
-				if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)])
+				bgmVolume_ = 255;
+			}
+			existEnemyCount_ = enemyList_.size();
+			if (frame_ % 100 == 0)
+			{
+				if (enemyCountinWave_[static_cast<int>(wave_)] <
+					enemyMaxNuminWave_[static_cast<int>(wave_)])
 				{
-					// ìGÇÃï°êª
-					spawner_->MakeClone(enemyList_, playerList_, wave_);
-					if (enemyList_.back()->GetType() != ActorType::Exoskeleton)
+					if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)])
 					{
-						enemyCountinWave_[static_cast<int>(wave_)]++;
+						// ìGÇÃï°êª
+						spawner_->MakeClone(enemyList_, playerList_, wave_);
+						if (enemyList_.back()->GetType() != ActorType::Exoskeleton)
+						{
+							enemyCountinWave_[static_cast<int>(wave_)]++;
+						}
+					}
+					for (auto enemy : enemyList_)
+					{
+						lpS_Effect.GetEnemy(enemy);
 					}
 				}
-				for (auto enemy : enemyList_)
-				{
-					lpS_Effect.GetEnemy(enemy);
-				}
 			}
-		}
-		for (auto enemy : enemyList_)
-		{
-			aiManager_->UpDate(enemy);
-
-			// ìGÇÃ±∆“∞ºÆ›ä÷åW
-			enemy->Action();
-			// ìGÇÃíeÇ∆Ãﬂ⁄≤‘∞ÇÃìñÇΩÇËîªíË
-			enemy->CheckHitMyBulletToPlayer(enemyBullets_);
-
-			auto type = enemy->GetType();
-
-			switch (type)
+			for (auto enemy : enemyList_)
 			{
-			case ActorType::Pod:
-				if (enemy->GetCurrentAnimation() == "attack_release")
+				aiManager_->UpDate(enemy);
+
+				// ìGÇÃ±∆“∞ºÆ›ä÷åW
+				enemy->Action();
+				// ìGÇÃíeÇ∆Ãﬂ⁄≤‘∞ÇÃìñÇΩÇËîªíË
+				enemy->CheckHitMyBulletToPlayer(enemyBullets_);
+
+				auto type = enemy->GetType();
+
+				switch (type)
 				{
-					enemy->AddBullet(enemyBullets_);
-				}
-				else
-				{
-					enemy->ReadyToShot();
-				}
-				break;
-			case ActorType::Exoskeleton:
-				break;
-			case ActorType::Spacenaut:
-				if (enemy->GetCurrentAnimation() == "attack")
-				{
-					if (frame_ % 10)
+				case ActorType::Pod:
+					if (enemy->GetCurrentAnimation() == "attack_release")
 					{
 						enemy->AddBullet(enemyBullets_);
 					}
@@ -109,101 +99,128 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 					{
 						enemy->ReadyToShot();
 					}
-				}
-				break;
-
-			case ActorType::Bigboy:
-				if (!isShaking_)
-				{
-					if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)] + 1)
+					break;
+				case ActorType::Exoskeleton:
+					break;
+				case ActorType::Spacenaut:
+					if (enemy->GetCurrentAnimation() == "attack")
 					{
-						createEnemyFlag_ = true;
+						if (frame_ % 10)
+						{
+							enemy->AddBullet(enemyBullets_);
+						}
+						else
+						{
+							enemy->ReadyToShot();
+						}
+					}
+					break;
+
+				case ActorType::Bigboy:
+					if (enemy->GetCurrentAnimation() == "attack")
+					{
+						if (enemy->GetisAnimEnd())
+						{
+							enemy->AddBullet(enemyBullets_);
+						}
 					}
 					else
 					{
-						createEnemyFlag_ = false;
+						enemy->ReadyToShot();
 					}
 
-					if (enemy->OnFloor())
+					if (!isShaking_)
 					{
-						// ìGÇÃï°êª
-						spawner_->MakeClone(enemyList_, playerList_, wave_,createEnemyFlag_);
-						lpSound.Play("onFloor",DX_PLAYTYPE_BACK);
-						isShaking_ = true;
-						shakeEffect_ = EFFECT_TYPE::shake;
-					}
-				}
-				else
-				{
-					if (enemy->IsJumping())
-					{
-						isShaking_ = false;
-					}
-				}
-				break;
-			default:
-				break;
-			}
-			// ìGÇ™éÄÇÒÇæÇÁÃﬂ⁄≤‘∞Ç™ìGÇì|ÇµÇΩêîÇâ¡éZ
-			if (enemy->GetType() != ActorType::Exoskeleton)
-			{
-				if (wave_ < Wave::ThirdWave)
-				{
-					if (enemy->GetDeleteFlag())
-					{
-						defeatEnemyNum_++;
-						existEnemyCount_--;
-						if (GetRand(droppingRate_) == 1 ||
-							GetRand(droppingRate_) == 2)
+						if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)] + 1)
 						{
-							DropItem(enemy->GetPos(), enemy->GetZPos());
+							createEnemyFlag_ = true;
+						}
+						else
+						{
+							createEnemyFlag_ = false;
+						}
+
+						if (enemy->OnFloor())
+						{
+							// ìGÇÃï°êª
+							spawner_->MakeClone(enemyList_, playerList_, wave_, createEnemyFlag_);
+							lpSound.Play("onFloor", DX_PLAYTYPE_BACK);
+							isShaking_ = true;
+							shakeEffect_ = EFFECT_TYPE::shake;
 						}
 					}
-				}
-				else
-				{
-					if (enemy->GetDeleteFlag())
+					else
 					{
-						if (enemy->GetType() == ActorType::Bigboy)
+						if (enemy->IsJumping())
+						{
+							isShaking_ = false;
+						}
+					}
+					break;
+				default:
+					break;
+				}
+				// ìGÇ™éÄÇÒÇæÇÁÃﬂ⁄≤‘∞Ç™ìGÇì|ÇµÇΩêîÇâ¡éZ
+				if (enemy->GetType() != ActorType::Exoskeleton)
+				{
+					if (wave_ < Wave::ThirdWave)
+					{
+						if (enemy->GetDeleteFlag())
 						{
 							defeatEnemyNum_++;
 							existEnemyCount_--;
+							if (GetRand(droppingRate_) == 1 ||
+								GetRand(droppingRate_) == 2)
+							{
+								DropItem(enemy->GetPos(), enemy->GetZPos());
+							}
 						}
-						if (GetRand(droppingRate_) == 1 ||
-							GetRand(droppingRate_) == 2)
+					}
+					else
+					{
+						if (enemy->GetDeleteFlag())
 						{
-							DropItem(enemy->GetPos(), enemy->GetZPos());
+							if (enemy->GetType() == ActorType::Bigboy)
+							{
+								defeatEnemyNum_++;
+								existEnemyCount_--;
+							}
+							if (GetRand(droppingRate_) == 1 ||
+								GetRand(droppingRate_) == 2)
+							{
+								DropItem(enemy->GetPos(), enemy->GetZPos());
+							}
 						}
 					}
 				}
 			}
-		}
 
-		for (auto b : enemyBullets_)
-		{
-			b->UpDate();
-		}
+			for (auto b : enemyBullets_)
+			{
+				b->UpDate();
+			}
 
-		if (isShaking_)
-		{
-			shakeTime_ += 0.3f;
-			if (shakeTime_ >= 6.0f)
+			if (isShaking_)
+			{
+				shakeTime_ += 0.3f;
+				if (shakeTime_ >= 6.0f)
+				{
+					shakeEffect_ = EFFECT_TYPE::non;
+					shakeTime_ = 0.0f;
+				}
+			}
+			else
 			{
 				shakeEffect_ = EFFECT_TYPE::non;
 				shakeTime_ = 0.0f;
 			}
-		}
-		else
-		{
-			shakeEffect_ = EFFECT_TYPE::non;
-			shakeTime_ = 0.0f;
-		}
 
-		// effectTypeÇïœçXÇ∑ÇÈÇ±Ç∆Ç≈óhÇÁÇ∑éñÇ™â¬î\
-		lpS_Effect.UpDate(shakeEffect_,5);
+			// effectTypeÇïœçXÇ∑ÇÈÇ±Ç∆Ç≈óhÇÁÇ∑éñÇ™â¬î\
+			lpS_Effect.UpDate(shakeEffect_, 5);
 
-		fps_.Wait();
-		frame_++;
+			fps_.Wait();
+			frame_++;
+		}
 	}
 	else
 	{
@@ -272,8 +289,18 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			player->UpDate();
 			player->GetCurrentWeapon()->UpDate();
+			if (player->GetDeleteFlag())
+			{
+				goResult_ = true;
+				//sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
+			}
 		}
 	}
+	playerList_.erase(std::remove_if(playerList_.begin(),
+		playerList_.end(),
+		[&](std::shared_ptr<ControlledPlayer>& player) {
+			return player->GetDeleteFlag();
+		}), playerList_.end());
 
 	enemyList_.remove_if
 	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
@@ -287,6 +314,19 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		[&](std::shared_ptr<BulletBase>& bullet) {
 			return bullet->GetDeleteFlag();
 		}), enemyBullets_.end());
+
+	if (goResult_)
+	{
+		goResultAddVal_--;
+		if (goResultAddVal_ <= 0)
+		{
+			goResultAddVal_ = 0;
+			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1)));
+			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
+		}
+	}
+
+
 
 	if (currentWeather_ == "Thundersky")
 	{
@@ -316,6 +356,7 @@ void PlayScene::Draw(void)
 
 	ClearDrawScreen();
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA,goResultAddVal_);
 	DrawRotaGraph(skyPos_[0].x,skyPos_[0].y,
 		1.0f, 0.0f,
 		lpImage.GetDivID(currentWeather_)[weatherAnimationCount_], true);
@@ -369,8 +410,8 @@ void PlayScene::Draw(void)
 				lpImage.GetDivID("UI/number")[static_cast<int>(10 - waitFrame_)], true, false);
 		}
 	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	lpEffect.Draw();
 	//fps_.Draw();
 	
 	ScreenFlip();
@@ -406,7 +447,7 @@ void PlayScene::Initialize(void)
 	auto scr = app.GetViewport().GetSize();
 	auto& imageMng = ImageManager::GetInstance();
 
-	wave_ = Wave::ThirdWave;
+	wave_ = Wave::FirstWave;
 
 	shakeEffect_ = EFFECT_TYPE::non;
 	shakeTime_ = 0.0f;
@@ -439,9 +480,8 @@ void PlayScene::Initialize(void)
 	weatherAnimationCount_ = 0.0f;
 
 	changeWaveFlag_ = false;
-
-	lpEffect.Load("laserRight");
-	lpEffect.Load("laserLeft");
+	goResult_ = false;
+	goResultAddVal_ = 255;
 
 	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));

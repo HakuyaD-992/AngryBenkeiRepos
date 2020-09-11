@@ -240,75 +240,8 @@ bool BigboyAI::LaserAttack(std::list<std::shared_ptr<Enemy>>& enemies)
 {
 	if (me_.GetisAnimEnd())
 	{
-		if (!isShotLaser_[0])
-		{
-			if (me_.GetisTurnFlag())
-			{
-				laserRect_ = Vector2I(me_.GetPos().x, me_.GetPos().y + (me_.GetZPos() / 2) + 25);
-				lpSound.Play("Bigboy/fire", DX_PLAYTYPE_BACK);
-				lpEffect.Play("laserRight", Vector2I(laserRect_.x,laserRect_.y));
-				isShotLaser_[0] = true;
-			}
-		}
-		if (!isShotLaser_[1])
-		{
-			if (!me_.GetisTurnFlag())
-			{
-				laserRect_ = Vector2I(me_.GetPos().x, me_.GetPos().y + (me_.GetZPos() / 2) + 25);
-				lpSound.Play("Bigboy/fire", DX_PLAYTYPE_BACK);
-				lpEffect.Play("laserLeft", Vector2I(laserRect_.x, laserRect_.y));
-				isShotLaser_[1] = true;
-			}
-		}
-	}
-
-	if (isShotLaser_[0])
-	{
-		laserRect_.x+= 3;
-
-		if (BoxCollision()(me_.GetNearestPlayer()->GetPos(), laserRect_,
-			me_.GetNearestPlayer()->GetSize(),
-			Vector2I(LaserSizeX, LaserSizeY),
-			me_.GetNearestPlayer()->GetZPos() - me_.GetZPos()))
-		{
-			if (me_.GetNearestPlayer()->GetPos().x -
-				me_.GetNearestPlayer()->GetSize().x / 2 <=
-				laserRect_.x)
-			{
-				me_.GetNearestPlayer()->GetOnDamaged() = true;
-			}
-		}
-		if ((lpEffect.IsPlayingEffect("laserRight") == -1))
-		{
-			laserRect_ = Vector2I(0, 0);
-			isShotLaser_[0] = false;
-			updater_ = &BigboyAI::Observe;
-		}
-	}
-
-	if (isShotLaser_[1])
-	{
-		laserRect_.x -= 3;
-
-		if (BoxCollision()(me_.GetNearestPlayer()->GetPos(), laserRect_,
-			me_.GetNearestPlayer()->GetSize(),
-			Vector2I(LaserSizeX, LaserSizeY), 
-			me_.GetNearestPlayer()->GetZPos() - me_.GetZPos()))
-		{
-			if (me_.GetNearestPlayer()->GetPos().x +
-				me_.GetNearestPlayer()->GetSize().x / 2 >=
-				laserRect_.x)
-			{
-				me_.GetNearestPlayer()->GetOnDamaged() = true;
-			}
-		}
-		if ((lpEffect.IsPlayingEffect("laserLeft") == -1))
-		{
-			laserRect_ = Vector2I(0, 0);
-
-			isShotLaser_[1] = false;
-			updater_ = &BigboyAI::Observe;
-		}
+		me_.ChangeAnimation("idle");
+		updater_ = &BigboyAI::Observe;
 	}
 
 	return false;

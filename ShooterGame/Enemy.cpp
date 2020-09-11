@@ -9,6 +9,7 @@
 #include "Collision.h"
 #include "WeaponBase.h"
 #include "SoundManager.h"
+#include "EffectManager.h"
 
 int Enemy::enemyNo_ = 0;
 
@@ -161,6 +162,11 @@ void Enemy::AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets)
 	if (isShot_)
 	{
 		bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_));
+		if (bullets.back()->GetType() == BulletType::LaserBullet)
+		{
+			lpEffect.Play(bullets.back()->GetName(),Vector2I(pos_.x,pos_.y + (z_/2)));
+		}
+
 		lpSound.Play(name_ + "/fire", DX_PLAYTYPE_BACK);
 		isShot_ = false;
 	}

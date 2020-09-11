@@ -18,6 +18,7 @@ TitleScene::TitleScene(SceneController& sCon):
 
 TitleScene::~TitleScene()
 {
+
 }
 
 void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
@@ -45,11 +46,22 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	if (fade_ == Fade::In)
 	{
 		fadeCnt_ += 2;
+		if (fadeCnt_ >= 255)
+		{
+			fadeCnt_ = 255;
+		}
 	}
-	if (fadeCnt_ >= 255)
+	else
 	{
-		fadeCnt_ = 255;
+		fadeCnt_ -= 2;
+		if (fadeCnt_ <= 0)
+		{
+			fadeCnt_ = 0;
+			lpSound.Stop("title");
+			sceneCtl_.ChangeScene(std::make_shared<PlayScene>(sceneCtl_));
+		}
 	}
+
 	if (fadeCnt_ >= 255)
 	{
 		for (auto cnt : inputData1_)
@@ -100,18 +112,9 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		// ｹﾞｰﾑｽﾀｰﾄ
 		if (nextFlag_ == Next::Game && (lpEffect.IsPlayingEffect("thunder") == -1))
 		{
-			lpSound.Stop("title");
-			sceneCtl_.ChangeScene(std::make_shared<PlayScene>(sceneCtl_));
+			fade_ = Fade::Out;
 		}
 	}
-
-
-	// 2P参戦
-	/*if (inputData2_[KeyConfiguration::Decision][static_cast<int>(TrgFlag::Now)] &&
-		inputData2_[KeyConfiguration::Decision][static_cast<int>(TrgFlag::Old)])
-	{
-		isConnected = true;
-	}*/
 
 }
 
@@ -120,7 +123,6 @@ void TitleScene::Draw(void)
 	auto& app = Application::Instance();
 	ClearDrawScreen();
 	int col = 0;
-
 	//int Pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);        //入力状態をPadに格納
 	//for (int i = 0; i < 28; i++) {      //ボタン28個分ループ
 	//	if (Pad & (1 << i)) {             //ボタンiの入力フラグが立っていたら
@@ -129,19 +131,19 @@ void TitleScene::Draw(void)
 	//}
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, fadeCnt_);
+
 	DrawGraph(stringPos_.x, stringPos_.y, lpImage.GetID("Title/title"), true);
 	DrawGraph(arrowPos_.x, arrowPos_.y + stringSp_[0].y, lpImage.GetID("Title/arrow"), true);
 
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[0].y, lpImage.GetID("Title/start"), true);
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, pushFadeCnt_);
 	DrawGraph(stringPos_.x - 180, stringPos_.y + stringSp_[1].y + 100, lpImage.GetID("Title/push"), true);
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	lpEffect.Draw();
-
 	ScreenFlip();
 }
 
@@ -155,6 +157,8 @@ void TitleScene::Initialize(void)
 
 	nextFlag_ = Next::Game;
 	isNext_ = false;
+	goNext_ = false;
+	goNextAlphaCount_ = 255;
 
 	// 画像のﾛｰﾄﾞ
 	lpImage.Load("Title/title");

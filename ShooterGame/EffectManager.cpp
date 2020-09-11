@@ -34,6 +34,7 @@ bool EffectManager::Play(std::string effectName, const Vector2I& pos)
 	SetPosPlayingEffekseer2DEffect(*(playList_.begin()),
 		static_cast<float>(pos.x), static_cast<float>(pos.y), 0.0f);
 	return true;
+
 }
 
 bool EffectManager::Init(const Vector2I& size)

@@ -184,6 +184,9 @@ bool ImageManager::LoadBullet(const BulletType& bulletType, std::string bulletNa
 		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(1, 1);
 		bulletResources_[static_cast<int>(bulletType)].divSize_ = Vector2I(8, 4);
 		break;
+
+		
+
 	default:
 		break;
 	}

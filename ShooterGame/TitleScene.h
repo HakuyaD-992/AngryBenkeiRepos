@@ -54,5 +54,8 @@ private:
 	bool extendFlag_;
 	// startの文字をだんだん透過させていくアルファ値
 	float alphaCount_;
+
+	bool goNext_;
+	int goNextAlphaCount_;
 };
 

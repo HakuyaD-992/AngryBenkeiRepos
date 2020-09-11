@@ -8,7 +8,7 @@ class Fps {
 	int mCount;             //カウンタ
 	float mFps;             //fps
 	static const int N = 40;//平均を取るサンプル数
-	static const int FPS = 85;	//設定したFPS
+	static const int FPS = 60;	//設定したFPS
 
 public:
 	Fps() {

@@ -110,6 +110,9 @@ private:
 	std::array<int, static_cast<int>(Wave::Max)> enemyNum_display_;
 
 	int existEnemyCount_;
+	// resultScene‚ÉˆÚs‚·‚éƒtƒ‰ƒO
+	bool goResult_;
+	int goResultAddVal_;
 };
 
 

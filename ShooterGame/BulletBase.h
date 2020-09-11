@@ -44,6 +44,11 @@ public:
 		return z_;
 	}
 
+	virtual const std::string& GetName(void) const
+	{
+		return bulletName_;
+	}
+
 	void SetAnimation(std::string animName);
 
 private:
