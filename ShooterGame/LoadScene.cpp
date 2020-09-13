@@ -52,11 +52,11 @@ void LoadScene::Draw(void)
 	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 295, 1.0f, 0.0f,
 		lpImage.GetID("Title/Nowloading"), true, false);
 
-	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 335, 1.0f, 0.0f,
-		lpImage.GetID("Title/NowloadingGauge"), true, false);
-
 	DrawBox(app.GetViewport().GetSize().x / 2 - 75, 323,
 		app.GetViewport().GetSize().x / 2 - 75 + (loadCnt_ * 50), 347, 0x00ff00, true);
+
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 335, 1.0f, 0.0f,
+		lpImage.GetID("Title/NowloadingGauge"), true, false);
 
 	DrawRotaGraph(app.GetViewport().GetSize().x / 2,
 		330, exRate_, 0.0f,
