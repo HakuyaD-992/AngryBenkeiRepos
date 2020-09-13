@@ -97,12 +97,12 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 				spawnPosZ_ = bossZ_;
 				if (bossPos_.x <= floorX / 2)
 				{
-					spawnPos_ = Vector2I(70, 0);
+					spawnPos_ = Vector2I(700, 0);
 				}
 
 				if (bossPos_.x >= floorX / 2)
 				{
-					spawnPos_ = Vector2I(700, 0);
+					spawnPos_ = Vector2I(70, 0);
 				}
 				bossFlag_ = false;
 				enemyInstanceFunc_[enemyType_](enemies, player, spawnPos_, spawnPosZ_, enemyType_);

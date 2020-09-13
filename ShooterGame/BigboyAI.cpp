@@ -35,13 +35,21 @@ void BigboyAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 
 	if (!isJumpAction_)
 	{
-		jumpInterval_++;
-		if (jumpInterval_ >= 2000)
+		if (enemies.size() <= 1)
 		{
-			jumpInterval_ = 0;
 			isJumpAction_ = true;
 		}
 	}
+
+	//if (!isJumpAction_)
+	//{
+	//	jumpInterval_++;
+	//	if (jumpInterval_ >= 2000)
+	//	{
+	//		jumpInterval_ = 0;
+	//		isJumpAction_ = true;
+	//	}
+	//}
 
 	(this->*updater_)(enemies);
 }
@@ -83,7 +91,7 @@ bool BigboyAI::Observe(std::list<std::shared_ptr<Enemy>>& enemies)
 
 	if (isJumpAction_)
 	{
-		if (abs(distance.x) >= 170)
+		//if (abs(distance.x) >= 170)
 		{
 			me_.IsJumping() = true;
 			isJumpAction_ = false;
@@ -197,6 +205,16 @@ bool BigboyAI::Jump(std::list<std::shared_ptr<Enemy>>& enemies)
 
 	if (me_.OnFloor())
 	{
+		if (CircleCollision()(me_.GetType(), me_.GetNearestPlayer()->GetPos() - me_.GetPos(),
+			Vector2I(me_.GetNearestPlayer()->GetSize().x + 50 + me_.GetSize().x + 50,
+				me_.GetNearestPlayer()->GetSize().y + 50 + me_.GetSize().y + 50),
+			me_.GetNearestPlayer()->GetZPos() - me_.GetZPos()))
+		{
+			me_.GetNearestPlayer()->GetOnDamaged() = true;
+			me_.GetNearestPlayer()->GetHp() -= 30;
+		}
+
+
 		jumpSp_ = 0;
 		jumpFirstSp_ = -45.0f;
 		jumpForce_ = 0.0f;

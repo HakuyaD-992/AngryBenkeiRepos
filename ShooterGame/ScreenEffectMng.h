@@ -45,11 +45,7 @@ public:
 	// ™X‚É“§‰ß‚µ‚Ä‚¢‚«‚È‚ª‚ç•`‰æ‚·‚é
 	void DrawRotaAlphaGraph(const Vector2I& pos, const int& alphaval,const float& exRate, int handle);
 
-<<<<<<< HEAD
 	Vector2F MoveAmountCalculator(ObjectType id,const std::shared_ptr<ControlledPlayer>& player);
-=======
-	Vector2F MoveAmountCalculator(ObjectType id,shared_ptr<ControlledPlayer>& player_);
->>>>>>> 56ac109e597b0e82e8d13a0ad1b670f3c322930f
 	Vector2F GetMoveOffset(void);
 
 private:

@@ -30,6 +30,14 @@ void SpacenautAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 		damage_anim_frame = 0;
 		me_.GetAlpha() = 100.0f;
 	}
+	if (me_.GetPos().x > me_.GetNearestPlayer()->GetPos().x)
+	{
+		me_.GetisTurnFlag() = true;
+	}
+	if (me_.GetPos().x < me_.GetNearestPlayer()->GetPos().x)
+	{
+		me_.GetisTurnFlag() = false;
+	}
 	(this->*updater_)(enemies);
 }
 
@@ -42,11 +50,26 @@ bool SpacenautAI::Search(std::list<std::shared_ptr<Enemy>>& enemies)
 		{
 			if (enemy->IsJumping())
 			{
-				moveOutside_ = true;
+				if (me_.GetPos().x <= floorX / 2)
+				{
+					moveRight_ = true;
+					me_.ChangeAnimation("walk");
+					updater_ = &SpacenautAI::Walk;
+				}
+				if (me_.GetPos().x >= floorX / 2)
+				{
+					moveLeft_ = true;
+					me_.ChangeAnimation("walk");
+					updater_ = &SpacenautAI::Walk;
+				}
+			}
+			else
+			{
+				updater_ = &SpacenautAI::ArrangementZ;
 			}
 		}
 	}
-	updater_ = &SpacenautAI::Walk;
+
 	return true;
 }
 
@@ -54,86 +77,34 @@ bool SpacenautAI::Walk(std::list<std::shared_ptr<Enemy>>& enemies)
 {
 	auto distance = partnerPos_.x - me_.GetPos().x;
 
-
-
-	if (abs(distance) <= 30)
-	{
-		if (distance < 0)
-		{
-			moveRight_ = true;
-		}
-		else
-		{
-			moveLeft_ = true;
-		}
-	}
-	else
-	{
-		if (me_.GetPos().x < 800 - 68 && me_.GetPos().x > 68)
-		{
-			if (me_.GetPos().x >= 400)
-			{
-				me_.GetSpeed().x = 1;
-			}
-			else
-			{
-				me_.GetSpeed().x = -1;
-			}
-		}
-		else
-		{
-			me_.GetSpeed().x = 0;
-			updater_ = &SpacenautAI::ArrangementZ;
-		}
-		me_.GetPos().x += me_.GetSpeed().x;
-
-	}
-	if (me_.GetPos().x > me_.GetNearestPlayer()->GetPos().x)
-	{
-		me_.GetisTurnFlag() = true;
-	}
-	if (me_.GetPos().x < me_.GetNearestPlayer()->GetPos().x)
-	{
-		me_.GetisTurnFlag() = false;
-	}
-
-	if (moveRight_)
-	{
-		me_.GetSpeed().x = 1;
-	}
 	if (moveLeft_)
 	{
-		me_.GetSpeed().x = -1;
+		me_.GetSpeed().x = -4;
+	}
+	if (moveRight_)
+	{
+		me_.GetSpeed().x = 4;
 	}
 
 	me_.GetPos().x += me_.GetSpeed().x;
 
-	if (moveRight_)
-	{
-		if (me_.GetPos().x >= floorX - 40)
-		{
-			me_.GetPos().x = floorX - 40;
-			moveRight_ = false;
-			updater_ = &SpacenautAI::ArrangementZ;
-		}
-	}
-
 	if (moveLeft_)
 	{
-		if (me_.GetPos().x <= 50)
+		if (me_.GetPos().x <= 70)
 		{
-			me_.GetPos().x = 50;
 			moveLeft_ = false;
-			updater_ = &SpacenautAI::ArrangementZ;
+			updater_ = &SpacenautAI::Attack;
 		}
 	}
 
-
-	//else
-	//{
-	//	updater_ = &SpacenautAI::ArrangementZ;
-	//}
-	
+	if (moveRight_)
+	{
+		if (me_.GetPos().x >= 700)
+		{
+			moveRight_ = false;
+			updater_ = &SpacenautAI::Attack;
+		}
+	}
 	return true;
 }
 
@@ -206,7 +177,6 @@ void SpacenautAI::Initialize(void)
 	frame = 0;
 	damage_anim_frame = 0;
 	partnerPos_ = { 0,0 };
-	moveOutside_ = false;
 	moveLeft_ = false;
 	moveRight_ = false;
 	anim_flag = false;

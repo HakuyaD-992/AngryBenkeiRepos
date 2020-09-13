@@ -187,7 +187,8 @@ bool ImageManager::LoadBullet(const BulletType& bulletType, std::string bulletNa
 
 	case BulletType::BossBullet:
 		bulletResources_[static_cast<int>(bulletType)].actionNameSet_.try_emplace("non", std::make_pair(0, 19), true);
-		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(5, 4);
+		bulletResources_[static_cast<int>(bulletType)].actionNameSet_.try_emplace("explosion", std::make_pair(20, 25), true);
+		bulletResources_[static_cast<int>(bulletType)].divCount_ = Vector2I(5, 6);
 		bulletResources_[static_cast<int>(bulletType)].divSize_ = Vector2I(60, 60);
 		break;
 	default:

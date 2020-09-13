@@ -1,13 +1,8 @@
 #include <DxLib.h>
 #include "Floor.h"
-#include "ControlledPlayer.h"
 #include "ScreenEffectMng.h"
 
-<<<<<<< HEAD
 Floor::Floor(Vector2I pos, ObjectType type, std::shared_ptr<ControlledPlayer>& player):
-=======
-Floor::Floor(Vector2I pos, ObjectType type, std::vector<std::shared_ptr<ControlledPlayer>>& player):
->>>>>>> 56ac109e597b0e82e8d13a0ad1b670f3c322930f
 	Object(player)
 {
 	pos_ = pos;

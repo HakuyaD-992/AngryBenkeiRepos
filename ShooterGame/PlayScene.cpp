@@ -29,18 +29,6 @@ PlayScene::PlayScene(SceneController& sCon):
 
 PlayScene::~PlayScene()
 {
-	for (auto itr : enemyList_)
-	{
-		itr.reset();
-	}
-	for (auto itr : itemList_)
-	{
-		itr.reset();
-	}
-	for (auto itr : playerList_)
-	{
-		itr.reset();
-	}
 }
 
 void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
@@ -309,18 +297,17 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			}
 		}
 	}
+	playerList_.erase(std::remove_if(playerList_.begin(),
+		playerList_.end(),
+		[&](std::shared_ptr<ControlledPlayer>& player) {
+			return player->GetDeleteFlag();
+		}), playerList_.end());
+
 	enemyList_.remove_if
 	([](std::shared_ptr<Enemy>& enemy) {return enemy->GetDeleteFlag(); });
 
 	itemList_.remove_if
 	([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
-
-	/*playerList_.erase(std::remove_if(playerList_.begin(),
-		playerList_.end(),
-		[&](std::shared_ptr<ControlledPlayer>& player) {
-			return player->GetDeleteFlag();
-		}), playerList_.end());*/
-
 
 	// ìGÇÃíeÇÃè¡ãé
 	enemyBullets_.erase(std::remove_if(enemyBullets_.begin(),
@@ -336,7 +323,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			goResultAddVal_ = 0;
 			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1)));
-			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_,playerList_.front()->GetUseBullet()));
+			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
 		}
 	}
 
@@ -398,7 +385,6 @@ void PlayScene::Draw(void)
 	for (auto enemy : enemyList_)
 	{
 		enemy->Draw_();
-		//enemy->GetAICollider()->Draw();
 	}
 
 	for (auto item : itemList_)
@@ -423,7 +409,6 @@ void PlayScene::Draw(void)
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	//DrawFormatString(0, 0, 0xffffff, "%d", playerList_.front().use_count());
 	//fps_.Draw();
 	
 	ScreenFlip();
@@ -454,13 +439,12 @@ void PlayScene::DrawPlayer(const std::shared_ptr<ControlledPlayer>& player)
 
 void PlayScene::Initialize(void)
 {
-	lpS_Effect.Init();
-
 	auto& app = Application::Instance();
 
 	auto scr = app.GetViewport().GetSize();
+	auto& imageMng = ImageManager::GetInstance();
 
-	wave_ = Wave::ThirdWave;
+	wave_ = Wave::FirstWave;
 
 	shakeEffect_ = EFFECT_TYPE::non;
 	shakeTime_ = 0.0f;
@@ -514,18 +498,10 @@ void PlayScene::Initialize(void)
 
 	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_));
 
-<<<<<<< HEAD
 	AddObject(std::make_shared<BackGround>(playerList_.front()));
 	AddObject(std::make_shared<Floor>
 		(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
 			ObjectType::Floor, playerList_.front()));
-=======
-		AddObject(std::make_shared<BackGround>(playerList_));
-		AddObject(std::make_shared<Floor>
-			(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
-				ObjectType::Floor, playerList_));
-	
->>>>>>> 56ac109e597b0e82e8d13a0ad1b670f3c322930f
 
 	// îwåiÇÃŒﬂºﬁºÆ›æØƒ
 	// ∫›Ωƒ◊∏¿Ç≈ŒﬂºﬁºÆ›æØƒÇ∑ÇÈÇÊÇËÇ‡Ç±Ç±Ç≈ÇµÇΩÇŸÇ§Ç™∂“◊Çí«â¡Ç∑ÇÈÇ∆Ç´Ç…Ç∑ÇÒÇ»ÇËÇ¢Ç≠ÇÃÇ≈
@@ -536,10 +512,7 @@ void PlayScene::Initialize(void)
 			obj->SetPos(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2));
 		}
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> 56ac109e597b0e82e8d13a0ad1b670f3c322930f
 }
 
 void PlayScene::AddObject(ObjectPtr object)

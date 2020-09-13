@@ -27,6 +27,8 @@ Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	friendlyFireFlag_ = false;
 	isShotPrepare_ = true;
 
+	myLevel_ = EnemyLevel::Lv_1;
+
 	muzzleFlashAnimationCount_ = 0.0f;
 	shotInterval_ = 0.0f;
 }
@@ -59,6 +61,8 @@ void Enemy::Action(void)
 			}
 		}
 	}
+
+	myLevel_ = (EnemyLevel)hpNum_;
 
 	if (onDamaged_)
 	{

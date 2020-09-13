@@ -4,7 +4,7 @@ class ResultScene :
 	public BaseScene
 {
 public:
-	ResultScene(SceneController& sCon,int useBullet);
+	ResultScene(SceneController& sCon);
 	~ResultScene();
 
 	void UpDate(const std::vector<std::shared_ptr<Input>>& input);
@@ -12,6 +12,6 @@ public:
 	void Draw(void);
 
 private:
-	int useBullet;
+
 };
 

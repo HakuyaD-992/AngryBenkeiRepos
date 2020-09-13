@@ -4,8 +4,6 @@
 #include "PadInput.h"
 #include "Application.h"
 #include "SceneController.h"
-#include "ImageManager.h"
-#include "SoundManager.h"
 #include "EffectManager.h"
 #include "TitleScene.h"
 #include "Wave.h"
@@ -48,47 +46,8 @@ bool Application::Initialize(void)
 	// 2P controller
 	//input_[static_cast<int>(PLAYER::TWO)]->Setup(PLAYER::TWO);
 
-<<<<<<< HEAD
 		// ´Ìª¸Ä‚ÌÛ°ÄÞ
 	lpEffect.Load("thunder");
-=======
-	auto& imageMng = ImageManager::GetInstance();
-
-	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
-	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
-	imageMng.LoadDiv("UI/wave_num", Vector2I(60, 60), Vector2I(3, 1));
-	imageMng.LoadDiv("UI/number", Vector2I(22, 40), Vector2I(10, 1));
-	imageMng.LoadDiv("Item/items", Vector2I(32, 32), Vector2I(3, 1));
-
-	imageMng.Load("UI/enemy1_UI2");
-	imageMng.Load("UI/wave");
-	imageMng.Load("UI/untilnext");
-	imageMng.Load("UI/bullets");
-
-	lpSound.Load("pistol/fire", true);
-	lpSound.Load("sub_machinegun/fire", true);
-	lpSound.Load("shotgun/fire", true);
-
-	lpSound.Load("Pod/fire", true);
-	lpSound.Load("Spacenaut/fire", true);
-	lpSound.Load("Bigboy/fire", true);
-
-
-	lpSound.Load("damage", true);
-
-	lpSound.Load("pistol/get", true);
-	lpSound.Load("sub_machinegun/get", true);
-	lpSound.Load("shotgun/get", true);
-
-	lpSound.Load("explosion", true);
-	lpSound.Load("bgm", true);
-	lpSound.Load("onFloor", true);
-
-	for (int i = 0; i < static_cast<int>(Wave::Max); i++)
-	{
-		lpSound.Load("bgm_wave" + std::to_string(i + 1), true);
-	}
->>>>>>> 56ac109e597b0e82e8d13a0ad1b670f3c322930f
 
 	return true;
 }

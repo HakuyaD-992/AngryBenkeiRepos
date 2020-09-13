@@ -49,19 +49,28 @@ void LoadScene::Draw(void)
 	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 200, 1.0f, 0.0f,
 		lpImage.GetID("Title/instructions2"), true, false);
 
-	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 400, 1.0f, 0.0f,
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 295, 1.0f, 0.0f,
 		lpImage.GetID("Title/Nowloading"), true, false);
 
-	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 450, 1.0f, 0.0f,
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 335, 1.0f, 0.0f,
 		lpImage.GetID("Title/NowloadingGauge"), true, false);
 
-	DrawBox(app.GetViewport().GetSize().x / 2 - 75, 438,
-		app.GetViewport().GetSize().x / 2 - 75 + (loadCnt_ * 50), 462, 0x00ff00, true);
+	DrawBox(app.GetViewport().GetSize().x / 2 - 75, 323,
+		app.GetViewport().GetSize().x / 2 - 75 + (loadCnt_ * 50), 347, 0x00ff00, true);
 
-	DrawRotaGraph(app.GetViewport().GetSize().x / 2 + 200,
-		app.GetViewport().GetSize().y - 90, exRate_, 0.0f, lpImage.GetID("Title/ready"),
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2,
+		330, exRate_, 0.0f,
+		lpImage.GetID("Title/ready"),
 		true, false);
 
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 420, 1.0f, 0.0f,
+		lpImage.GetID("UI/Enemies"), true, false);
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2 - 200, 500, 1.0f, 0.0f,
+		lpImage.GetID("UI/Pod_UI"), true, false);
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 500, 1.0f, 0.0f,
+		lpImage.GetID("UI/Exoskeleton_UI"), true, false);
+	DrawRotaGraph(app.GetViewport().GetSize().x / 2 + 200, 500, 1.0f, 0.0f,
+		lpImage.GetID("UI/Spacenaut_UI"), true, false);
 	ScreenFlip();
 }
 
@@ -140,6 +149,11 @@ void LoadScene::LoadImageResources(void)
 	lpImage.Load("Title/Nowloading");
 	lpImage.Load("Title/NowloadingGauge");
 	lpImage.Load("Title/ready");
+
+	lpImage.Load("UI/Enemies");
+	lpImage.Load("UI/Pod_UI");
+	lpImage.Load("UI/Exoskeleton_UI");
+	lpImage.Load("UI/Spacenaut_UI");
 
 	lpImage.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	lpImage.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));

@@ -18,6 +18,8 @@ Bigboy::Bigboy(Vector2I pos, int z, ActorType type,
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<BigboyAI>(*this);
 
+	onFloorPos_ = { 0,0 };
+
 	damageRate_ = 1.0f;
 	attackRate_ = 10.0f;
 	name_ = "Bigboy";
@@ -37,6 +39,8 @@ void Bigboy::UpDate(void)
 		gravity_->Apply(pos_);
 	}
 	aiCollider_->SetPos(pos_, z_);
+
+	onFloorPos_ = pos_;
 
 	// ±ÆÒ°¼®Ý
 	UpDateAnimation(currentAnimation_);
@@ -59,6 +63,16 @@ void Bigboy::Draw_(void)
 		DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + 100, shadowRadius_.x / 1.5f, shadowRadius_.y / 3, 10.0f, 0x000000, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
+	if (isJump_)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+
+		DrawBox(onFloorPos_.x - 50,500 + (z_ /2),
+			onFloorPos_.x + 50,550 + (z_ /2), 0xff0000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+
 	Actor::Draw();
 	Enemy::Draw();
 }

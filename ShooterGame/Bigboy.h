@@ -12,9 +12,6 @@ public:
 	void Draw_(void);
 
 private:
-
-
-
-
+	Vector2I onFloorPos_;
 };
 

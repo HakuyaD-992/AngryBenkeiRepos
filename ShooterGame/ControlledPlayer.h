@@ -26,11 +26,6 @@ public:
 	{
 		return isOnFloor_;
 	}
-	
-	virtual int& GetUseBullet(void)
-	{
-		return use_Bullet;
-	}
 
 	void Draw_(void);
 
@@ -69,8 +64,6 @@ private:
 	// ‰ÁŽZ’l
 	int addBlendval_;
 	bool addBlendFlag_;
-
-	int use_Bullet;
 
 	std::list<std::shared_ptr<Item>>& items_;
 
