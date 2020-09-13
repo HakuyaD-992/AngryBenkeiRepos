@@ -1,8 +1,11 @@
 #pragma once
 #include <string>
+#include <map>
 
 #include "Geometory.h"
 #include "BulletType.h"
+
+class BulletBase;
 
 class BulletBase
 {
@@ -12,9 +15,8 @@ public:
 
 	virtual void UpDate(void) = 0;
 	virtual void Draw(void) = 0;
-	virtual bool Initialize(void) = 0;
+	virtual bool Initialize(void);
 	virtual void UpDateAnimation(std::string animName) = 0;
-
 	const Vector2I& GetPos(void) const
 	{
 		return pos_;
@@ -49,7 +51,12 @@ public:
 		return bulletName_;
 	}
 
-	void SetAnimation(std::string animName);
+	virtual void SetAnimation(std::string animName);
+
+	virtual const bool& GetisShake(void)
+	{
+		return isShake_;
+	}
 
 private:
 protected:
@@ -72,5 +79,12 @@ protected:
 	float speed_;
 
 	BulletType type_;
+
+	// ±∆“∞ºÆ›ÇÃç€ÇÃ±∆“∞ºÆ›ñºÇ∆±∆“∞ºÆ›Ã⁄∞—êî
+	std::map<std::string, int> animationSet_;
+	// ±∆“∞ºÆ›ÇŸ∞ÃﬂÇ∑ÇÈÇÃÇ©ÇÃÃ◊∏ﬁ
+	std::map<std::string, bool> isLoop_;
+
+	bool isShake_;
 };
 

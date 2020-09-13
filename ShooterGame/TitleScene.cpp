@@ -62,7 +62,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		}
 	}
 
-	if (fadeCnt_ >= 255)
+	if (pushFadeCnt_ >= 255)
 	{
 		for (auto cnt : inputData1_)
 		{
@@ -101,6 +101,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
 					lpSound.Play("start", DX_PLAYTYPE_BACK);
+					lpEffect.SetPos("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
 					lpEffect.Play("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
 					isNext_ = true;
 				}
@@ -130,6 +131,9 @@ void TitleScene::Draw(void)
 
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[0].y, lpImage.GetID("Title/start"), true);
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, pushFadeCnt_);
 
 	DrawGraph(stringPos_.x - 180, stringPos_.y + 300, lpImage.GetID("Title/push"), true);

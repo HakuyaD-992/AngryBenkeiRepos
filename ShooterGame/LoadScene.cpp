@@ -42,7 +42,6 @@ void LoadScene::Draw(void)
 	auto& app = Application::Instance();
 
 	ClearDrawScreen();
-	DrawFormatString(0, 0, 0xffffff, "nowLoading");
 
 	DrawRotaGraph(app.GetViewport().GetSize().x / 2, 100, 1.0f, 0.0f,
 		lpImage.GetID("Title/instructions"), true, false);
@@ -131,9 +130,9 @@ void LoadScene::LoadSoundResources(void)
 	lpSound.Load("shotgun/get", true);
 
 	lpSound.Load("explosion", true);
+	lpSound.Load("explosionboss", true);
 	lpSound.Load("bgm", true);
 	lpSound.Load("onFloor", true);
-
 }
 
 void LoadScene::LoadImageResources(void)

@@ -12,7 +12,6 @@ public:
 
 	void UpDate(void);
 	void Draw(void);
-	bool Initialize(void);
 	void UpDateAnimation(std::string animName);
 
 private:

@@ -4,7 +4,7 @@
 #include "Actor.h"
 #include "PLAYER.h"
 
-//class Enemy;
+class Enemy;
 class WeaponBase;
 class Item;
 
@@ -12,7 +12,8 @@ class ControlledPlayer :
 	public Actor
 {
 public:
-	ControlledPlayer(Vector2I pos, int z, const ActorType& type,std::list<std::shared_ptr<Item>>& itemList);
+	ControlledPlayer(Vector2I pos, int z, const ActorType& type,
+		std::list<std::shared_ptr<Item>>& itemList);
 	~ControlledPlayer();
 
 	void UpDate(void);
@@ -25,6 +26,16 @@ public:
 	virtual bool& GetisOnFloor(void)
 	{
 		return isOnFloor_;
+	}
+
+	virtual bool& GetisHitEnemyZ(void)
+	{
+		return isHitEnemyZ_;
+	}
+
+	const std::vector<std::shared_ptr<WeaponBase>>& GetWeapons(void)
+	{
+		return weapons_;
 	}
 
 	void Draw_(void);
@@ -64,6 +75,8 @@ private:
 	// ‰ÁŽZ’l
 	int addBlendval_;
 	bool addBlendFlag_;
+
+	bool isHitEnemyZ_;
 
 	std::list<std::shared_ptr<Item>>& items_;
 

@@ -4,14 +4,19 @@
 #include "EffectManager.h"
 #include "Floor.h"
 #include "SoundManager.h"
+#include "Enemy.h"
 
 int EnemyBullet::no_ = 0;
 
-EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor, bool isLeft)
+EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor,
+	bool isLeft,Enemy& enemy):
+	enemy_(enemy)
 {
 	z_ = z;
+	bulletExplosionCnt_ = 0.0f;
 	isMoveLeft_ = isLeft;
 	extendFlag_ = false;
+	level_ = enemy.GetLevel();
 	switch (actor)
 	{
 	case ActorType::Pod:
@@ -30,7 +35,7 @@ EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor, bool isLef
 			pos_ = Vector2I(pos.x + 20, pos.y - 3);
 			speed_ = 4.0f;
 		}
-		Initialize();
+		BulletBase::Initialize();
 
 		break;
 		case ActorType::Exoskeleton:
@@ -52,26 +57,62 @@ EnemyBullet::EnemyBullet(Vector2I pos, int z, const ActorType& actor, bool isLef
 				pos_ = Vector2I(pos.x + 20, pos.y +7);
 				speed_ = 4.0f;
 			}
-			Initialize();
+			BulletBase::Initialize();
 
 			break;
 		case ActorType::Bigboy:
 			type_ = BulletType::BossBullet;
 			isMove_ = false;
 			exRate_ = 0.0f;
-			size_ = Vector2I(0, 100);
+			size_ = Vector2I(60, 60);
 			bulletName_ = "bossbullet";
 			if (isLeft)
 			{
 				pos_ = Vector2I(pos.x + 150, pos.y - 10);
-				speed_ = 7.0f;
+				switch (level_)
+				{
+				case Level::Lv_1:
+					speed_ = 7.0f;
+					break;
+
+				case Level::Lv_2:
+					speed_ = 3.0f;
+					break;
+
+				case Level::Lv_3:
+					speed_ = 3.0f;
+					break;
+				case Level::Max:
+					break;
+				default:
+					break;
+				}
 			}
 			else
 			{
 				pos_ = Vector2I(pos.x - 150, pos.y - 10);
-				speed_ = -7.0f;
+				switch (enemy_.GetLevel())
+				{
+				case Level::Lv_1:
+					speed_ = -7.0f;
+
+					break;
+
+				case Level::Lv_2:
+					speed_ = -3.0f;
+					break;
+
+				case Level::Lv_3:
+					speed_ = -3.0f;
+					break;
+				case Level::Max:
+
+					break;
+				default:
+					break;
+				}
 			}
-			Initialize();
+			BulletBase::Initialize();
 
 			break;
 	default:
@@ -106,10 +147,40 @@ void EnemyBullet::UpDate(void)
 				extendFlag_ = false;
 			}
 		}
-		animationCount_ += 1.0f;
-		if (animationCount_ >= 19.0f)
+		if (isMove_)
 		{
-			animationCount_ = 0.0f;
+			switch (level_)
+			{
+			case Level::Lv_1:
+				break;
+
+			case Level::Lv_2:
+				bulletExplosionCnt_ += 1.5f;
+				if (bulletExplosionCnt_ >= 85.0f)
+				{
+					if (!isShake_)
+					{
+						isShake_ = true;
+						lpSound.Play("explosionboss", DX_PLAYTYPE_BACK);
+					}
+					SetAnimation("explosion");
+					if (isAnimEnd_)
+					{
+						Delete();
+					}
+				}
+
+				break;
+
+			case Level::Lv_3:
+
+				break;
+			case Level::Max:
+
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	if (isMove_)
@@ -121,11 +192,14 @@ void EnemyBullet::UpDate(void)
 	{
 		Delete();
 	}
+	UpDateAnimation(currentAnimation_);
 }
 
 void EnemyBullet::Draw(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
+
+	BulletBase::Draw();
 
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
 
@@ -135,14 +209,37 @@ void EnemyBullet::Draw(void)
 		true, false);
 }
 
-bool EnemyBullet::Initialize(void)
-{
-	auto& imageMng = ImageManager::GetInstance();
-	imageMng.LoadBullet(type_, bulletName_);
-
-	return true;
-}
-
 void EnemyBullet::UpDateAnimation(std::string animName)
 {
+	if (type_ == BulletType::BossBullet)
+	{
+		if (animName != "explosion")
+		{
+			animationCount_ += 1.0f;
+		}
+		else
+		{
+			animationCount_ += 0.3f;
+		}
+	}
+	else
+	{
+		animationCount_ += 1.0f;
+	}
+
+	if (animationSet_.find(animName) != animationSet_.end())
+	{
+		if ((int)animationCount_ >= animationSet_.find(animName)->second)
+		{
+			if (isLoop_[animName])
+			{
+				animationCount_ = 0.0f;
+			}
+			else
+			{
+				animationCount_ = animationSet_.find(animName)->second;
+				isAnimEnd_ = true;
+			}
+		}
+	}
 }

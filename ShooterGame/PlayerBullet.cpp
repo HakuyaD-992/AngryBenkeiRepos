@@ -59,7 +59,7 @@ PlayerBullet::PlayerBullet(Vector2I pos,int z,WeaponType weapon,bool isLeft)
 		break;
 	}
 
-	Initialize();
+	BulletBase::Initialize();
 	SetAnimation("non");
 }
 
@@ -75,6 +75,7 @@ void PlayerBullet::UpDate(void)
 void PlayerBullet::Draw(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
+	BulletBase::Draw();
 
 	drawPos_ = Vector2I(pos_.x, pos_.y + (z_ / 2));
 
@@ -86,13 +87,4 @@ void PlayerBullet::Draw(void)
 
 void PlayerBullet::UpDateAnimation(std::string animName)
 {
-}
-
-bool PlayerBullet::Initialize(void)
-{
-	auto& imageMng = ImageManager::GetInstance();
-
-	imageMng.LoadBullet(type_, bulletName_);
-
-	return true;
 }

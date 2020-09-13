@@ -55,22 +55,39 @@ bool SpacenautAI::Search(std::list<std::shared_ptr<Enemy>>& enemies)
 					moveRight_ = true;
 					me_.ChangeAnimation("walk");
 					updater_ = &SpacenautAI::Walk;
+					return true;
 				}
 				if (me_.GetPos().x >= floorX / 2)
 				{
 					moveLeft_ = true;
 					me_.ChangeAnimation("walk");
 					updater_ = &SpacenautAI::Walk;
+					return true;
 				}
 			}
 			else
 			{
-				updater_ = &SpacenautAI::ArrangementZ;
+				if (me_.GetPos().x <= floorX / 2 &&
+					enemy->GetPos().x <= floorX/2)
+				{
+					moveRight_ = true;
+					me_.ChangeAnimation("walk");
+					updater_ = &SpacenautAI::Walk;
+					return true;
+				}
+				if (me_.GetPos().x >= floorX / 2 &&
+					enemy->GetPos().x >= floorX / 2)
+				{
+					moveLeft_ = true;
+					me_.ChangeAnimation("walk");
+					updater_ = &SpacenautAI::Walk;
+					return true;
+				}
 			}
+			updater_ = &SpacenautAI::ArrangementZ;
+			return true;
 		}
 	}
-
-	return true;
 }
 
 bool SpacenautAI::Walk(std::list<std::shared_ptr<Enemy>>& enemies)
@@ -93,7 +110,7 @@ bool SpacenautAI::Walk(std::list<std::shared_ptr<Enemy>>& enemies)
 		if (me_.GetPos().x <= 70)
 		{
 			moveLeft_ = false;
-			updater_ = &SpacenautAI::Attack;
+			updater_ = &SpacenautAI::ArrangementZ;
 		}
 	}
 
@@ -102,7 +119,7 @@ bool SpacenautAI::Walk(std::list<std::shared_ptr<Enemy>>& enemies)
 		if (me_.GetPos().x >= 700)
 		{
 			moveRight_ = false;
-			updater_ = &SpacenautAI::Attack;
+			updater_ = &SpacenautAI::ArrangementZ;
 		}
 	}
 	return true;

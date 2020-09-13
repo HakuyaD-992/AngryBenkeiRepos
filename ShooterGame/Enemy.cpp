@@ -27,7 +27,7 @@ Enemy::Enemy(std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	friendlyFireFlag_ = false;
 	isShotPrepare_ = true;
 
-	myLevel_ = EnemyLevel::Lv_1;
+	myLevel_ = Level::Lv_1;
 
 	muzzleFlashAnimationCount_ = 0.0f;
 	shotInterval_ = 0.0f;
@@ -62,7 +62,7 @@ void Enemy::Action(void)
 		}
 	}
 
-	myLevel_ = (EnemyLevel)hpNum_;
+	myLevel_ = (Level)(Level::Max - hpNum_);
 
 	if (onDamaged_)
 	{
@@ -160,7 +160,7 @@ bool Enemy::CheckHitPlayerBullet(const std::vector<std::shared_ptr<BulletBase>>&
 	{
 		if (CircleCollision()(type_,bullet->GetPos() - pos_,
 			size_,
-			nearestPlayer_->GetZPos() - z_
+			bullet->GetZPos() - z_
 			))
 		{
 			// íeÇè¡Ç∑
@@ -234,7 +234,7 @@ void Enemy::AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets)
 {
 	if (isShotPrepare_)
 	{
-		bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_));
+		bullets.emplace_back(std::make_unique<EnemyBullet>(pos_, z_, type_, isTurnLeft_,(*this)));
 
 		isShotPrepare_ = false;
 	}

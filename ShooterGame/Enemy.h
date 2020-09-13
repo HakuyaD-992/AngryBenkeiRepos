@@ -5,45 +5,13 @@
 #include <type_traits>
 #include <functional>
 #include "Actor.h"
+#include "Level.h"
 
 class ControlledPlayer;
 class BulletBase;
 class AIBase;
 class AICollider;
 
-
-enum EnemyLevel
-{
-	Lv_1,
-	Lv_2,
-	Lv_3,
-	Max
-};
-
-static EnemyLevel begin(EnemyLevel)
-{
-	return EnemyLevel::Lv_1;
-}
-
-static EnemyLevel end(EnemyLevel)
-{
-	return EnemyLevel::Max;
-}
-
-static EnemyLevel operator++(EnemyLevel& type)
-{
-	return (type = (EnemyLevel)(std::underlying_type<EnemyLevel>::type(type) + 1));
-}
-
-static EnemyLevel operator+(EnemyLevel type, int i)
-{
-	return EnemyLevel(int(type) + i);
-}
-
-static EnemyLevel operator*(EnemyLevel& type)
-{
-	return type;
-}
 
 // “G‚ÌAI½Ã°Ä
 enum class AIState
@@ -117,6 +85,11 @@ public:
 		return isShot_;
 	}
 
+	virtual const Level& GetLevel(void)
+	{
+		return myLevel_;
+	}
+
 	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
 	virtual void ReadyToShot(void);
 
@@ -187,6 +160,6 @@ protected:
 	bool isShot_;
 	int shotInterval_;
 
-	EnemyLevel myLevel_;
+	Level myLevel_;
 };
 

@@ -58,6 +58,7 @@ private:
 	// ‚Ä‚«‚Ì’e(“G‚ÌÀ²Ìß‚É‚æ‚Á‚Ä•Ï‰»)
 	std::vector<std::shared_ptr<BulletBase>> enemyBullets_;
 
+
 	ObjectList objList_;
 	// ÌÚ°ÑÚ°Ä
 	Fps fps_;

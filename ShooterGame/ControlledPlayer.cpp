@@ -17,13 +17,15 @@
 
 int ControlledPlayer::player_ = 0;
 
-ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,std::list<std::shared_ptr<Item>>& itemList):
+ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,
+	std::list<std::shared_ptr<Item>>& itemList):
 	items_(itemList)
 {
 	pos_ = pos;
 	type_ = type;
 	// ‰œs
 	z_ = z;
+	isHitEnemyZ_ = false;
 	size_ = { 64,64 };
 	weaponsArrangementAmount_ = {0,0};
 	deleteFlag_ = false;
@@ -272,8 +274,11 @@ void ControlledPlayer::Draw_(void)
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
 	DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + (size_.y / 2), shadowRadius_.x / 2.8f, shadowRadius_.y / 4, 10.0f, 0x000000, true);
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	Actor::Draw();
+
+	DrawFormatString(100, 100, 0xffffff, "%d", hp_[0]);
 	for (auto weapon : weapons_)
 	{
 		for (auto bullet : weapon->GetBullets())

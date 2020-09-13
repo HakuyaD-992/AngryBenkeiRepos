@@ -33,23 +33,23 @@ void BigboyAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 		updater_ = &BigboyAI::OnDamaged;
 	}
 
-	if (!isJumpAction_)
+	/*if (!isJumpAction_)
 	{
 		if (enemies.size() <= 1)
 		{
 			isJumpAction_ = true;
 		}
-	}
+	}*/
 
-	//if (!isJumpAction_)
-	//{
-	//	jumpInterval_++;
-	//	if (jumpInterval_ >= 2000)
-	//	{
-	//		jumpInterval_ = 0;
-	//		isJumpAction_ = true;
-	//	}
-	//}
+	if (!isJumpAction_)
+	{
+		jumpInterval_++;
+		if (jumpInterval_ >= 2000)
+		{
+			jumpInterval_ = 0;
+			isJumpAction_ = true;
+		}
+	}
 
 	(this->*updater_)(enemies);
 }

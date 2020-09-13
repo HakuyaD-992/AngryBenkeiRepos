@@ -19,6 +19,7 @@
 #include "EffectManager.h"
 #include "SceneController.h"
 #include "ResultScene.h"
+#include "BulletBase.h"
 
 
 PlayScene::PlayScene(SceneController& sCon):
@@ -124,7 +125,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 					if (!isShaking_)
 					{
-						if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)] + 1)
+						if (existEnemyCount_ < enemyNum_display_[static_cast<int>(wave_)])
 						{
 							createEnemyFlag_ = true;
 						}
@@ -192,14 +193,18 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 							}
 						}
 					}
-
-
 				}
 			}
 
 			for (auto b : enemyBullets_)
 			{
 				b->UpDate();
+
+				if (b->GetisShake())
+				{
+					shakeEffect_ = EFFECT_TYPE::shake;
+					isShaking_ = true;
+				}
 			}
 
 			if (isShaking_)
@@ -285,16 +290,26 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		item->UpDate();
 	}
 
-	if (shakeEffect_ != EFFECT_TYPE::shake)
+
+	for (auto player : playerList_)
 	{
-		for (auto player : playerList_)
+		if (shakeEffect_ != EFFECT_TYPE::shake)
 		{
 			player->UpDate();
-			player->GetCurrentWeapon()->UpDate();
-			if (player->GetDeleteFlag())
-			{
-				goResult_ = true;
-			}
+		}
+		player->GetCurrentWeapon()->UpDate();
+		if (player->GetDeleteFlag())
+		{
+			goResult_ = true;
+		}
+		int num = 0;
+		for (auto weapon : player->GetWeapons())
+		{
+			num = weapon->GetHavingBulletNum();
+		}
+		if (num <= 0)
+		{
+			goResult_ = true;
 		}
 	}
 	playerList_.erase(std::remove_if(playerList_.begin(),
