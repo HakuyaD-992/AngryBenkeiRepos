@@ -101,8 +101,8 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
 					lpSound.Play("start", DX_PLAYTYPE_BACK);
-					//lpEffect.SetPos("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
-					//lpEffect.Play("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
+					lpEffect.SetPos("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
+					lpEffect.Play("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
 					isNext_ = true;
 				}
 			}
