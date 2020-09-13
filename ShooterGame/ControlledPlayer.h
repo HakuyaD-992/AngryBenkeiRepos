@@ -33,6 +33,11 @@ public:
 		return isHitEnemyZ_;
 	}
 
+	virtual int& GetUseBullet(void)
+	{
+		return use_Bullet;
+	}
+
 	const std::vector<std::shared_ptr<WeaponBase>>& GetWeapons(void)
 	{
 		return weapons_;
@@ -75,6 +80,8 @@ private:
 	// ‰ÁŽZ’l
 	int addBlendval_;
 	bool addBlendFlag_;
+
+	int use_Bullet;
 
 	bool isHitEnemyZ_;
 

@@ -64,15 +64,15 @@ bool Actor::Initialize(void)
 	switch (type_)
 	{
 	case ActorType::Player:
-		hpPos_ = Vector2I(150, 85);
+		hpPos_ = Vector2I(125, 42);
 		break;
 	case ActorType::Pod:
 	case ActorType::Exoskeleton:
 	case ActorType::Spacenaut:
-		hpPos_ = Vector2I(500, 65);
+		hpPos_ = Vector2I(675, 42);
 		break;
 	case ActorType::Bigboy:
-		hpPos_ = Vector2I(650, 65);
+		hpPos_ = Vector2I(675, 63);
 		break;
 	case ActorType::Max:
 		break;
@@ -116,10 +116,9 @@ void Actor::Draw(void)
 
 	if (type_ == ActorType::Player)
 	{
-		DrawRotaGraph(hpPos_.x, hpPos_.y, 1.0f, 0.0f,
-			lpImage.GetID("UI/" + name_ + "_Hp"), true, false);
-		DrawBox(hpPos_.x - 18, hpPos_.y + 9,
-			(hpPos_.x - 18) + hp_[0], hpPos_.y + 24, 0x0000ff, true);
+		DrawGraph(10, 10,
+			lpImage.GetID("UI/" + name_ + "_Hp"), true);
+		DrawBox(76, 53, 76 + 160 * static_cast<float>(hp_[0]) / 100.0f, 65, 0x0000ff, true);
 	}
 
 	if (type_ != ActorType::Bigboy)

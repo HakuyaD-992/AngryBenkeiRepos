@@ -153,6 +153,11 @@ void LoadScene::LoadImageResources(void)
 	lpImage.Load("UI/Pod_UI");
 	lpImage.Load("UI/Exoskeleton_UI");
 	lpImage.Load("UI/Spacenaut_UI");
+	//@
+	lpImage.Load("Result/gameclear");
+	lpImage.Load("Result/gameover");
+	lpImage.Load("Result/total");
+	lpImage.LoadDiv("Result/number", Vector2I(43, 60), Vector2I(10, 1));
 
 	lpImage.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	lpImage.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));

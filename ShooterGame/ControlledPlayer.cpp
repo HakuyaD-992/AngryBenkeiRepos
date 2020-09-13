@@ -37,6 +37,9 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,
 	playerNo_ = (PLAYER)player_;
 	player_++;
 
+	use_Bullet = 0;
+
+
 	Initialize();
 }
 

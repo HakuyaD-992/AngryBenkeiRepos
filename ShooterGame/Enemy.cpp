@@ -179,9 +179,12 @@ bool Enemy::CheckHitMyBulletToPlayer(std::vector<std::shared_ptr<BulletBase>>& b
 			nearestPlayer_->GetPos() - bullet->GetPos(), nearestPlayer_->GetSize() + bullet->GetSize(),
 			nearestPlayer_->GetZPos() - bullet->GetZPos()))
 		{
-			nearestPlayer_->GetHp() -= (int)attackRate_;
-			nearestPlayer_->GetOnDamaged() = true;
-			bullet->Delete();
+			if ((int)attackRate_ > 0 && (int)attackRate_ <= 100)
+			{
+				nearestPlayer_->GetHp() -= (int)attackRate_;
+				nearestPlayer_->GetOnDamaged() = true;
+				bullet->Delete();
+			}
 			return true;
 		}
 	}
@@ -256,8 +259,8 @@ void Enemy::HpDraw(void)
 		lpImage.GetID("UI/" + name_ + "_Hp"), true, false);
 	for (int i = 0; i < hpNum_; i++)
 	{
-		DrawBox(hpPos_.x - 105, hpPos_.y + 10 + (i * 20),
-			(hpPos_.x - 105) + hp_[i], hpPos_.y + 25 + (i * 20), 0x0000ff, true);
+		DrawBox(hpPos_.x + 49, hpPos_.y + 10 + (i * 20),
+			(hpPos_.x - 107) + hp_[i], hpPos_.y + 25 + (i * 20), 0x0000ff, true);
 	}
 	DrawFormatString(hpPos_.x - 10, hpPos_.y - 30, 0xffffff, (name_ + std::to_string(id_)).c_str());
 }

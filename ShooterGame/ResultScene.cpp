@@ -2,14 +2,17 @@
 
 #include "ResultScene.h"
 #include "Input.h"
+
 #include "SceneController.h"
 #include "TitleScene.h"
 #include "ImageManager.h"
 #include "Application.h"
 
-ResultScene::ResultScene(SceneController& sCon):
+ResultScene::ResultScene(SceneController& sCon, int useBullet, bool winFlag) :
 	BaseScene(sCon)
 {
+	this->useBullet = useBullet;
+	this->winFlag = winFlag;
 	Initialize();
 }
 
@@ -47,5 +50,51 @@ void ResultScene::Draw(void)
 		30, 1.0f, 0.0f,
 		lpImage.GetID("Result/result"),
 		true, false);
+	if (winFlag)
+	{
+		DrawGraph(400 - 187, 100, lpImage.GetID("Result/gameclear"), true);
+	}
+	else
+	{
+		DrawGraph(400 - 175, 100, lpImage.GetID("Result/gameover"), true);
+	}
+
+	DrawGraph(0, 300, lpImage.GetID("Result/total"), true);
+
+	if (useBullet < 10)
+	{
+		DrawGraph(525, 300, lpImage.GetDivID("Result/number")[useBullet], true);
+	}
+
+	if (useBullet > 9 && useBullet < 100)
+	{
+		DrawGraph(525, 300, lpImage.GetDivID("Result/number")[useBullet / 10], true);
+		DrawGraph(525 + 43, 300, lpImage.GetDivID("Result/number")[useBullet % 10], true);
+	}
+
+	if (useBullet > 99 && useBullet < 1000)
+	{
+		DrawGraph(525, 300, lpImage.GetDivID("Result/number")[useBullet / 100], true);
+		DrawGraph(525 + 43, 300, lpImage.GetDivID("Result/number")[(useBullet % 100) / 10], true);
+		DrawGraph(525 + 86, 300, lpImage.GetDivID("Result/number")[useBullet % 10], true);
+	}
+
+	if (useBullet > 999 && useBullet < 10000)
+	{
+		DrawGraph(525, 300, lpImage.GetDivID("Result/number")[useBullet / 1000], true);
+		DrawGraph(525 + 43, 300, lpImage.GetDivID("Result/number")[(useBullet % 1000) / 100], true);
+		DrawGraph(525 + 86, 300, lpImage.GetDivID("Result/number")[(useBullet % 100) / 10], true);
+		DrawGraph(525 + 129, 300, lpImage.GetDivID("Result/number")[useBullet % 10], true);
+	}
+
+	if (useBullet > 9999 && useBullet < 100000)
+	{
+		DrawGraph(525, 300, lpImage.GetDivID("Result/number")[useBullet / 10000], true);
+		DrawGraph(525 + 43, 300, lpImage.GetDivID("Result/number")[(useBullet % 10000) / 1000], true);
+		DrawGraph(525 + 86, 300, lpImage.GetDivID("Result/number")[(useBullet % 1000) / 100], true);
+		DrawGraph(525 + 129, 300, lpImage.GetDivID("Result/number")[(useBullet % 100) / 10], true);
+		DrawGraph(525 + 172, 300, lpImage.GetDivID("Result/number")[useBullet % 10], true);
+	}
+	DrawFormatString(0, 0, 0xffffff, "%d", useBullet);
 	ScreenFlip();
 }

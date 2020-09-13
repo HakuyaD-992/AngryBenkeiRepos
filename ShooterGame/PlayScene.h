@@ -113,6 +113,7 @@ private:
 	int existEnemyCount_;
 	// resultScene‚ÉˆÚs‚·‚éƒtƒ‰ƒO
 	bool goResult_;
+	bool resultFlag;
 	int goResultAddVal_;
 };
 

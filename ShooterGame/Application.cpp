@@ -39,7 +39,7 @@ bool Application::Initialize(void)
 	BaseScene::SetLoadSize(3);
 	sceneCtl_->PushScene(std::make_shared<LoadScene>(*sceneCtl_));
 
-	input_.emplace_back(std::make_shared<PadInput>());
+	input_.emplace_back(std::make_shared<KeyInput>());
 	//input_.emplace_back(std::make_shared<KeyInput>());
 	// 1P controller
 	input_[static_cast<int>(PLAYER::ONE)]->Setup(PLAYER::ONE);

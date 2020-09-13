@@ -28,10 +28,10 @@ void ExoskeletonAI::Update(std::list<std::shared_ptr<Enemy>>& enemies)
 	if (CircleCollision()(me_.GetType(),
 		me_.SearchNearestPlayer()->GetPos() - me_.GetPos(),
 		me_.GetSize() + me_.GetNearestPlayer()->GetSize(),
-		me_.GetZPos() - me_.GetNearestPlayer()->GetZPos()))
+		me_.GetZPos() - me_.GetNearestPlayer()->GetZPos()) && me_.GetCurrentAnimation() != "death")
 	{
 		me_.ChangeAnimation("death");
-		me_.GetNearestPlayer()->GetOnDamaged() = true;
+		me_.GetNearestPlayer()->GetHp() -= 1;
 		updater_ = &ExoskeletonAI::Death;
 	}
 

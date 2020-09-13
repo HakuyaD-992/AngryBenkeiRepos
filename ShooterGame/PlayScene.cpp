@@ -338,7 +338,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			goResultAddVal_ = 0;
 			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1)));
-			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
+			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_, playerList_.front()->GetUseBullet(), resultFlag));
 		}
 	}
 
