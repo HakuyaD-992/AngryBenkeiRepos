@@ -176,6 +176,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="KeyInput.cpp" />
+    <ClCompile Include="LoadScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PadInput.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="KeyConfiguration.h" />
     <ClInclude Include="KeyInput.h" />
+    <ClInclude Include="LoadScene.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="PadInput.h" />

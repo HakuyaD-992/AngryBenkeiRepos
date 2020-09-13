@@ -10,7 +10,7 @@ class Actor
 {
 public:
 	Actor();
-	virtual ~Actor();
+	~Actor();
 
 	virtual void UpDate(void) = 0;
 	virtual bool Initialize(void);
