@@ -32,6 +32,7 @@ private:
 	void Draw(void);
 	void Initialize(void);
 
+
 	// ﾀｲﾄﾙでの文字列のﾎﾟｼﾞｼｮﾝ
 	Vector2I stringPos_;
 	// 文字列のｽﾋﾟｰﾄﾞ(fadeIn,outの際に使用)
@@ -55,7 +56,6 @@ private:
 	// startの文字をだんだん透過させていくアルファ値
 	float alphaCount_;
 
-	bool goNext_;
-	int goNextAlphaCount_;
+	int frame_;
 };
 

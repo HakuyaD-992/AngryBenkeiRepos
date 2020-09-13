@@ -1,7 +1,7 @@
 #include <DxLib.h>
 #include "Application.h"
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
 	auto& app = Application::Instance();
 

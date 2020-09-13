@@ -11,7 +11,7 @@ void SoundManager::Load(std::string soundName, bool loop)
 
 bool SoundManager::Play(std::string soundName,int playType)
 {
-	if (CheckSoundMem(handles_[soundName].first == 0))
+	//if (CheckSoundMem(handles_[soundName].first) == 0)
 	{
 		PlaySoundMem(handles_[soundName].first, playType, handles_[soundName].second);
 	}

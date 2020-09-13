@@ -27,7 +27,7 @@ enum class LAYER_ID
 using namespace std;
 
 class ControlledPlayer;
-class Enemy;
+
 class ScreenEffectMng
 {
 public:
@@ -45,11 +45,8 @@ public:
 	// ™X‚É“§‰ß‚µ‚Ä‚¢‚«‚È‚ª‚ç•`‰æ‚·‚é
 	void DrawRotaAlphaGraph(const Vector2I& pos, const int& alphaval,const float& exRate, int handle);
 
-	const void GetPlayer(shared_ptr<ControlledPlayer> player);
-	const void GetEnemy(shared_ptr<Enemy> player);
-	Vector2F MoveAmountCalculator(ObjectType id);
+	Vector2F MoveAmountCalculator(ObjectType id,const std::shared_ptr<ControlledPlayer>& player);
 	Vector2F GetMoveOffset(void);
-
 
 private:
 	ScreenEffectMng();
@@ -57,9 +54,6 @@ private:
 
 	map<string, Vector2F> offset;
 
-
-	std::shared_ptr<ControlledPlayer> player;
-	std::shared_ptr<Enemy> enemy;
 	int frame;
 
 	Vector2F pos;

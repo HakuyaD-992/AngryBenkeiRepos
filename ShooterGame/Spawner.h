@@ -41,5 +41,8 @@ private:
 	Vector2I spawnPos_;
 	int spawnPosZ_;
 	bool bossFlag_;
+
+	Vector2I bossPos_;
+	int bossZ_;
 };
 

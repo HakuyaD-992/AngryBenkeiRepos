@@ -96,9 +96,7 @@ bool BigboyAI::Observe(std::list<std::shared_ptr<Enemy>>& enemies)
 		me_.ChangeAnimation("walk");
 		updater_ = &BigboyAI::ZArrange;
 	}
-
 	return true;
-
 }
 
 bool BigboyAI::Walk(std::list<std::shared_ptr<Enemy>>& enemies)
@@ -162,7 +160,7 @@ bool BigboyAI::ZArrange(std::list<std::shared_ptr<Enemy>>& enemies)
 	if (abs(zdiff) <= 5)
 	{
 		me_.ChangeAnimation("attack");
-		updater_ = &BigboyAI::LaserAttack;
+		updater_ = &BigboyAI::Attack;
 	}
 
 	return false;
@@ -182,6 +180,7 @@ bool BigboyAI::Attack(std::list<std::shared_ptr<Enemy>>& enemies)
 	}
 	if (me_.GetisAnimEnd())
 	{
+		me_.ReadyToShot();
 		me_.ChangeAnimation("idle");
 		updater_ = &BigboyAI::Observe;
 	}
@@ -214,8 +213,16 @@ bool BigboyAI::OnDamaged(std::list<std::shared_ptr<Enemy>>& enemies)
 	{
 		if (me_.GetHp() <= 0)
 		{
-			me_.ChangeAnimation("death");
-			updater_ = &BigboyAI::Death;
+			me_.GetHpNum()--;
+			if (me_.GetHpNum() <= 0)
+			{
+				me_.ChangeAnimation("death");
+				updater_ = &BigboyAI::Death;
+			}
+			else
+			{
+				me_.GetHp() = me_.GetMaxHp();
+			}
 			return true;
 		}
 		else
@@ -232,7 +239,10 @@ bool BigboyAI::OnDamaged(std::list<std::shared_ptr<Enemy>>& enemies)
 
 bool BigboyAI::Death(std::list<std::shared_ptr<Enemy>>& enemies)
 {
-
+	if (me_.GetisAnimEnd())
+	{
+		me_.Delete();
+	}
 	return false;
 }
 

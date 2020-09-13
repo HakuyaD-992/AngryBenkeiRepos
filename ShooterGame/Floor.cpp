@@ -2,7 +2,8 @@
 #include "Floor.h"
 #include "ScreenEffectMng.h"
 
-Floor::Floor(Vector2I pos, ObjectType type)
+Floor::Floor(Vector2I pos, ObjectType type, std::shared_ptr<ControlledPlayer>& player):
+	Object(player)
 {
 	pos_ = pos;
 	type_ = type;

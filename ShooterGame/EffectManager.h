@@ -1,5 +1,4 @@
 #pragma once
-#include <EffekseerForDXLib.h>
 #include <string>
 #include <map>
 #include <list>
@@ -25,10 +24,13 @@ public:
 	void Draw(void);
 	// ‘S‚Ä‚Ì´Ìª¸Ä‚ÌÄ¶‚ğ~‚ß‚é
 	bool StopAll(void);
+	void SetPos(std::string effectName, const Vector2I& pos);
 	// ´Ìª¸Ä‚ÌÄ¶
-	bool Play(std::string effectName, const Vector2I& pos);
+	bool Play(std::string effectName, const Vector2I& pos, std::string num = "");
 	// effekseer‚Ì‰Šú‰»ŠÖ˜A
 	bool Init(const Vector2I& size);
+
+	void DeleteEffect(std::string effectName,const bool& flg);
 
 	// ´Ìª¸Ä‚ªÄ¶’†‰Ø‚Ç‚¤‚©‚ÌÌ×¸Şæ“¾
 	const int& IsPlayingEffect(std::string effectName);
@@ -45,7 +47,8 @@ private:
 	// ´Ìª¸ÄÊİÄŞÙ
 	std::map<std::string, int> handles_;
 	// ÌßÚ²ÊİÄŞÙ‚ğŠi”[‚µ‚½Ø½Ä
-	std::list<int> playList_;
+	std::multimap<std::string,int> playList_;
+	std::multimap<std::string, bool> delFlag_;
 };
 
 

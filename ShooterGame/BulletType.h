@@ -8,7 +8,7 @@ enum class BulletType
 	MachineBullet,
 	PodBullet,
 	SpacenautBullet,
-	LaserBullet,
+	BossBullet,
 	Max
 };
 

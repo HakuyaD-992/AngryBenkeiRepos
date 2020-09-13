@@ -17,19 +17,18 @@ Exoskeleton::Exoskeleton(Vector2I pos,
 	pos_ = pos;
 	z_ = z;
 	type_ = type;
+	hpNum_ = 1;
+	maxHp_ = 100;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<ExoskeletonAI>(*this);
 	damageRate_ = 6.0f;
 
 	size_ = Vector2I(48, 48);
-	id_ = enemyNo_;
-	hp_ = 100;
 	name_ = "Exoskeleton";
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("run");
 	updater = &Exoskeleton::Run;
-	enemyNo_++;
 	frame = 0;
 	afterimage_limit;
 }
@@ -62,6 +61,12 @@ void Exoskeleton::UpDate(void)
 
 void Exoskeleton::Draw_(void)
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+	DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + (size_.y / 2), size_.x / 2.8f, size_.y / 4, 10.0f, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	Actor::Draw();
+	Enemy::Draw();
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 	if (OnFloor() == true)
 	{

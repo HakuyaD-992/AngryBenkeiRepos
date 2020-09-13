@@ -69,6 +69,15 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 
 		break;
 	case Wave::ThirdWave:
+		for (auto enemy : enemies)
+		{
+			if (enemy->GetType() == ActorType::Bigboy)
+			{
+				bossPos_ = enemy->GetPos();
+				bossZ_ = enemy->GetZPos();
+			}
+		}
+
 		if (bossFlag_)
 		{
 			enemyType_ = ActorType::Bigboy;
@@ -85,9 +94,16 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 			{
 				enemyType_ = ActorType::Spacenaut;
 				// ÉXÉ|Å[ÉìŒﬂºﬁºÆ›
-				spawnPos_ = Vector2I(10 + GetRand(floorX - 10), 0);
-				// zé≤ŒﬂºﬁºÆ›
-				spawnPosZ_ = -floorZ + 50 + GetRand(floorZ);
+				spawnPosZ_ = bossZ_;
+				if (bossPos_.x <= floorX / 2)
+				{
+					spawnPos_ = Vector2I(70, 0);
+				}
+
+				if (bossPos_.x >= floorX / 2)
+				{
+					spawnPos_ = Vector2I(700, 0);
+				}
 				bossFlag_ = false;
 				enemyInstanceFunc_[enemyType_](enemies, player, spawnPos_, spawnPosZ_, enemyType_);
 			}
@@ -110,6 +126,7 @@ void Spawner::MakeClone(std::list<std::shared_ptr<Enemy>>& enemies,
 bool Spawner::Initialize(void)
 {
 	bossFlag_ = true;
+	bossPos_ = { 0,0 };
 	enemyInstanceFunc_.try_emplace(ActorType::Pod,
 		[&](std::list<std::shared_ptr<Enemy>>& enemies,
 			std::vector<std::shared_ptr<ControlledPlayer>>& player,

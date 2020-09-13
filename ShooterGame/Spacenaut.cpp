@@ -15,17 +15,17 @@ Spacenaut::Spacenaut(Vector2I pos, int z, ActorType type, std::vector<std::share
 	pos_ = pos;
 	z_ = z;
 	type_ = type;
+	hpNum_ = 2;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<SpacenautAI>(*this);
 
 	size_ = Vector2I(68, 68);
-	id_ = enemyNo_;
-	hp_ = 20;
+	maxHp_ = 100;
 	name_ = "Spacenaut";
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("walk");
-	enemyNo_++;
+
 }
 
 Spacenaut::~Spacenaut()
@@ -43,5 +43,9 @@ void Spacenaut::UpDate(void)
 
 void Spacenaut::Draw_(void)
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+	DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + (size_.y / 2), size_.x / 2.8f, size_.y / 4, 10.0f, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	Actor::Draw();
+	Enemy::Draw();
 }

@@ -144,8 +144,17 @@ bool PodAI::OnDamaged(std::list<std::shared_ptr<Enemy>>& enemies)
 	{
 		if (me_.GetHp() <= 0)
 		{
-			me_.ChangeAnimation("death");
-			updater_ = &PodAI::Death;
+			me_.GetHpNum()--;
+			
+			if (me_.GetHpNum() <= 0)
+			{
+				me_.ChangeAnimation("death");
+				updater_ = &PodAI::Death;
+			}
+			else
+			{
+				me_.GetHp() = me_.GetMaxHp();
+			}
 			return true;
 		}
 		else

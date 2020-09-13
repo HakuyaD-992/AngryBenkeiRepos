@@ -6,7 +6,10 @@
 #include "SceneController.h"
 #include "EffectManager.h"
 #include "TitleScene.h"
-
+#include "Wave.h"
+#include "SoundManager.h"
+#include "ImageManager.h"
+#include "LoadScene.h"
 
 namespace
 {
@@ -32,7 +35,9 @@ bool Application::Initialize(void)
 	lpEffect.Init(Vector2I(w_size_.w, w_size_.h));
 	SetDrawScreen(DX_SCREEN_BACK);
 	sceneCtl_ = std::make_shared<SceneController>();
-	sceneCtl_->PushScene(std::make_shared<TitleScene>(*sceneCtl_));
+
+	BaseScene::SetLoadSize(3);
+	sceneCtl_->PushScene(std::make_shared<LoadScene>(*sceneCtl_));
 
 	input_.emplace_back(std::make_shared<KeyInput>());
 	//input_.emplace_back(std::make_shared<KeyInput>());
@@ -40,6 +45,9 @@ bool Application::Initialize(void)
 	input_[static_cast<int>(PLAYER::ONE)]->Setup(PLAYER::ONE);
 	// 2P controller
 	//input_[static_cast<int>(PLAYER::TWO)]->Setup(PLAYER::TWO);
+
+		// ´Ìª¸Ä‚ÌÛ°ÄÞ
+	lpEffect.Load("thunder");
 
 	return true;
 }
@@ -51,6 +59,7 @@ void Application::Exit(void)
 
 void Application::Run(void)
 {
+
 	while (!CheckHitKey(KEY_INPUT_ESCAPE))
 	{
 		for (auto&& in : input_)

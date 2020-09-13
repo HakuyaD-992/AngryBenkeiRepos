@@ -29,9 +29,9 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,st
 	deleteFlag_ = false;
 
 	isOnFloor_ = true;
-
-	hp_ = 5;
-
+	hpNum_ = 1;
+	hp_.emplace_back(100);
+	name_ = "Player";
 	playerNo_ = (PLAYER)player_;
 	player_++;
 
@@ -163,7 +163,6 @@ void ControlledPlayer::UpDate(void)
 
 		if (currentWeapon_->GetAnimation() == "non")
 		{
-			ReadyToShot();
 			// ¡Œ»İ‘•”õ’†‚Ì•Ší‚Ì•ÏX
 			if (inputData.first == KeyConfiguration::ChangeWeapon)
 			{
@@ -261,7 +260,7 @@ void ControlledPlayer::UpDate(void)
 	}
 
 	// Hp‚ª0‚É‚È‚Á‚½‚ç€‚Ê
-	if (hp_ <= 0)
+	if (hp_[hpNum_-1] <= 0)
 	{
 		Delete();
 	}
@@ -271,6 +270,9 @@ void ControlledPlayer::UpDate(void)
 
 void ControlledPlayer::Draw_(void)
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+	DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + (size_.y / 2), shadowRadius_.x / 2.8f, shadowRadius_.y / 4, 10.0f, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	Actor::Draw();
 	for (auto weapon : weapons_)
 	{

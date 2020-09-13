@@ -52,10 +52,11 @@ public:
 	void SetAnimation(std::string animName);
 
 private:
-	bool deleteFlag_;
 protected:
 	Vector2I pos_;
 	Vector2I drawPos_;
+	bool deleteFlag_;
+
 	int z_;
 	Vector2I size_;
 	std::string bulletName_;

@@ -32,6 +32,11 @@ public:
 		return type_;
 	}
 
+	int& GetHpNum(void)
+	{
+		return hpNum_;
+	}
+
 	// ﾎﾟｼﾞｼｮﾝ取得
 	Vector2I& GetPos(void)
 	{
@@ -77,7 +82,7 @@ public:
 
 	virtual int& GetHp(void)
 	{
-		return hp_;
+		return hp_[hpNum_ - 1];
 	}
 
 	float& GetAlpha(void)
@@ -95,12 +100,9 @@ public:
 		return onDamaged_;
 	}
 
-	// isShot_をtrueにすることで次の弾の生成を可能にする
-	virtual void ReadyToShot(void);
-
-	virtual const bool& GetisShot(void)
+	virtual const int& GetMaxHp(void)
 	{
-		return isShot_;
+		return maxHp_;
 	}
 
 private:
@@ -115,9 +117,13 @@ protected:
 	// 自分のｻｲｽﾞ
 	Vector2I size_;
 	Vector2I hpPos_;
+
+	std::string name_;
 	// 奥ゆきのｽﾋﾟｰﾄﾞ
 	int zSpeed_;
 	int z_;
+
+	Vector2I shadowRadius_;
 	// ｼﾞｬﾝﾌﾟｽﾋﾟｰﾄﾞ
 	int jumpSpeed_;
 	float jumpFirstSpeed_;
@@ -161,10 +167,11 @@ protected:
 	double rotRate_;
 
 	// 各ｱｸﾀｰのHP
-	int hp_;
-
-	// 弾を撃つﾌﾗｸﾞ
-	bool isShot_;
+	std::vector<int> hp_;
+	// hpの本数
+	int hpNum_;
+	// hpの最大値
+	int maxHp_;
 	// 透過率
 	float alpha_percent;
 };

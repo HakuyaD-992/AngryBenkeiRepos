@@ -15,9 +15,16 @@ public:
 	virtual void Initialize(void) = 0;
 	virtual void Draw(void) = 0;
 
-private:
+	static void SetLoadSize(int size);
+	static int& GetLoadSize(void)
+	{
+		return loadSize_;
+	}
 
+private:
+	
 protected:
 	SceneController& sceneCtl_;
+	static int loadSize_;
 };
 

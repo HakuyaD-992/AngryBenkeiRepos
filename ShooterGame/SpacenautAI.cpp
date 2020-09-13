@@ -40,7 +40,10 @@ bool SpacenautAI::Search(std::list<std::shared_ptr<Enemy>>& enemies)
 	{
 		if (enemy->GetType() == ActorType::Bigboy)
 		{
-			partnerPos_ = enemy->GetPos();
+			if (enemy->IsJumping())
+			{
+				moveOutside_ = true;
+			}
 		}
 	}
 	updater_ = &SpacenautAI::Walk;
@@ -50,6 +53,8 @@ bool SpacenautAI::Search(std::list<std::shared_ptr<Enemy>>& enemies)
 bool SpacenautAI::Walk(std::list<std::shared_ptr<Enemy>>& enemies)
 {
 	auto distance = partnerPos_.x - me_.GetPos().x;
+
+
 
 	if (abs(distance) <= 30)
 	{
@@ -201,6 +206,7 @@ void SpacenautAI::Initialize(void)
 	frame = 0;
 	damage_anim_frame = 0;
 	partnerPos_ = { 0,0 };
+	moveOutside_ = false;
 	moveLeft_ = false;
 	moveRight_ = false;
 	anim_flag = false;

@@ -41,9 +41,13 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		if (defeatEnemyNum_ >= enemyMaxNuminWave_[static_cast<int>(wave_)])
 		{
-			drawNextWaveFlag_ = true;
-			// waveïœçXÃ◊∏ﬁÇtrue
-			changeVolFlag_ = true;
+			if (wave_ != Wave::ThirdWave)
+			{
+				Enemy::ResetEnemyNo();
+				drawNextWaveFlag_ = true;
+				// waveïœçXÃ◊∏ﬁÇtrue
+				changeVolFlag_ = true;
+			}
 		}
 	}
 	lpEffect.UpDate();
@@ -70,10 +74,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 						{
 							enemyCountinWave_[static_cast<int>(wave_)]++;
 						}
-					}
-					for (auto enemy : enemyList_)
-					{
-						lpS_Effect.GetEnemy(enemy);
 					}
 				}
 			}
@@ -119,14 +119,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				case ActorType::Bigboy:
 					if (enemy->GetCurrentAnimation() == "attack")
 					{
-						if (enemy->GetisAnimEnd())
-						{
-							enemy->AddBullet(enemyBullets_);
-						}
-					}
-					else
-					{
-						enemy->ReadyToShot();
+						enemy->AddBullet(enemyBullets_);
 					}
 
 					if (!isShaking_)
@@ -154,6 +147,13 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 						if (enemy->IsJumping())
 						{
 							isShaking_ = false;
+						}
+					}
+					if (enemy->GetCurrentAnimation() == "death")
+					{
+						if (enemy->GetisAnimEnd())
+						{
+							goResult_ = true;
 						}
 					}
 					break;
@@ -192,6 +192,8 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 							}
 						}
 					}
+
+
 				}
 			}
 
@@ -292,7 +294,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			if (player->GetDeleteFlag())
 			{
 				goResult_ = true;
-				//sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
 			}
 		}
 	}
@@ -325,8 +326,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_));
 		}
 	}
-
-
 
 	if (currentWeather_ == "Thundersky")
 	{
@@ -382,7 +381,6 @@ void PlayScene::Draw(void)
 	{
 		DrawPlayer(player);
 	}
-
 
 	for (auto enemy : enemyList_)
 	{
@@ -447,7 +445,7 @@ void PlayScene::Initialize(void)
 	auto scr = app.GetViewport().GetSize();
 	auto& imageMng = ImageManager::GetInstance();
 
-	wave_ = Wave::FirstWave;
+	wave_ = Wave::ThirdWave;
 
 	shakeEffect_ = EFFECT_TYPE::non;
 	shakeTime_ = 0.0f;
@@ -483,41 +481,6 @@ void PlayScene::Initialize(void)
 	goResult_ = false;
 	goResultAddVal_ = 255;
 
-	imageMng.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
-	imageMng.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));
-	imageMng.LoadDiv("UI/wave_num", Vector2I(60, 60), Vector2I(3, 1));
-	imageMng.LoadDiv("UI/number", Vector2I(22, 40), Vector2I(10, 1));
-	imageMng.LoadDiv("Item/items", Vector2I(32, 32), Vector2I(3, 1));
-
-	imageMng.Load("UI/enemy1_UI2");
-	imageMng.Load("UI/wave");
-	imageMng.Load("UI/untilnext");
-	imageMng.Load("UI/bullets");
-
-	lpSound.Load("pistol/fire", true);
-	lpSound.Load("sub_machinegun/fire", true);
-	lpSound.Load("shotgun/fire", true);
-
-	lpSound.Load("Pod/fire", true);
-	lpSound.Load("Spacenaut/fire", true);
-	lpSound.Load("Bigboy/fire", true);
-
-
-	lpSound.Load("damage", true);
-
-	lpSound.Load("pistol/get", true);
-	lpSound.Load("sub_machinegun/get", true);
-	lpSound.Load("shotgun/get", true);
-
-	lpSound.Load("explosion", true);
-	lpSound.Load("bgm", true);
-	lpSound.Load("onFloor", true);
-
-	for (int i = 0; i < static_cast<int>(Wave::Max); i++)
-	{
-		lpSound.Load("bgm_wave" + std::to_string(i + 1), true);
-	}
-
 	// ìGëSëÃÇÃAIÇÃä«óù∏◊Ω
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
 
@@ -536,11 +499,10 @@ void PlayScene::Initialize(void)
 
 	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_));
 
-
-	AddObject(std::make_shared<BackGround>());
+	AddObject(std::make_shared<BackGround>(playerList_.front()));
 	AddObject(std::make_shared<Floor>
 		(Vector2I(app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 + 150),
-			ObjectType::Floor));
+			ObjectType::Floor, playerList_.front()));
 
 	// îwåiÇÃŒﬂºﬁºÆ›æØƒ
 	// ∫›Ωƒ◊∏¿Ç≈ŒﬂºﬁºÆ›æØƒÇ∑ÇÈÇÊÇËÇ‡Ç±Ç±Ç≈ÇµÇΩÇŸÇ§Ç™∂“◊Çí«â¡Ç∑ÇÈÇ∆Ç´Ç…Ç∑ÇÒÇ»ÇËÇ¢Ç≠ÇÃÇ≈
@@ -552,10 +514,6 @@ void PlayScene::Initialize(void)
 		}
 	}
 
-	for (auto player : playerList_)
-	{
-		lpS_Effect.GetPlayer(player);
-	}
 }
 
 void PlayScene::AddObject(ObjectPtr object)

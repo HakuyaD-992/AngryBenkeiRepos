@@ -36,7 +36,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	if (stringSp_[1].y >= 170)
 	{
 		stringSp_[1].y = 170;
-		lpSound.Play("fadein",DX_PLAYTYPE_BACK);
+		lpSound.Play("fadein", DX_PLAYTYPE_BACK);
 		pushFadeCnt_++;
 		if (pushFadeCnt_ >= 255)
 		{
@@ -71,7 +71,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
-					lpSound.Play("cursorMove",DX_PLAYTYPE_BACK);
+					lpSound.Play("cursorMove", DX_PLAYTYPE_BACK);
 					arrowPos_.y += 70;
 					if (arrowPos_.y >= stringPos_.y + 70)
 					{
@@ -85,7 +85,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
-					lpSound.Play("cursorMove",DX_PLAYTYPE_BACK);
+					lpSound.Play("cursorMove", DX_PLAYTYPE_BACK);
 					arrowPos_.y -= 70;
 					if (arrowPos_.y <= stringPos_.y)
 					{
@@ -100,7 +100,7 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
 					!cnt.second[static_cast<int>(TrgFlag::Old)])
 				{
-					lpSound.Play("start",DX_PLAYTYPE_BACK);
+					lpSound.Play("start", DX_PLAYTYPE_BACK);
 					lpEffect.Play("thunder", Vector2I(arrowPos_.x + 120, arrowPos_.y + 120));
 					isNext_ = true;
 				}
@@ -122,13 +122,6 @@ void TitleScene::Draw(void)
 {
 	auto& app = Application::Instance();
 	ClearDrawScreen();
-	int col = 0;
-	//int Pad = GetJoypadInputState(DX_INPUT_KEY_PAD1);        //入力状態をPadに格納
-	//for (int i = 0; i < 28; i++) {      //ボタン28個分ループ
-	//	if (Pad & (1 << i)) {             //ボタンiの入力フラグが立っていたら
-	//		DrawFormatString(0, i * 15, GetColor(255, 255, 255), "%dのキーが押されています", i);
-	//	}
-	//}
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, fadeCnt_);
 
@@ -137,9 +130,9 @@ void TitleScene::Draw(void)
 
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[0].y, lpImage.GetID("Title/start"), true);
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
-
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, pushFadeCnt_);
-	DrawGraph(stringPos_.x - 180, stringPos_.y + stringSp_[1].y + 100, lpImage.GetID("Title/push"), true);
+
+	DrawGraph(stringPos_.x - 180, stringPos_.y + 300, lpImage.GetID("Title/push"), true);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -151,29 +144,14 @@ void TitleScene::Initialize(void)
 {
 	auto& app = Application::Instance();
 
+	lpSound.Load("title", true);
+
 	stringPos_ = { app.GetViewport().GetSize().x / 2, app.GetViewport().GetSize().y / 2 - 100 };
 	// 矢印のﾎﾟｼﾞｼｮﾝ
 	arrowPos_ = { stringPos_.x - 20,stringPos_.y };
 
 	nextFlag_ = Next::Game;
 	isNext_ = false;
-	goNext_ = false;
-	goNextAlphaCount_ = 255;
-
-	// 画像のﾛｰﾄﾞ
-	lpImage.Load("Title/title");
-	lpImage.Load("Title/start");
-	lpImage.Load("Title/manual");
-	lpImage.Load("Title/arrow");
-	lpImage.Load("Title/push");
-
-	lpSound.Load("cursorMove", true);
-	lpSound.Load("title", true);
-	lpSound.Load("start", false);
-	lpSound.Load("fadein", false);
-
-	// ｴﾌｪｸﾄのﾛｰﾄﾞ
-	lpEffect.Load("thunder");
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -184,6 +162,5 @@ void TitleScene::Initialize(void)
 	fadeCnt_ = 0;
 	pushFadeCnt_ = 0;
 	fade_ = Fade::In;
-	//return true;
 }
 

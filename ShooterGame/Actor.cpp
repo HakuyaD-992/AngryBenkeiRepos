@@ -7,6 +7,7 @@ Actor::Actor()
 {
 	exRate_ = 1.0f;
 	rotRate_ = 0.0f;
+	shadowRadius_ = { 0,0 };
 
 	animationCount_ = 0.0f;
 	count_ = 0.0f;
@@ -14,6 +15,8 @@ Actor::Actor()
 	isMove_ = false;
 	speed_ = { 0,0 };
 	zSpeed_ = 0;
+	z_ = 0;
+	type_ = ActorType::Max;
 	jumpSpeed_ = 0;
 	drawHpCnt_ = 0;
 	jumpFirstSpeed_ = -13.0f;
@@ -23,7 +26,9 @@ Actor::Actor()
 	isAttack_ = false;
 	onDamaged_ = false;
 	isDrawHp_ = false;
-
+	deleteFlag_ = false;
+	duration_ = 0.0f;
+	alpha_percent = 0.0f;
 	// まず待機状態に初期化
 	//currentAnimation_ = "idle";
 
@@ -33,11 +38,6 @@ Actor::Actor()
 
 Actor::~Actor()
 {
-}
-
-void Actor::ReadyToShot(void)
-{
-	isShot_ = true;
 }
 
 bool Actor::OnFloor(void)
@@ -54,21 +54,32 @@ bool Actor::Initialize(void)
 	// ImageLoaderｸﾗｽの使用
 	auto& imageMng = ImageManager::GetInstance();
 	auto imageResource = imageMng.GetResource(type_);
+	shadowRadius_ = { size_.x / 2, size_.y / 2 };
 
 	// ｱﾆﾒｰｼｮﾝﾌﾚｰﾑ、ｱﾆﾒｰｼｮﾝ名の吊り上げ
 	auto animSet = imageMng.GetActionSet(type_);
 
 	alpha_percent = 100.0f;
 
-	if (type_ != ActorType::Player)
+	switch (type_)
 	{
-		hpPos_ = Vector2I(650, 65);
-	}
-	else
-	{
+	case ActorType::Player:
 		hpPos_ = Vector2I(150, 85);
+		break;
+	case ActorType::Pod:
+	case ActorType::Exoskeleton:
+	case ActorType::Spacenaut:
+		hpPos_ = Vector2I(500, 65);
+		break;
+	case ActorType::Bigboy:
+		hpPos_ = Vector2I(650, 65);
+		break;
+	case ActorType::Max:
+		break;
+	default:
+		break;
 	}
-	lpImage.LoadDiv("UI/hp", Vector2I(230, 64), Vector2I(1, 4));
+	lpImage.Load("UI/" + name_ + "_Hp");
 	// ﾀｲﾌﾟ別に個々のｱﾆﾒｰｼｮﾝ名とｱﾆﾒｰｼｮﾝﾌﾚｰﾑの格納
 	// もしかしたらこれはいらない...??
 	for (auto anim = animSet.begin(); anim != animSet.end(); anim++)
@@ -103,36 +114,12 @@ void Actor::Draw(void)
 {
 	auto& imageMng = ImageManager::GetInstance();
 
-	if (type_ != ActorType::Player)
-	{
-		if (onDamaged_)
-		{
-			isDrawHp_ = true;
-		}
-		if (isDrawHp_)
-		{
-			drawHpCnt_++;
-		}
-
-		if (drawHpCnt_ >= 1 && drawHpCnt_ <= 75)
-		{
-			DrawRotaGraph(hpPos_.x, hpPos_.y, 1.0f, 0.0f,
-				lpImage.GetDivID("UI/hp")[static_cast<int>(type_)], true, false);
-			DrawBox(hpPos_.x - 105, hpPos_.y + 10, (hpPos_.x - 105) + hp_, hpPos_.y + 25, 0x0000ff, true);
-		}
-		else
-		{
-			if (drawHpCnt_ > 100)
-			{
-				isDrawHp_ = false;
-				drawHpCnt_ = 0;
-			}
-		}
-	}
-	else
+	if (type_ == ActorType::Player)
 	{
 		DrawRotaGraph(hpPos_.x, hpPos_.y, 1.0f, 0.0f,
-			lpImage.GetDivID("UI/hp")[static_cast<int>(type_)], true, false);
+			lpImage.GetID("UI/" + name_ + "_Hp"), true, false);
+		DrawBox(hpPos_.x - 18, hpPos_.y + 9,
+			(hpPos_.x - 18) + hp_[0], hpPos_.y + 24, 0x0000ff, true);
 	}
 
 	if (type_ != ActorType::Bigboy)
@@ -159,7 +146,21 @@ void Actor::Draw(void)
 
 void Actor::UpDateAnimation(const std::string& animName)
 {
-	animationCount_ += 0.1f;
+	if (type_ != ActorType::Bigboy)
+	{
+		animationCount_ += 0.1f;
+	}
+	else
+	{
+		if (currentAnimation_ == "hit")
+		{
+			animationCount_ += 0.3f;
+		}
+		else
+		{
+			animationCount_ += 0.2f;
+		}
+	}
 	if (animationSet_.find(animName) != animationSet_.end())
 	{
 		if ((int)animationCount_ >= animationSet_.find(animName)->second)

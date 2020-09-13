@@ -21,11 +21,12 @@ Pod::Pod(Vector2I pos,
 	size_ = Vector2I(55,55);
 	z_ = z;
 	type_ = type;
+	hpNum_ = 1;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<PodAI>(*this);
 	damageRate_ = 10.0f;
 	attackRate_ = 2.0f;
-	hp_ = 100;
+	maxHp_ = 100;
 
 	name_ = "Pod";
 
@@ -34,8 +35,6 @@ Pod::Pod(Vector2I pos,
 	Actor::Initialize();
 	ChangeAnimation("walk");
 
-	id_ = enemyNo_;
-	enemyNo_++;
 }
 
 Pod::~Pod()
@@ -53,7 +52,11 @@ void Pod::UpDate(void)
 
 void Pod::Draw_(void)
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
+	DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + (size_.y / 2), size_.x / 2.8f, size_.y / 4, 10.0f, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	Actor::Draw();
+	Enemy::Draw();
 	if (isTurnLeft_)
 	{
 		muzzleFlashPos_ = Vector2I(pos_.x -40, pos_.y - 5 + (z_/2));

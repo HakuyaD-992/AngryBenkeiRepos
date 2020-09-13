@@ -14,6 +14,11 @@ public:
 	void UpDateAnimation(std::string animName);
 
 private:
+	// ”­Ë‚µ‚½’e‚Ì‡”Ô‚ğ•\‚·”Ô†
+	static int no_;
+	int bulletNo_;
 
+	bool isMove_;
+	bool extendFlag_;
 };
 

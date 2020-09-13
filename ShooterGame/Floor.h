@@ -9,7 +9,7 @@ class Floor :
 	public Object
 {
 public:
-	Floor(Vector2I pos, ObjectType type);
+	Floor(Vector2I pos, ObjectType type, std::shared_ptr<ControlledPlayer>& player);
 	~Floor();
 
 	// ‰Šú‰»

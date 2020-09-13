@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <array>
 #include <functional>
 #include "Actor.h"
 
@@ -32,6 +33,7 @@ public:
 
 	virtual void Action(void);
 	virtual void UpDate(void) = 0;
+	virtual void Draw(void);
 	virtual void Draw_(void) = 0;
 	virtual bool Initialize(void);
 	virtual void SetPos(const Vector2I& pos,int z);
@@ -58,6 +60,11 @@ public:
 		return id_;
 	}
 
+	virtual Vector2I& GetShadowRadius(void)
+	{
+		return shadowRadius_;
+	}
+
 	// AIstateæ“¾ŠÖ”
 	virtual AIState& GetAIState(void)
 	{
@@ -69,6 +76,14 @@ public:
 	{
 		return isHitAICollider_;
 	}
+
+	virtual const bool& GetisShot(void)
+	{
+		return isShot_;
+	}
+
+	// isShot_‚ğtrue‚É‚·‚é‚±‚Æ‚ÅŸ‚Ì’e‚Ì¶¬‚ğ‰Â”\‚É‚·‚é
+	virtual void ReadyToShot(void);
 
 	// e’e‚Ì’Ç‰Á
 	void AddBullet(std::vector<std::shared_ptr<BulletBase>>& bullets);
@@ -93,11 +108,17 @@ public:
 	{
 		return muzzleFlashAnimationCount_;
 	}
-private:
+	bool& GetisShotPrepare(void)
+	{
+		return isShotPrepare_;
+	}
 
+	static void ResetEnemyNo(void);
+private:
+	void HpDraw(void);
 protected:
 	// “G‚ÌŒÅ—L¯•Ê”Ô†(¶¬‚³‚ê‚é‚Æ1‰ÁZ)
-	static int enemyNo_;
+	static std::array<int,4> enemyNo_;
 	// ©•ª©g‚ÌŒÅ—L¯•Ê”Ô†
 	int id_;
 	// À²Ìß•Ê‚ÌÀŞÒ°¼Ş—¦
@@ -125,7 +146,10 @@ protected:
 	Vector2I muzzleFlashPos_;
 	// eŒû‚©‚ço‚émuzzleFlash‚Ì±ÆÒ°¼®İ¶³İÄ
 	float muzzleFlashAnimationCount_;
-
-	std::string name_;
+	// ”­–C‚·‚é‘O‚Ì€”õ’iŠK
+	bool isShotPrepare_;
+	// ’e‚ğŒ‚‚ÂÌ×¸Ş
+	bool isShot_;
+	int shotInterval_;
 };
 

@@ -5,7 +5,6 @@
 #include "AICollider.h"
 #include "ImageManager.h"
 
-
 Bigboy::Bigboy(Vector2I pos, int z, ActorType type, 
 	std::vector<std::shared_ptr<ControlledPlayer>>& player):
 	Enemy(player)
@@ -14,18 +13,17 @@ Bigboy::Bigboy(Vector2I pos, int z, ActorType type,
 	size_ = Vector2I(300, 300);
 	z_ = z;
 	type_ = type;
+	hpNum_ = 3;
+	maxHp_ = 100;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<BigboyAI>(*this);
 
-	hp_ = 100;
 	damageRate_ = 1.0f;
 	attackRate_ = 10.0f;
 	name_ = "Bigboy";
 	Initialize();
 	Actor::Initialize();
 	ChangeAnimation("idle");
-	id_ = enemyNo_;
-	enemyNo_++;
 }
 
 Bigboy::~Bigboy()
@@ -46,6 +44,21 @@ void Bigboy::UpDate(void)
 
 void Bigboy::Draw_(void)
 {
+	auto shadow = 100 + (pos_.y - 500);
+	if (shadow >= 255)
+	{
+		shadow = 255;
+	}
+	if (shadow <= 0)
+	{
+		shadow = 0;
+	}
+	if (currentAnimation_ != "death")
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, shadow);
+		DrawOvalAA(pos_.x, pos_.y + (z_ / 2) + 100, shadowRadius_.x / 1.5f, shadowRadius_.y / 3, 10.0f, 0x000000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 	Actor::Draw();
-	DrawFormatString(100, 100, 0xffffff, "z_:%d", z_);
+	Enemy::Draw();
 }
