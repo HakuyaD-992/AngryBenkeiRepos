@@ -58,6 +58,16 @@ public:
 		return isShake_;
 	}
 
+	virtual void SetHittedBulletType(const BulletType& hitType)
+	{
+		hittedBulletType_ = hitType;
+	}
+
+	const BulletType& GetHittedBulletType(void)
+	{
+		return hittedBulletType_;
+	}
+
 private:
 protected:
 	Vector2I pos_;
@@ -84,6 +94,8 @@ protected:
 	std::map<std::string, int> animationSet_;
 	// ±ÆÒ°¼®Ý‚ðÙ°Ìß‚·‚é‚Ì‚©‚ÌÌ×¸Þ
 	std::map<std::string, bool> isLoop_;
+
+	BulletType hittedBulletType_;
 
 	bool isShake_;
 };

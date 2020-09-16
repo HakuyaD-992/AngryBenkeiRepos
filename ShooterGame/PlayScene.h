@@ -10,11 +10,13 @@
 #include "Wave.h"
 #include "ScreenEffectMng.h"
 #include "BulletType.h"
+#include "MoneyType.h"
 
 class ControlledPlayer;
 class Enemy;
 class BulletBase;
 class Item;
+class MoneyItem;
 class EnemyAIManager;
 //class ShotBase;
 //class Spawner;
@@ -38,7 +40,8 @@ private:
 	void Initialize(void);
 	void AddObject(ObjectPtr object);
 	// “G‚ª±²ÃÑ‚ğƒhƒƒbƒv‚·‚éˆ—
-	void DropItem(const Vector2I& pos,const int& z);
+	void DropItem(const Vector2I& pos, const int& z);
+	//void DropMoney(const Vector2I& pos, const int& z);
 
 	void ChangeWeather(void);
 	// 2ÌßÚ²Ô°²İ½Àİ½§Œä—pÌ×¸Ş
@@ -54,6 +57,8 @@ private:
 	std::unique_ptr<EnemyAIManager> aiManager_;
 	// ±²ÃÑ
 	std::list<std::shared_ptr<Item>> itemList_;
+	//// ‚¨‹à
+	//std::list<std::shared_ptr<MoneyItem>> moneyList_;
 
 	// ‚Ä‚«‚Ì’e(“G‚ÌÀ²Ìß‚É‚æ‚Á‚Ä•Ï‰»)
 	std::vector<std::shared_ptr<BulletBase>> enemyBullets_;
@@ -84,6 +89,9 @@ private:
 	Wave wave_;
 	Vector2I waveStringPos_;
 	Vector2I waveNumPos_;
+
+	Vector2I existEnemyUIPos_;
+
 	float waitFrame_;
 	float waveNumExRate_;
 
@@ -95,6 +103,8 @@ private:
 	// ÌßÚ²Ô°‚ª“|‚µ‚½“G‚Ì”
 	int defeatEnemyNum_;
 
+	//int dropNum_;
+
 	// 1Wave‚É‘Î‚·‚é“G‚Ì¶¬”Ši”[
 	// “G‚ğ¶¬‚µ‚½‚ç‰ÁZ
 	std::array<int, static_cast<int>(Wave::Max)> enemyCountinWave_;
@@ -105,16 +115,22 @@ private:
 	bool createEnemyFlag_;
 	// “G‚ªƒhƒƒbƒv‚µ‚½±²ÃÑ‚ÌÀ²Ìß
 	BulletType dropItemType_;
+	//MoneyType dropMoneyType_;
 	// ±²ÃÑƒhƒƒbƒv‚ÌŠm—¦
 	int droppingRate_;
+
 	// ‰æ–Ê‚ÉoŒ»‚·‚é‚±‚Æ‚Ì‚Å‚«‚é“G”
 	std::array<int, static_cast<int>(Wave::Max)> enemyNum_display_;
 
 	int existEnemyCount_;
 	// resultScene‚ÉˆÚs‚·‚éƒtƒ‰ƒO
 	bool goResult_;
-	bool resultFlag;
+	bool resultFlag_;
 	int goResultAddVal_;
+
+	int totalUseBullet_;
+
+	//bool moneyScatteringDirection_;
 };
 
 

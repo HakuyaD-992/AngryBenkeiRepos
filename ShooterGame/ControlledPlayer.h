@@ -1,19 +1,23 @@
 #pragma once
 #include <list>
+#include <array>
 
 #include "Actor.h"
 #include "PLAYER.h"
+#include "MoneyType.h"
 
 class Enemy;
 class WeaponBase;
 class Item;
+class MoneyItem;
 
 class ControlledPlayer :
 	public Actor
 {
 public:
 	ControlledPlayer(Vector2I pos, int z, const ActorType& type,
-		std::list<std::shared_ptr<Item>>& itemList);
+		std::list<std::shared_ptr<Item>>& itemList/*,
+		std::list<std::shared_ptr<MoneyItem>>& moneyList*/);
 	~ControlledPlayer();
 
 	void UpDate(void);
@@ -57,6 +61,8 @@ private:
 	void Fire(void);
 	// ±²ÃÑæ“¾
 	void GetItems(void);
+	// ‚¨‹àæ“¾
+	//void GetMoneys(void);
 
 	// ÌßÚ²Ô°‚Ìs“®‚ÉŠÖ‚·‚éŠÖ”Îß²İÀ
 	void(ControlledPlayer::* updater_)(void);
@@ -77,16 +83,23 @@ private:
 	Vector2I weaponsUIPos_;
 
 	Vector2I bulletNumPos_;
+
 	// ‰ÁZ’l
 	int addBlendval_;
 	bool addBlendFlag_;
 
+	// g—p‚µ‚½e’e‚Ì”
 	int use_Bullet;
 
 	bool isHitEnemyZ_;
 
+	std::array<int,static_cast<int>(MoneyType::Max)> havingMoney_;
+
 	std::list<std::shared_ptr<Item>>& items_;
+	//std::list<std::shared_ptr<MoneyItem>>& moneyItems_;
 
 	std::list<std::pair<std::pair<Vector2I,int>,int>> getBulletNumPos_;
+
+
 };
 

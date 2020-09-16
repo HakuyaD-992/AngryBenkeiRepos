@@ -20,6 +20,7 @@
 #include "SceneController.h"
 #include "ResultScene.h"
 #include "BulletBase.h"
+#include "MoneyItem.h"
 
 
 PlayScene::PlayScene(SceneController& sCon):
@@ -42,6 +43,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		if (defeatEnemyNum_ >= enemyMaxNuminWave_[static_cast<int>(wave_)])
 		{
+			defeatEnemyNum_ = 0;
 			if (wave_ != Wave::ThirdWave)
 			{
 				Enemy::ResetEnemyNo();
@@ -84,6 +86,18 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 				// ìGÇÃ±∆“∞ºÆ›ä÷åW
 				enemy->Action();
+				//dropNum_ = 0;
+
+				//if (enemy->GetOnDamaged())
+				//{
+				//	lpSound.Play("money_drop", DX_PLAYTYPE_BACK);
+				//	//dropNum_ = 2 + GetRand(5);
+				//	for (int i = 0; i < dropNum_; i++)
+				//	{
+				//		DropMoney(enemy->GetPos(), enemy->GetZPos());
+				//	}
+				//}
+
 				// ìGÇÃíeÇ∆Ãﬂ⁄≤‘∞ÇÃìñÇΩÇËîªíË
 				enemy->CheckHitMyBulletToPlayer(enemyBullets_);
 
@@ -185,7 +199,9 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 							{
 								defeatEnemyNum_++;
 								existEnemyCount_--;
+								resultFlag_ = true;
 							}
+							else
 							if (GetRand(droppingRate_) == 1 ||
 								GetRand(droppingRate_) == 2)
 							{
@@ -276,7 +292,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 	if (isPlayBGM_)
 	{
-		defeatEnemyNum_ = 0;
+
 		changeWaveFlag_ = false;
 		isNextWave_ = false;
 		isPlayBGM_ = false;
@@ -290,6 +306,10 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		item->UpDate();
 	}
 
+	//for (auto money : moneyList_)
+	//{
+	//	money->Update();
+	//}
 
 	for (auto player : playerList_)
 	{
@@ -297,12 +317,15 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			player->UpDate();
 		}
+		int num = 0;
 		player->GetCurrentWeapon()->UpDate();
 		if (player->GetDeleteFlag())
 		{
+			resultFlag_ = false;
+			totalUseBullet_ = player->GetUseBullet();
 			goResult_ = true;
 		}
-		int num = 0;
+
 		for (auto weapon : player->GetWeapons())
 		{
 			num = weapon->GetHavingBulletNum();
@@ -324,6 +347,9 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	itemList_.remove_if
 	([](std::shared_ptr<Item>& item) {return item->GetDeleteFlag(); });
 
+	/*moneyList_.remove_if
+	([](std::shared_ptr<MoneyItem>& money) {return money->GetDeleteFlag(); });*/
+
 	// ìGÇÃíeÇÃè¡ãé
 	enemyBullets_.erase(std::remove_if(enemyBullets_.begin(),
 		enemyBullets_.end(),
@@ -338,7 +364,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		{
 			goResultAddVal_ = 0;
 			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1)));
-			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_, playerList_.front()->GetUseBullet(), resultFlag));
+			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_, totalUseBullet_, resultFlag_));
 		}
 	}
 
@@ -407,6 +433,11 @@ void PlayScene::Draw(void)
 		item->Draw();
 	}
 
+	/*for (auto money : moneyList_)
+	{
+		money->Draw();
+	}*/
+
 	if (drawNextWaveFlag_)
 	{
 		DrawRotaGraph(waveStringPos_.x, waveStringPos_.y, 1.0f, 0.0f,
@@ -424,6 +455,18 @@ void PlayScene::Draw(void)
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	DrawRotaGraph(existEnemyUIPos_.x, existEnemyUIPos_.y,
+		1.0f, 0.0f,
+		lpImage.GetID("UI/exist"), true, false);
+
+	DrawRotaGraph(existEnemyUIPos_.x + 80, existEnemyUIPos_.y,
+		1.0f, 0.0f,
+		lpImage.GetDivID("UI/number")
+		[(enemyMaxNuminWave_[static_cast<int>(wave_)]-defeatEnemyNum_)/10], true, false);
+	DrawRotaGraph(existEnemyUIPos_.x + 100, existEnemyUIPos_.y,
+		1.0f, 0.0f,
+		lpImage.GetDivID("UI/number")
+		[(enemyMaxNuminWave_[static_cast<int>(wave_)] - defeatEnemyNum_) % 10], true, false);
 	//fps_.Draw();
 	
 	ScreenFlip();
@@ -469,6 +512,7 @@ void PlayScene::Initialize(void)
 	enemyMaxNuminWave_ = { 30,30,1 };
 	enemyNum_display_ = {5,6,2};
 	existEnemyCount_ = 0;
+	totalUseBullet_ = 0;
 
 	waveStringPos_ = { -120,50 };
 	waveNumPos_ = { 530,50 };
@@ -479,6 +523,9 @@ void PlayScene::Initialize(void)
 	bgmVolume_ = 0.0f;
 	defeatEnemyNum_ = 0;
 	droppingRate_ = 5;
+	resultFlag_ = false;
+
+	//dropNum_ = 0;
 
 	dropItemType_ = BulletType::Max;
 
@@ -488,12 +535,16 @@ void PlayScene::Initialize(void)
 	goNextWave_ = false;
 	drawNextWaveFlag_ = true;
 	createEnemyFlag_ = false;
+	//moneyScatteringDirection_ = false;
 	currentWeather_ = "Normalsky";
 	weatherAnimationCount_ = 0.0f;
 
 	changeWaveFlag_ = false;
 	goResult_ = false;
 	goResultAddVal_ = 255;
+
+	existEnemyUIPos_ = { 570,100 };
+
 
 	// ìGëSëÃÇÃAIÇÃä«óù∏◊Ω
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
@@ -511,7 +562,7 @@ void PlayScene::Initialize(void)
 	};
 	zFlag_ = false;
 
-	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_));
+	playerList_.emplace_back(std::make_shared<ControlledPlayer>(Vector2I(200, 0), 0, ActorType::Player,itemList_/*,moneyList_*/));
 
 	AddObject(std::make_shared<BackGround>(playerList_.front()));
 	AddObject(std::make_shared<Floor>
@@ -540,6 +591,12 @@ void PlayScene::DropItem(const Vector2I& pos, const int& z)
 	dropItemType_ = (BulletType)GetRand(static_cast<int>(BulletType::MachineBullet));
 	itemList_.emplace_back(std::make_shared<Item>(pos, z, dropItemType_));
 }
+
+//void PlayScene::DropMoney(const Vector2I& pos, const int& z)
+//{
+//	dropMoneyType_ = (MoneyType)GetRand(static_cast<int>(MoneyType::Red));
+//	moneyList_.emplace_back(std::make_shared<MoneyItem>(pos, z, dropMoneyType_));
+//}
 
 void PlayScene::ChangeWeather(void)
 {

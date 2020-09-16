@@ -51,6 +51,9 @@ void Enemy::Action(void)
 			}
 		}
 	}
+
+	onDamaged_ = false;
+
 	if (OnFloor())
 	{
 		if (!onDamaged_)
@@ -69,14 +72,14 @@ void Enemy::Action(void)
 		switch (nearestPlayer_->GetCurrentWeapon()->GetType())
 		{
 		case WeaponType::Pistol:
-			hp_[hpNum_-1] -= 2 * damageRate_;
+			hp_[hpNum_ - 1] -= 2 * damageRate_;
 			break;
 
 		case WeaponType::ShotGun:
-			hp_[hpNum_-1] -= 5 * damageRate_;
+			hp_[hpNum_ - 1] -= 5 * damageRate_;
 			break;
 		case WeaponType::SubMachineGun:
-			hp_[hpNum_-1] -= 1 * damageRate_;
+			hp_[hpNum_ - 1] -= 1 * damageRate_;
 			break;
 
 		default:

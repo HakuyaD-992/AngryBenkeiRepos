@@ -24,7 +24,7 @@ Pod::Pod(Vector2I pos,
 	hpNum_ = 1;
 	aiCollider_ = std::make_unique<AICollider>();
 	aiSystem_ = std::make_shared<PodAI>(*this);
-	damageRate_ = 10.0f;
+	damageRate_ = 20.0f;
 	attackRate_ = 2.0f;
 	maxHp_ = 100;
 

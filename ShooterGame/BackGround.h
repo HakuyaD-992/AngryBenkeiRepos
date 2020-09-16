@@ -3,7 +3,6 @@
 #include <memory>
 #include "Object.h"
 
-
 #define lpBackGround BackGround::GetInstance()
 
 using namespace std;
@@ -16,7 +15,9 @@ public:
 	BackGround(std::shared_ptr<ControlledPlayer>& player);
 	~BackGround();
 	bool Initialize(void);
-		void Draw(void);
+	void Draw(void);
 private:
+
+	Vector2I scoreUIPos_;
 };
 

@@ -133,6 +133,9 @@ void LoadScene::LoadSoundResources(void)
 	lpSound.Load("explosionboss", true);
 	lpSound.Load("bgm", true);
 	lpSound.Load("onFloor", true);
+	lpSound.Load("money_drop", true);
+	lpSound.Load("money_get", true);
+
 }
 
 void LoadScene::LoadImageResources(void)
@@ -153,7 +156,9 @@ void LoadScene::LoadImageResources(void)
 	lpImage.Load("UI/Pod_UI");
 	lpImage.Load("UI/Exoskeleton_UI");
 	lpImage.Load("UI/Spacenaut_UI");
-	//@
+	lpImage.Load("UI/Score");
+	lpImage.Load("UI/exist");
+
 	lpImage.Load("Result/gameclear");
 	lpImage.Load("Result/gameover");
 	lpImage.Load("Result/total");

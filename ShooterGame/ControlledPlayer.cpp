@@ -13,13 +13,15 @@
 #include "Collision.h"
 #include "SoundManager.h"
 #include "Item.h"
+#include "MoneyItem.h"
 #include "EffectManager.h"
 
 int ControlledPlayer::player_ = 0;
 
 ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,
-	std::list<std::shared_ptr<Item>>& itemList):
-	items_(itemList)
+	std::list<std::shared_ptr<Item>>& itemList/*,
+	std::list<std::shared_ptr<MoneyItem>>& moneyList*/):
+	items_(itemList)/*,moneyItems_(moneyList)*/
 {
 	pos_ = pos;
 	type_ = type;
@@ -38,6 +40,7 @@ ControlledPlayer::ControlledPlayer(Vector2I pos, int z, const ActorType& type,
 	player_++;
 
 	use_Bullet = 0;
+	havingMoney_ = { 0,0,0 };
 
 
 	Initialize();
@@ -77,6 +80,8 @@ void ControlledPlayer::UpDate(void)
 
 	// ÌßÚ²Ô°‚Ì±²ÃÑŽæ“¾
 	GetItems();
+	// ÌßÚ²Ô°‚Ì‚¨‹àŽæ“¾
+	//GetMoneys();
 
 	for (auto inputData : input)
 	{
@@ -97,6 +102,7 @@ void ControlledPlayer::UpDate(void)
 								DX_PLAYTYPE_BACK);
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
+							use_Bullet++;
 						}
 					}
 					if (currentWeapon_->GetType() == WeaponType::SubMachineGun)
@@ -106,6 +112,7 @@ void ControlledPlayer::UpDate(void)
 							currentWeapon_->SetAnimation("fire");
 							currentWeapon_->AddBullet();
 							currentWeapon_->GetHavingBulletNum()--;
+							use_Bullet++;
 						}
 						if (inputData.second[static_cast<int>(TrgFlag::Now)] &&
 							!inputData.second[static_cast<int>(TrgFlag::Old)])
@@ -378,6 +385,8 @@ void ControlledPlayer::Draw_(void)
 			lpImage.GetDivID("UI/number")[num.second % 10], true, false);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
+
+	DrawFormatString(200, 240, 0xffffff, "Playerz:%d", z_);
 }
 
 bool ControlledPlayer::Initialize(void)
@@ -396,7 +405,7 @@ bool ControlledPlayer::Initialize(void)
 
 	lpImage.LoadDiv("UI/weapons", Vector2I(110,64), Vector2I(1, 3));
 
-	weaponsUIPos_ = { 130,160 };
+	weaponsUIPos_ = { 90,160 };
 	bulletNumPos_ = { weaponsUIPos_.x + 150,weaponsUIPos_.y + 30 };
 	addBlendval_ = 255;
 	addBlendFlag_ = false;
@@ -474,3 +483,18 @@ void ControlledPlayer::GetItems(void)
 		}
 	}
 }
+
+//void ControlledPlayer::GetMoneys(void)
+//{
+//	for (auto money : moneyItems_)
+//	{
+//		if (CircleCollision()(type_, money->GetPos() - pos_,
+//			Vector2I(size_.x + money->GetSize().x, size_.y + money->GetSize().y),
+//			(money->GetZPos() - (z_ + 35))))
+//		{
+//			havingMoney_[static_cast<int>(money->GetType())] += money->GetMoneyRate(money->GetType());
+//			lpSound.Play("money_get", DX_PLAYTYPE_BACK);
+//			money->Delete();
+//		}
+//	}
+//}
