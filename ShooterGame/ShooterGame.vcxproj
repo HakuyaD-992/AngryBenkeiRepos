@@ -178,6 +178,7 @@
     <ClCompile Include="KeyInput.cpp" />
     <ClCompile Include="LoadScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MoneyItem.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="Pistol.cpp" />
@@ -229,6 +230,8 @@
     <ClInclude Include="KeyConfiguration.h" />
     <ClInclude Include="KeyInput.h" />
     <ClInclude Include="LoadScene.h" />
+    <ClInclude Include="MoneyItem.h" />
+    <ClInclude Include="MoneyType.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectType.h" />
     <ClInclude Include="PadInput.h" />
