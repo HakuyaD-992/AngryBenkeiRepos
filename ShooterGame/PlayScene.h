@@ -63,7 +63,6 @@ private:
 	// ‚Ä‚«‚Ì’e(“G‚ÌÀ²Ìß‚É‚æ‚Á‚Ä•Ï‰»)
 	std::vector<std::shared_ptr<BulletBase>> enemyBullets_;
 
-
 	ObjectList objList_;
 	// ÌÚ°ÑÚ°Ä
 	Fps fps_;
@@ -71,6 +70,11 @@ private:
 	std::array<Vector2I, 2> skyPos_;
 
 	int frame_;
+
+	time_t time_start_;
+	time_t time_now_;
+	time_t spendTime_;
+
 	// ½Îß°Å°
 	std::shared_ptr<Spawner> spawner_;
 
@@ -129,6 +133,9 @@ private:
 	int goResultAddVal_;
 
 	int totalUseBullet_;
+	int totalDefeatEnemyNum_;
+
+	bool gameOverFlag_;
 
 	//bool moneyScatteringDirection_;
 };

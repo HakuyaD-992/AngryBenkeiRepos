@@ -117,7 +117,6 @@ void Enemy::Draw(void)
 				drawHpCnt_ = 0;
 			}
 		}
-		DrawFormatString(hpPos_.x - 200, hpPos_.y - 30, 0xffffff, (name_ + std::to_string(id_)).c_str());
 	}
 	else
 	{

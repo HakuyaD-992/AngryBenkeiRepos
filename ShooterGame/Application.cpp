@@ -59,8 +59,8 @@ void Application::Exit(void)
 
 void Application::Run(void)
 {
-
-	while (!CheckHitKey(KEY_INPUT_ESCAPE))
+	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0 &&
+		ProcessMessage() == 0)
 	{
 		for (auto&& in : input_)
 		{

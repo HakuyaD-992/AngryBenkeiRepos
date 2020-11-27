@@ -1,3 +1,4 @@
+#include <time.h>
 #include "TitleScene.h"
 #include "PlayScene.h"
 #include "PLAYER.h"
@@ -116,14 +117,13 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 			fade_ = Fade::Out;
 		}
 	}
-
+	++frame_;
 }
 
 void TitleScene::Draw(void)
 {
 	auto& app = Application::Instance();
 	ClearDrawScreen();
-
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, fadeCnt_);
 
 	DrawGraph(stringPos_.x, stringPos_.y, lpImage.GetID("Title/title"), true);
@@ -165,6 +165,8 @@ void TitleScene::Initialize(void)
 	// Ìª°ÄŞ¶³İÄ‚Ì‰Šú‰»
 	fadeCnt_ = 0;
 	pushFadeCnt_ = 0;
+
+	frame_ = 0;
 	fade_ = Fade::In;
 }
 

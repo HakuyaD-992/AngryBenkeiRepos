@@ -6,6 +6,8 @@
 #include "Application.h"
 #include "SoundManager.h"
 #include "SceneController.h"
+#include "GameOver.h"
+#include "ResultScene.h"
 
 LoadScene::LoadScene(SceneController& sCon):
 	BaseScene(sCon)
@@ -135,6 +137,10 @@ void LoadScene::LoadSoundResources(void)
 	lpSound.Load("onFloor", true);
 	lpSound.Load("money_drop", true);
 	lpSound.Load("money_get", true);
+	lpSound.Load("BacktoTitle", true);
+	lpSound.Load("GameOver", false);
+	lpSound.Load("Result", false);
+	lpSound.Load("Result_item", true);
 
 }
 
@@ -158,11 +164,15 @@ void LoadScene::LoadImageResources(void)
 	lpImage.Load("UI/Spacenaut_UI");
 	lpImage.Load("UI/Score");
 	lpImage.Load("UI/exist");
-
-	lpImage.Load("Result/gameclear");
+	lpImage.Load("Result/percent");
+	lpImage.Load("Result/Time");
+	lpImage.Load("Result/HitRate");
 	lpImage.Load("Result/gameover");
+	lpImage.Load("Result/BacktoTitle");
 	lpImage.Load("Result/total");
+	lpImage.Load("Result/yourscore");
 	lpImage.LoadDiv("Result/number", Vector2I(43, 60), Vector2I(10, 1));
+	lpImage.LoadDiv("Result/bulletNum", Vector2I(38, 50), Vector2I(10, 1));
 
 	lpImage.LoadDiv("Normalsky", Vector2I(800, 387), Vector2I(2, 3));
 	lpImage.LoadDiv("Thundersky", Vector2I(800, 387), Vector2I(2, 3));

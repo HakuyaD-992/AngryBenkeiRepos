@@ -35,6 +35,8 @@ public:
 
 	bool Play(std::string soundName,int playType);
 	void Stop(std::string soundName);
+	// 全てのサウンドを止める
+	void StopAll(void);
 
 	void ChangeVolume(std::string soundName, int vol);
 
@@ -42,6 +44,9 @@ public:
 	{
 		return handles_[soundName].first;
 	}
+
+	const bool& CheckPlaySound(std::string soundName);
+
 private:
 	SoundManager() = default;
 	SoundManager(const SoundManager&) = delete;

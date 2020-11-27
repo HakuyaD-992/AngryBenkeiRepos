@@ -23,7 +23,29 @@ void SoundManager::Stop(std::string soundName)
 	StopSoundMem(handles_[soundName].first);
 }
 
+void SoundManager::StopAll(void)
+{
+	for (auto handle : handles_)
+	{
+		StopSoundMem(handle.second.first);
+	}
+}
+
 void SoundManager::ChangeVolume(std::string soundName, int vol)
 {
 	ChangeVolumeSoundMem(vol, handles_[soundName].first);
+}
+
+const bool& SoundManager::CheckPlaySound(std::string soundName)
+{
+	if (CheckSoundMem(handles_[soundName].first) == -1)
+	{
+		// ‰¹Šy‚ª–Â‚è‚â‚ñ‚Å‚¢‚½‚ç
+		return false;
+	}
+	else
+	{
+		// ‚È‚Á‚Ä‚¢‚½‚ç
+		return true;
+	}
 }

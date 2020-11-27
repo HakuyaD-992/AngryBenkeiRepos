@@ -170,6 +170,7 @@
     <ClCompile Include="Exoskeleton.cpp" />
     <ClCompile Include="ExoskeletonAI.cpp" />
     <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Geometory.cpp" />
     <ClCompile Include="Gravity.cpp" />
     <ClCompile Include="ImageManager.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="ExoskeletonAI.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Fps.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="Geometory.h" />
     <ClInclude Include="Gravity.h" />
     <ClInclude Include="ImageManager.h" />

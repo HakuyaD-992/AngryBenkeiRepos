@@ -131,15 +131,6 @@ void ControlledPlayer::UpDate(void)
 			{
 				lpSound.Stop(currentWeapon_->GetWeaponName() + "/fire");
 			}
-
-			if (inputData.first == KeyConfiguration::Reload)
-			{
-				if (inputData.second[static_cast<int>(TrgFlag::Now)] &&
-					!inputData.second[static_cast<int>(TrgFlag::Old)])
-				{
-					currentWeapon_->SetAnimation("reload");
-				}
-			}
 		}
 
 		if (inputData.first == KeyConfiguration::Left)
@@ -385,8 +376,6 @@ void ControlledPlayer::Draw_(void)
 			lpImage.GetDivID("UI/number")[num.second % 10], true, false);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
-
-	DrawFormatString(200, 240, 0xffffff, "Playerz:%d", z_);
 }
 
 bool ControlledPlayer::Initialize(void)

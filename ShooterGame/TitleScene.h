@@ -5,14 +5,6 @@
 
 using ArrayInt = std::array<int, 2>;
 
-// fade in out ‚ÌÛ‚Ég—p
-enum class Fade
-{
-	In,
-	Out,
-	Max
-};
-
 enum class Next
 {
 	Manual,
@@ -43,8 +35,7 @@ private:
 	// Ìª°ÄŞ²İ‚ÆÌª°ÄŞ±³Ä‚Ì¶³İÄ
 	int fadeCnt_;
 	int pushFadeCnt_;
-	// Ìª°ÄŞ²İ‚Æ±³Ä‚ÌØ‚è‘Ö‚¦
-	Fade fade_;
+
 	// Ÿ‚Ì¼°İ‚ÉØ‚è‘Ö‚¦‚éÌ×¸Ş
 	Next nextFlag_;
 	// Œˆ’èÎŞÀİ‚ğ‰Ÿ‚µ‚½Ì×¸Ş

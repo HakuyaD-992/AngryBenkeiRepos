@@ -1,4 +1,5 @@
 #include <DxLib.h>
+#include <time.h>
 #include "Application.h"
 #include "PlayScene.h"
 #include "ImageManager.h"
@@ -21,12 +22,14 @@
 #include "ResultScene.h"
 #include "BulletBase.h"
 #include "MoneyItem.h"
+#include "GameOver.h"
 
 
 PlayScene::PlayScene(SceneController& sCon):
 	BaseScene(sCon)
 {
 	Initialize();
+	time_start_ = time(NULL);
 }
 
 PlayScene::~PlayScene()
@@ -35,7 +38,9 @@ PlayScene::~PlayScene()
 
 void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 {
+	time_now_ = time(NULL);
 	fps_.Update();
+
 	auto inputData1_ = input[static_cast<int>(PLAYER::ONE)]->GetPeriData();
 
 	// ìGëSàıì|Ç∑
@@ -43,6 +48,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		if (defeatEnemyNum_ >= enemyMaxNuminWave_[static_cast<int>(wave_)])
 		{
+			totalDefeatEnemyNum_ += defeatEnemyNum_;
 			defeatEnemyNum_ = 0;
 			if (wave_ != Wave::ThirdWave)
 			{
@@ -87,16 +93,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 				// ìGÇÃ±∆“∞ºÆ›ä÷åW
 				enemy->Action();
 				//dropNum_ = 0;
-
-				//if (enemy->GetOnDamaged())
-				//{
-				//	lpSound.Play("money_drop", DX_PLAYTYPE_BACK);
-				//	//dropNum_ = 2 + GetRand(5);
-				//	for (int i = 0; i < dropNum_; i++)
-				//	{
-				//		DropMoney(enemy->GetPos(), enemy->GetZPos());
-				//	}
-				//}
 
 				// ìGÇÃíeÇ∆Ãﬂ⁄≤‘∞ÇÃìñÇΩÇËîªíË
 				enemy->CheckHitMyBulletToPlayer(enemyBullets_);
@@ -169,6 +165,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 						if (enemy->GetisAnimEnd())
 						{
 							goResult_ = true;
+							resultFlag_ = true;
 						}
 					}
 					break;
@@ -199,6 +196,7 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 							{
 								defeatEnemyNum_++;
 								existEnemyCount_--;
+								goResult_ = true;
 								resultFlag_ = true;
 							}
 							else
@@ -292,7 +290,6 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 
 	if (isPlayBGM_)
 	{
-
 		changeWaveFlag_ = false;
 		isNextWave_ = false;
 		isPlayBGM_ = false;
@@ -321,11 +318,11 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		player->GetCurrentWeapon()->UpDate();
 		if (player->GetDeleteFlag())
 		{
-			resultFlag_ = false;
-			totalUseBullet_ = player->GetUseBullet();
+			gameOverFlag_ = true;
 			goResult_ = true;
+			totalUseBullet_ = player->GetUseBullet();
 		}
-
+		totalUseBullet_ = player->GetUseBullet();
 		for (auto weapon : player->GetWeapons())
 		{
 			num = weapon->GetHavingBulletNum();
@@ -333,8 +330,11 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		if (num <= 0)
 		{
 			goResult_ = true;
+			gameOverFlag_ = true;
 		}
 	}
+
+
 	playerList_.erase(std::remove_if(playerList_.begin(),
 		playerList_.end(),
 		[&](std::shared_ptr<ControlledPlayer>& player) {
@@ -363,8 +363,19 @@ void PlayScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 		if (goResultAddVal_ <= 0)
 		{
 			goResultAddVal_ = 0;
-			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1)));
-			sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_, totalUseBullet_, resultFlag_));
+			// ëSÇƒÇÃâπäyÇé~ÇﬂÇÈ
+			lpSound.StopAll();
+			lpSound.Stop("bgm_wave" + std::to_string(static_cast<int>(wave_ + 1))); 
+			spendTime_ = time_now_ - time_start_;
+			if (resultFlag_)
+			{
+				sceneCtl_.ChangeScene(std::make_shared<ResultScene>(sceneCtl_, totalUseBullet_, spendTime_,totalDefeatEnemyNum_));
+			}
+
+			if (gameOverFlag_)
+			{
+				sceneCtl_.ChangeScene(std::make_shared<GameOver>(sceneCtl_));
+			}
 		}
 	}
 
@@ -395,7 +406,6 @@ void PlayScene::Draw(void)
 	auto scr = app.GetViewport().GetSize();
 
 	ClearDrawScreen();
-
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,goResultAddVal_);
 	DrawRotaGraph(skyPos_[0].x,skyPos_[0].y,
 		1.0f, 0.0f,
@@ -468,7 +478,7 @@ void PlayScene::Draw(void)
 		lpImage.GetDivID("UI/number")
 		[(enemyMaxNuminWave_[static_cast<int>(wave_)] - defeatEnemyNum_) % 10], true, false);
 	//fps_.Draw();
-	
+	//DrawFormatString(0, 0, 0xffffff, "%dïb", time_now_ - time_start_);
 	ScreenFlip();
 }
 
@@ -513,6 +523,11 @@ void PlayScene::Initialize(void)
 	enemyNum_display_ = {5,6,2};
 	existEnemyCount_ = 0;
 	totalUseBullet_ = 0;
+	totalDefeatEnemyNum_ = 0;
+
+	time_start_ = 0;
+	time_now_ = 0;
+	spendTime_ = 0;
 
 	waveStringPos_ = { -120,50 };
 	waveNumPos_ = { 530,50 };
@@ -539,12 +554,13 @@ void PlayScene::Initialize(void)
 	currentWeather_ = "Normalsky";
 	weatherAnimationCount_ = 0.0f;
 
+	gameOverFlag_ = false;
+
 	changeWaveFlag_ = false;
 	goResult_ = false;
 	goResultAddVal_ = 255;
 
 	existEnemyUIPos_ = { 570,100 };
-
 
 	// ìGëSëÃÇÃAIÇÃä«óù∏◊Ω
 	aiManager_ = std::make_unique<EnemyAIManager>(enemyList_);
