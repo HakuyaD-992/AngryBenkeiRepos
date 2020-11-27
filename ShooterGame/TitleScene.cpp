@@ -67,20 +67,20 @@ void TitleScene::UpDate(const std::vector<std::shared_ptr<Input>>& input)
 	{
 		for (auto cnt : inputData1_)
 		{
-			if (cnt.first == KeyConfiguration::Down)
-			{
-				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
-					!cnt.second[static_cast<int>(TrgFlag::Old)])
-				{
-					lpSound.Play("cursorMove", DX_PLAYTYPE_BACK);
-					arrowPos_.y += 70;
-					if (arrowPos_.y >= stringPos_.y + 70)
-					{
-						arrowPos_.y = stringPos_.y + 70;
-					}
-					nextFlag_ = Next::Manual;
-				}
-			}
+			//if (cnt.first == KeyConfiguration::Down)
+			//{
+			//	if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
+			//		!cnt.second[static_cast<int>(TrgFlag::Old)])
+			//	{
+			//		lpSound.Play("cursorMove", DX_PLAYTYPE_BACK);
+			//		arrowPos_.y += 70;
+			//		if (arrowPos_.y >= stringPos_.y + 70)
+			//		{
+			//			arrowPos_.y = stringPos_.y + 70;
+			//		}
+			//		nextFlag_ = Next::Manual;
+			//	}
+			//}
 			if (cnt.first == KeyConfiguration::Up)
 			{
 				if (cnt.second[static_cast<int>(TrgFlag::Now)] &&
@@ -130,13 +130,13 @@ void TitleScene::Draw(void)
 	DrawGraph(arrowPos_.x, arrowPos_.y + stringSp_[0].y, lpImage.GetID("Title/arrow"), true);
 
 	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[0].y, lpImage.GetID("Title/start"), true);
-	DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
+	//DrawGraph(stringPos_.x + 50, stringPos_.y + stringSp_[1].y, lpImage.GetID("Title/manual"), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, pushFadeCnt_);
 
-	DrawGraph(stringPos_.x - 180, stringPos_.y + 300, lpImage.GetID("Title/push"), true);
+	DrawGraph(stringPos_.x - 130, stringPos_.y + 300, lpImage.GetID("Title/push"), true);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
